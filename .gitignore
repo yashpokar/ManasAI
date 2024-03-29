@@ -1,0 +1,16 @@
+.idea/
+.vscode/*
+
+!.vscode/settings.json
+!.vscode/extensions.json
+
+.DS_Store
+
+node_modules/
+dist/
+coverage/
+build/
+
+package-lock.json
+
+.nx/

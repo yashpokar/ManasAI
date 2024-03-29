@@ -1,0 +1,32 @@
+{
+  "name": "manas-ai",
+  "version": "0.0.1",
+  "description": "The Manas AI",
+  "scripts": {
+    "ui:dev": "nx run ui:dev",
+    "ui:build": "nx run ui:build",
+    "ui:lint": "nx run ui:lint",
+    "ui:test": "nx run ui:test",
+    "api:dev": "nx run api:dev",
+    "api:build": "nx run api:build",
+    "api:lint": "nx run api:lint",
+    "api:test": "nx run api:test",
+    "lint": "nx run-many --target=lint --all",
+    "test": "nx run-many --target=test --all",
+    "build": "nx run-many --target=build --all"
+  },
+  "keywords": [
+    "ManasAI",
+    "OpenDevin",
+    "DevinAI",
+    "Software Engineer",
+    "AGI",
+    "LLM"
+  ],
+  "author": "Yash Patel <hello@yashpokar.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "nx": "^18.2.1",
+    "prettier": "3.2.5"
+  }
+}
