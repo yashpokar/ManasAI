@@ -1,5 +1,6 @@
 import typography from '@tailwindcss/typography'
 import form from '@tailwindcss/forms'
+import headlessui from '@headlessui/tailwindcss'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -8,10 +9,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        chat: ['Poppins', 'sans-serif']
-      },
-      rotate: {}
+        chat: ['Poppins', 'sans-serif'],
+        display: ['Inter', 'sans-serif']
+      }
     }
   },
-  plugins: [typography, form]
+  plugins: [typography, form, headlessui({ prefix: 'ui' })]
 }

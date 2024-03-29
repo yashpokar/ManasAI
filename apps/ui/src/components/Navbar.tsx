@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
       <ul className="flex flex-col">
         <li className="">
           <button
-            className="p-0.5 md:p-1 rounded-full hover:bg-zinc-300 dark:hover:bg-zinc-700"
+            className="p-0.5 md:p-1 rounded-full focus:outline-none hover:bg-zinc-300 dark:hover:bg-zinc-700"
             onClick={toggleTheme}
           >
             {isDarkMode ? (
