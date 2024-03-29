@@ -16,9 +16,10 @@
   "author": "Yash Patel <hello@yashpokar.com>",
   "license": "ISC",
   "dependencies": {
-    "core": "workspace:^",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

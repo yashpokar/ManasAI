@@ -3,17 +3,17 @@
   "version": "0.0.1",
   "description": "The Manas AI",
   "scripts": {
-    "ui:dev": "concurrently \"nx run core:build:watch\" \"nx run ui:dev\"",
+    "ui:dev": "nx run ui:dev",
     "ui:build": "nx run ui:build",
     "ui:lint": "nx run ui:lint",
     "ui:test": "nx run ui:test",
-    "api:dev": "concurrently \"nx run core:build:watch\" \"nx run api:dev\"",
+    "api:dev": "nx run api:dev",
     "api:build": "nx run api:build",
     "api:lint": "nx run api:lint",
     "api:test": "nx run api:test",
     "lint": "nx run-many --target=lint --all",
     "test": "nx run-many --target=test --all",
-    "build": "nx run core:build && nx run ui:build && nx run api:build",
+    "build": "nx run-many --target=build --all",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -32,7 +32,6 @@
   "author": "Yash Patel <hello@yashpokar.com>",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^8.2.2",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "nx": "^18.2.1",
