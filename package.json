@@ -3,17 +3,23 @@
   "version": "0.0.1",
   "description": "The Manas AI",
   "scripts": {
-    "ui:dev": "nx run ui:dev",
+    "ui:dev": "concurrently \"nx run core:build:watch\" \"nx run ui:dev\"",
     "ui:build": "nx run ui:build",
     "ui:lint": "nx run ui:lint",
     "ui:test": "nx run ui:test",
-    "api:dev": "nx run api:dev",
+    "api:dev": "concurrently \"nx run core:build:watch\" \"nx run api:dev\"",
     "api:build": "nx run api:build",
     "api:lint": "nx run api:lint",
     "api:test": "nx run api:test",
     "lint": "nx run-many --target=lint --all",
     "test": "nx run-many --target=test --all",
-    "build": "nx run-many --target=build --all"
+    "build": "nx run-many --target=build --all",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ]
   },
   "keywords": [
     "ManasAI",
@@ -26,6 +32,9 @@
   "author": "Yash Patel <hello@yashpokar.com>",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^8.2.2",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "nx": "^18.2.1",
     "prettier": "3.2.5"
   }
