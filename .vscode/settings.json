@@ -19,5 +19,10 @@
   "[typescriptreact]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "markdownlint.config": {
+    "MD033": {
+      "allowed_elements": ["img", "div"]
+    }
   }
 }
