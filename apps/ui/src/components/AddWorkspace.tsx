@@ -18,6 +18,10 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
   const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    setVisibility(show)
+  }, [show])
+
+  useEffect(() => {
     if (workspaces.length === 0) return
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -66,7 +70,7 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
   if (!visibility) return null
 
   return (
-    <div className="fixed flex justify-center items-center inset-0 z-50 opacity-85 bg-zinc-200 dark:bg-zinc-800">
+    <div className="fixed flex justify-center items-center inset-0 z-50 opacity-90 bg-zinc-200 dark:bg-zinc-800">
       <div
         className="p-4 lg:p-6 rounded-lg w-1/3 bg-zinc-50 dark:bg-zinc-900"
         ref={modalRef}
