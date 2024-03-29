@@ -16,6 +16,7 @@
   "author": "Yash Patel <hello@yashpokar.com>",
   "license": "ISC",
   "dependencies": {
+    "core": "workspace:^",
     "express": "^4.19.2",
     "socket.io": "^4.7.5"
   },

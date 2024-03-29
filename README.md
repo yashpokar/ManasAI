@@ -13,3 +13,9 @@ To install ManasAI, clone the repository and run the following command:
 ```shell
 pnpm install
 ```
+
+Create a `.env` file in the root directory and add the following environment variables:
+
+```shell
+cp .env.example .env
+```
