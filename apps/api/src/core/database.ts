@@ -7,7 +7,7 @@ import path from 'path'
 
 const AppDataSource = new DataSource({
   type: 'sqlite',
-  database: path.join(__dirname, '..', '..', '..', 'tmp', 'db.sqlite'),
+  database: path.join(__dirname, '..', '..', '..', '..', 'tmp', 'db.sqlite'),
   entities: [Workspace, Task],
   synchronize: true,
   logging: false
