@@ -22,3 +22,5 @@ package-lock.json
 .env.production
 
 workspaces/
+
+tmp/
