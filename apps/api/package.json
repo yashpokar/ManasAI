@@ -17,15 +17,16 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
+    "reflect-metadata": "^0.2.2",
     "sql-template-strings": "^2.2.2",
     "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.20",
     "winston": "^3.13.0",
     "ws": "^8.16.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.30",
-    "@types/sqlite3": "^3.1.11",
     "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "eslint": "^8.0.1",

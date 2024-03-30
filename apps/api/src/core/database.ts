@@ -1,17 +1,20 @@
-import path from 'path'
-import sqlite from 'sqlite3'
+import 'reflect-metadata'
+import { DataSource } from 'typeorm'
+
+import { Workspace, Task } from '../models'
 import logger from './logger'
+import path from 'path'
 
-const db = new sqlite.Database(
-  path.resolve(__dirname, '../../tmp/database.sqlite'),
-  err => {
-    if (err) {
-      logger.error('Failed to connect to the database', err)
-      process.exit(1)
-    } else {
-      logger.info('Connected to the database')
-    }
-  }
-)
+const AppDataSource = new DataSource({
+  type: 'sqlite',
+  database: path.join(__dirname, '..', '..', '..', 'tmp', 'db.sqlite'),
+  entities: [Workspace, Task],
+  synchronize: true,
+  logging: false
+})
 
-export default db
+AppDataSource.initialize()
+  .then(() => logger.info('Database initialized'))
+  .catch(error => logger.error('Error initializing database', error))
+
+export default AppDataSource

@@ -3,6 +3,7 @@ import { WebSocket, WebSocketServer } from 'ws'
 
 import { API_PORT } from './core/config'
 import logger from './core/logger'
+import './core/database'
 
 const server = createServer()
 const wss = new WebSocketServer({
@@ -19,6 +20,6 @@ wss.on('connection', (ws: WebSocket) => {
   ws.send('something')
 })
 
-server.listen(API_PORT, () => {
+server.listen(API_PORT, async () => {
   logger.info(`API server listening on port ${API_PORT}`)
 })
