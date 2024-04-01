@@ -1,14 +1,17 @@
-import { Workspace, Event } from '@manasai/events'
-import logger from '../core/logger'
+import { Event, Workspace } from '@manasai/events'
 
-export const onWrokspaceCreated = async (event: Event<Workspace>) => {
-  logger.info(`Workspace created: ${event.payload}`)
+class WorkspaceEventsListener {
+  public async onWorkspaceCreated(workspace: Event<Workspace>) {
+    console.log('Workspace created', workspace)
+  }
+
+  public async onWorkspaceUpdated(workspace: Event<Workspace>) {
+    console.log('Workspace updated', workspace)
+  }
+
+  public async onWorkspaceDeleted(workspace: Event<Workspace>) {
+    console.log('Workspace deleted', workspace)
+  }
 }
 
-export const onWrokspaceChanged = async (event: Event<Workspace>) => {
-  logger.info(`Workspace changed: ${event.payload}`)
-}
-
-export const onWrokspaceDeleted = async (event: Event<Workspace>) => {
-  logger.info(`Workspace deleted: ${event.payload}`)
-}
+export default WorkspaceEventsListener

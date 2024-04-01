@@ -1,5 +1,4 @@
 import { Server } from 'ws'
-import { Event } from '@manasai/events'
 import logger from './logger'
 
 class EventsHandler {
@@ -15,7 +14,7 @@ class EventsHandler {
 
       ws.on('message', data => {
         try {
-          const event = JSON.parse(data.toString()) as Event<unknown>
+          const event = JSON.parse(data.toString())
 
           logger.info(`Event received: ${event.type}`)
         } catch (error) {

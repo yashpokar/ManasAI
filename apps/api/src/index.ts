@@ -3,8 +3,9 @@ import { WebSocketServer } from 'ws'
 
 import { API_PORT } from './core/config'
 import logger from './core/logger'
-import './core/database'
 import EventsHandler from './core/events'
+
+import './core/database'
 
 const server = createServer()
 
