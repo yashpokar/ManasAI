@@ -16,6 +16,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
   useEffect(() => {
     client.onopen = () => {
       console.log('connected')
+
+      client.send('Hello, Server!')
     }
 
     client.onclose = () => {

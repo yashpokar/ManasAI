@@ -1,24 +1,18 @@
 import { createServer } from 'http'
-import { WebSocket, WebSocketServer } from 'ws'
+import { WebSocketServer } from 'ws'
 
 import { API_PORT } from './core/config'
 import logger from './core/logger'
 import './core/database'
+import EventsHandler from './core/events'
 
 const server = createServer()
-const wss = new WebSocketServer({
-  server
-})
 
-wss.on('connection', (ws: WebSocket) => {
-  ws.on('error', logger.error)
-
-  ws.on('message', data => {
-    logger.info('received: %s', data)
+new EventsHandler(
+  new WebSocketServer({
+    server
   })
-
-  ws.send('something')
-})
+).handle()
 
 server.listen(API_PORT, async () => {
   logger.info(`API server listening on port ${API_PORT}`)

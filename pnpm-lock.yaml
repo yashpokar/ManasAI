@@ -23,6 +23,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@manasai/events':
+        specifier: workspace:^
+        version: link:../../packages/events
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -164,6 +167,15 @@ importers:
       winston:
         specifier: ^3.13.0
         version: 3.13.0
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.30
+        version: 20.11.30
+      typescript:
+        specifier: ^5.2.2
+        version: 5.4.3
+
+  packages/events:
     devDependencies:
       '@types/node':
         specifier: ^20.11.30

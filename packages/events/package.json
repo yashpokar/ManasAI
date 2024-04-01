@@ -1,0 +1,19 @@
+{
+  "name": "@manasai/events",
+  "version": "0.0.1",
+  "private": true,
+  "description": "The event types",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "keywords": [],
+  "author": "Yash Patel <hello@yashpokar.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "typescript": "^5.2.2"
+  }
+}

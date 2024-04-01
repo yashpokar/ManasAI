@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useSocket } from '../providers/SocketProvider'
 
 const Chat: React.FC = () => {
   const [query, setQuery] = useState('')
+  useSocket()
 
   const onMessageSubmit = (e: React.FormEvent) => {
     e.preventDefault()

@@ -16,6 +16,7 @@
   "author": "Yash Patel <hello@yashpokar.com>",
   "license": "ISC",
   "dependencies": {
+    "@manasai/events": "workspace:^",
     "dotenv": "^16.4.5",
     "reflect-metadata": "^0.2.2",
     "sql-template-strings": "^2.2.2",
