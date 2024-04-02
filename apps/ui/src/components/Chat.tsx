@@ -1,13 +1,21 @@
 import React, { useState } from 'react'
 import { useSocket } from '../providers/SocketProvider'
+import { MessageReceivedEvent } from '@manasai/events'
 
 const Chat: React.FC = () => {
   const [query, setQuery] = useState('')
-  useSocket()
+  const { emit } = useSocket()
 
   const onMessageSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log(query)
+
+    emit({
+      type: 'MESSAGE_RECEIVED',
+      payload: {
+        author: 'USER',
+        content: query
+      }
+    } as MessageReceivedEvent)
 
     setQuery('')
   }

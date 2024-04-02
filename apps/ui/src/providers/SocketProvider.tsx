@@ -1,35 +1,59 @@
-import { createContext, useContext, useEffect } from 'react'
+import { createContext, useContext, useEffect, useCallback } from 'react'
+import { Event, EventWithPayload } from '@manasai/events'
 
-interface SocketContextProps {}
+interface SocketContextProps {
+  emit: (event: EventWithPayload<unknown> | Event) => void
+}
 
 interface SocketProviderProps {
   client: WebSocket
   children: React.ReactNode
 }
 
-const SocketContext = createContext<SocketContextProps>({})
+const SocketContext = createContext<SocketContextProps>({
+  emit: () => {
+    throw new Error('SocketProvider is not initialized')
+  }
+})
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({
   children,
   client
 }) => {
+  const emit = useCallback(
+    (event: EventWithPayload<unknown> | Event) => {
+      client.send(JSON.stringify(event))
+    },
+    [client]
+  )
+
   useEffect(() => {
-    client.onopen = () => {
-      console.log('connected')
-
-      client.send('Hello, Server!')
+    const onMessage = (event: MessageEvent) => {
+      console.log({ event })
     }
 
-    client.onclose = () => {
-      console.log('disconnected')
+    const onOpen = () => {
+      emit({ type: 'CONNECTED' })
     }
 
-    client.onerror = () => {
-      console.log('error')
+    const onClose = () => {
+      emit({ type: 'DISCONNECTED' })
     }
-  }, [client])
 
-  return <SocketContext.Provider value={{}}>{children}</SocketContext.Provider>
+    client.addEventListener('open', onOpen)
+    client.addEventListener('close', onClose)
+    client.addEventListener('message', onMessage)
+
+    return () => {
+      client.removeEventListener('message', onMessage)
+      client.removeEventListener('open', onOpen)
+      client.removeEventListener('close', onClose)
+    }
+  }, [client, emit])
+
+  return (
+    <SocketContext.Provider value={{ emit }}>{children}</SocketContext.Provider>
+  )
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

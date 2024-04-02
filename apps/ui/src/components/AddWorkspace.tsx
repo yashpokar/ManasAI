@@ -3,6 +3,8 @@ import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ShortUniqueId from 'short-unique-id'
 import clsx from 'clsx'
 import { useWorkspace } from '../providers/WorkspaceProvider'
+import { useSocket } from '../providers/SocketProvider'
+import { WorkspaceCreatedEvent } from '@manasai/events'
 
 interface AddWorkspaceProps {
   show: boolean
@@ -14,6 +16,7 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
   const [name, setName] = useState('')
   const [visibility, setVisibility] = useState(show)
   const [error, setError] = useState('')
+  const { emit } = useSocket()
 
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -51,6 +54,17 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
       id
     })
 
+    emit({
+      type: 'WORKSPACE_CREATED',
+      payload: {
+        id,
+        name
+      }
+    } as WorkspaceCreatedEvent)
+
+    // TODO: wait for the workspace to be created, let the server acknowledge it
+    // before closing the modal
+
     onWorkspaceChange(id)
     setName('')
     setVisibility(false)
@@ -72,7 +86,7 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
   return (
     <div className="fixed flex justify-center items-center inset-0 z-50 opacity-90 bg-zinc-200 dark:bg-zinc-800">
       <div
-        className="p-4 lg:p-6 rounded-lg w-1/3 bg-zinc-50 dark:bg-zinc-900"
+        className="p-4 md:p-6 lg:p-10 rounded-lg w-1/3 bg-zinc-50 dark:bg-zinc-900"
         ref={modalRef}
       >
         <div className="">
@@ -81,12 +95,12 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
           </span>
         </div>
 
-        <form className="grid gap-2 md:gap-4 mt-4" onSubmit={onSubmit}>
+        <form className="grid gap-2 md:gap-4 lg:gap-6 mt-4" onSubmit={onSubmit}>
           <div className="">
             <input
               type="text"
               className={clsx(
-                'border py-2.5 font-chat text-sm rounded-lg w-full dark:bg-zinc-800 dark:text-zinc-200 focus:ring-0',
+                'border py-2.5 font-chat text-sm rounded-lg w-full dark:bg-zinc-800 dark:text-zinc-200 focus:ring-0 dark:focus:border-zinc-700',
                 {
                   'border-red-500 focus:border-red-500': error
                 },
@@ -97,6 +111,7 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
               )}
               onChange={onWorkspaceNameChange}
               value={name}
+              spellCheck="false"
               required
             />
 
@@ -107,7 +122,7 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
             )}
           </div>
 
-          <div className="flex justify-end gap-x-2">
+          <div className="flex justify-end gap-x-2 lg:gap-x-4">
             <button
               type="button"
               className={clsx(

@@ -2,12 +2,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn
+  CreateDateColumn,
+  PrimaryColumn
 } from 'typeorm'
 
 @Entity()
 export class Workspace {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string
 
   @Column({ unique: true, nullable: false })
