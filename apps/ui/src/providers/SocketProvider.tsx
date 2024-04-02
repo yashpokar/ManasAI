@@ -1,14 +1,27 @@
-import { createContext, useContext, useEffect, useCallback } from 'react'
-import { Event, EventWithPayload } from '@manasai/events'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useCallback,
+  useState
+} from 'react'
+import {
+  ConnectedEvent,
+  DisconnectedEvent,
+  EventWithPayload
+} from '@manasai/events'
+import ShortUniqueId from 'short-unique-id'
 
 interface SocketContextProps {
-  emit: (event: EventWithPayload<unknown> | Event) => void
+  emit: (event: EventWithPayload<unknown>) => void
 }
 
 interface SocketProviderProps {
   client: WebSocket
   children: React.ReactNode
 }
+
+const DEVICE_TOKEN_KEY = 'device_token'
 
 const SocketContext = createContext<SocketContextProps>({
   emit: () => {
@@ -20,12 +33,37 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
   children,
   client
 }) => {
+  const [deviceToken, setDeviceToken] = useState<string>('')
+
   const emit = useCallback(
-    (event: EventWithPayload<unknown> | Event) => {
-      client.send(JSON.stringify(event))
+    (event: EventWithPayload<unknown>) => {
+      client.send(
+        JSON.stringify({
+          ...event,
+          payload: {
+            ...(event.payload ?? {}),
+            deviceToken
+          }
+        })
+      )
     },
-    [client]
+    [client, deviceToken]
   )
+
+  useEffect(() => {
+    if (!deviceToken) {
+      let deviceId = localStorage.getItem(DEVICE_TOKEN_KEY)
+
+      if (!deviceId) {
+        deviceId = new ShortUniqueId().randomUUID(6)
+        localStorage.setItem(DEVICE_TOKEN_KEY, deviceId)
+      }
+
+      if (deviceId) {
+        setDeviceToken(deviceId)
+      }
+    }
+  }, [deviceToken])
 
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
@@ -33,11 +71,16 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
     }
 
     const onOpen = () => {
-      emit({ type: 'CONNECTED' })
+      emit({
+        type: 'CONNECTED',
+        payload: {
+          deviceToken
+        }
+      } as ConnectedEvent)
     }
 
     const onClose = () => {
-      emit({ type: 'DISCONNECTED' })
+      emit({ type: 'DISCONNECTED' } as DisconnectedEvent)
     }
 
     client.addEventListener('open', onOpen)
@@ -49,7 +92,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
       client.removeEventListener('open', onOpen)
       client.removeEventListener('close', onClose)
     }
-  }, [client, emit])
+  }, [client, emit, deviceToken])
 
   return (
     <SocketContext.Provider value={{ emit }}>{children}</SocketContext.Provider>

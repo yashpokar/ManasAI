@@ -19,7 +19,6 @@
     "@manasai/events": "workspace:^",
     "dotenv": "^16.4.5",
     "reflect-metadata": "^0.2.2",
-    "sql-template-strings": "^2.2.2",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20",
     "winston": "^3.13.0",

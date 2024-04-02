@@ -1,14 +1,14 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 
-import { Workspace, Task } from '../models'
+import { WorkspaceEntity, TaskEntity } from '../models'
 import logger from './logger'
 import path from 'path'
 
 const AppDataSource = new DataSource({
   type: 'sqlite',
   database: path.join(__dirname, '..', '..', '..', '..', 'tmp', 'db.sqlite'),
-  entities: [Workspace, Task],
+  entities: [WorkspaceEntity, TaskEntity],
   synchronize: true,
   logging: false
 })

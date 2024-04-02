@@ -1,22 +1,35 @@
-import { Event, MessageReceivedEvent } from '@manasai/events'
-import logger from '../core/logger'
-import { HandlerOptions } from '../types'
+import { Event, MessageReceivedEvent, ReadyEvent } from '@manasai/events'
 import EventEmitter from 'events'
+
+import logger from '../core/logger'
+import { Socket } from '../types'
+import db from '../core/database'
+import { WorkspaceEntity } from '../models'
 
 export default (events: EventEmitter) => {
   events.on('MESSAGE_RECEIVED', (event: MessageReceivedEvent) => {
     logger.info(`Message received: ${event.payload.content}`)
   })
 
-  events.on('CONNECTED', (event: Event, { emit }: HandlerOptions) => {
-    logger.info('Connected', event, emit)
+  events.on('CONNECTED', async (event: Event, socket: Socket) => {
+    logger.info('Connected', event)
 
-    emit({
-      type: 'MESSAGE_RECEIVED',
+    const workspaces = await db.manager.find(WorkspaceEntity)
+
+    socket.emit({
+      type: 'READY',
       payload: {
-        author: 'ASSISTANT',
-        content: 'Hello, world!'
+        workspaces: workspaces.map(workspace => ({
+          id: workspace.id,
+          name: workspace.name
+        })),
+        messages: [
+          {
+            author: 'ASSISTANT',
+            content: `Hi there! I'm ManasAI. Your buddy engineer, you can ask me a question or tell me your requirements for the project. I'm here to help you.`
+          }
+        ]
       }
-    } as MessageReceivedEvent)
+    } as ReadyEvent)
   })
 }

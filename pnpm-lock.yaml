@@ -32,9 +32,6 @@ importers:
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
-      sql-template-strings:
-        specifier: ^2.2.2
-        version: 2.2.2
       sqlite3:
         specifier: ^5.1.7
         version: 5.1.7
@@ -4910,11 +4907,6 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
-
-  /sql-template-strings@2.2.2:
-    resolution: {integrity: sha512-UXhXR2869FQaD+GMly8jAMCRZ94nU5KcrFetZfWEMd+LVVG6y0ExgHAhatEcKZ/wk8YcKPdi+hiD2wm75lq3/Q==}
-    engines: {node: '>=4.0.0'}
-    dev: false
 
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}

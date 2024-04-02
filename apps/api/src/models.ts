@@ -7,9 +7,12 @@ import {
 } from 'typeorm'
 
 @Entity()
-export class Workspace {
+export class WorkspaceEntity {
   @PrimaryColumn()
   id: string
+
+  @Column({ nullable: false })
+  deviceToken: string
 
   @Column({ unique: true, nullable: false })
   name: string
@@ -19,7 +22,7 @@ export class Workspace {
 }
 
 @Entity()
-export class Task {
+export class TaskEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
