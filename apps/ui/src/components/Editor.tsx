@@ -8,7 +8,7 @@ const Editor: React.FC = () => {
 
   useEffect(() => {
     monaco?.editor.defineTheme('manas-ai', {
-      base: 'vs-dark',
+      base: isDarkMode ? 'vs-dark' : 'vs',
       inherit: true,
       rules: [],
       colors: {
@@ -23,6 +23,7 @@ const Editor: React.FC = () => {
     <div className="h-full w-full">
       <CodeEditor
         height="100%"
+        theme="manas-ai"
         defaultLanguage="javascript"
         defaultValue={`// Welcome to ManasAI Editor! 🚀
 
