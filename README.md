@@ -8,6 +8,12 @@ ManasAI, inspired by the groundbreaking [Devin AI](https://www.cognition-labs.co
   <img src=".assets/ManasAI.png" alt="ManasAI" height="200" />
 </div>
 
+## First Look
+
+<div align="center">
+  <img src=".assets/ManasAIFirstLook.png" alt="ManasAI" height="500" />
+</div>
+
 ## Installation
 
 To install ManasAI, clone the repository and run the following command:

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Tab } from '@headlessui/react'
+import Shell from './Shell'
 
 const Widgets: React.FC = () => {
   return (
@@ -29,11 +30,16 @@ const Widgets: React.FC = () => {
             </Tab>
           </Tab.List>
 
-          <Tab.Panels className="border flex-1 rounded-lg border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900">
-            <Tab.Panel></Tab.Panel>
-            <Tab.Panel></Tab.Panel>
-            <Tab.Panel></Tab.Panel>
-            <Tab.Panel></Tab.Panel>
+          <Tab.Panels
+            className="border p-1 flex-1 rounded-lg border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900"
+            id="tabs"
+          >
+            <Tab.Panel className="h-full">
+              <Shell />
+            </Tab.Panel>
+            <Tab.Panel className="h-full"></Tab.Panel>
+            <Tab.Panel className="h-full"></Tab.Panel>
+            <Tab.Panel className="h-full"></Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>

@@ -100,6 +100,9 @@ importers:
       '@manasai/events':
         specifier: workspace:^
         version: link:../../packages/events
+      '@xterm/xterm':
+        specifier: ^5.4.0
+        version: 5.4.0
       clsx:
         specifier: ^2.1.0
         version: 2.1.0
@@ -112,6 +115,12 @@ importers:
       short-unique-id:
         specifier: ^5.0.3
         version: 5.0.3
+      xterm:
+        specifier: ^5.3.0
+        version: 5.3.0
+      xterm-addon-fit:
+        specifier: ^0.8.0
+        version: 0.8.0(xterm@5.3.0)
     devDependencies:
       '@tailwindcss/forms':
         specifier: ^0.5.7
@@ -1536,6 +1545,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@xterm/xterm@5.4.0:
+    resolution: {integrity: sha512-GlyzcZZ7LJjhFevthHtikhiDIl8lnTSgol6eTM4aoSNLcuXu3OEhnbqdCVIjtIil3jjabf3gDtb1S8FGahsuEw==}
+    dev: false
 
   /@yarnpkg/lockfile@1.1.0:
     resolution: {integrity: sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==}
@@ -5604,6 +5617,18 @@ packages:
         optional: true
     dependencies:
       bufferutil: 4.0.8
+    dev: false
+
+  /xterm-addon-fit@0.8.0(xterm@5.3.0):
+    resolution: {integrity: sha512-yj3Np7XlvxxhYF/EJ7p3KHaMt6OdwQ+HDu573Vx1lRXsVxOcnVJs51RgjZOouIZOczTsskaS+CpXspK81/DLqw==}
+    peerDependencies:
+      xterm: ^5.0.0
+    dependencies:
+      xterm: 5.3.0
+    dev: false
+
+  /xterm@5.3.0:
+    resolution: {integrity: sha512-8QqjlekLUFTrU6x7xck1MsPzPA571K5zNqWm0M0oroYEWVOptZ0+ubQSkQ3uxIEhcIHRujJy6emDWX4A7qyFzg==}
     dev: false
 
   /y18n@5.0.8:

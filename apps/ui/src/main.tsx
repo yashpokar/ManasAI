@@ -13,19 +13,17 @@ import { HistoryProvider } from './providers/HistoryProvider.tsx'
 const socket = new WebSocket(import.meta.env.UI_WEB_SOCKET_URL)
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <AlertProvider>
-      <DeviceInfoProvider>
-        <HistoryProvider>
-          <SocketProvider client={socket}>
-            <ThemeProvider>
-              <WorkspaceProvider>
-                <App />
-              </WorkspaceProvider>
-            </ThemeProvider>
-          </SocketProvider>
-        </HistoryProvider>
-      </DeviceInfoProvider>
-    </AlertProvider>
-  </React.StrictMode>
+  <AlertProvider>
+    <DeviceInfoProvider>
+      <HistoryProvider>
+        <SocketProvider client={socket}>
+          <ThemeProvider>
+            <WorkspaceProvider>
+              <App />
+            </WorkspaceProvider>
+          </ThemeProvider>
+        </SocketProvider>
+      </HistoryProvider>
+    </DeviceInfoProvider>
+  </AlertProvider>
 )
