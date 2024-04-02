@@ -2,16 +2,14 @@ import { useEffect, useRef } from 'react'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import '@xterm/xterm/css/xterm.css'
+import { useTheme } from '../providers/ThemeProvider'
 
 const Shell: React.FC = () => {
   const playgroundRef = useRef<HTMLDivElement>(null)
+  const { isDarkMode } = useTheme()
 
   useEffect(() => {
     if (!playgroundRef.current) return
-
-    const backgroundColor = getComputedStyle(
-      document.getElementById('tabs')!
-    ).backgroundColor
 
     const terminal = new Terminal({
       cols: 0,
@@ -19,7 +17,9 @@ const Shell: React.FC = () => {
       fontFamily: "Menlo, Monaco, 'Courier New', monospace",
       fontSize: 18,
       theme: {
-        background: backgroundColor
+        background: isDarkMode ? '#18181b' : '#f4f4f5',
+        foreground: isDarkMode ? '#f4f4f5' : '#18181b',
+        cursor: isDarkMode ? '#f4f4f5' : '#18181b'
       }
     })
     terminal.write('$ ')
@@ -30,7 +30,11 @@ const Shell: React.FC = () => {
     fitAddon.activate(terminal)
 
     fitAddon.fit()
-  }, [playgroundRef])
+
+    return () => {
+      terminal.dispose()
+    }
+  }, [playgroundRef, isDarkMode])
 
   return <div ref={playgroundRef} className="p-2 h-full" />
 }
