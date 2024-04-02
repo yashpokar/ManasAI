@@ -36,8 +36,6 @@ socket.on('connection', ws => {
               client.send(JSON.stringify(event))
             }
           })
-
-          logger.debug(`Event emitted: ${event.type}`)
         }
       })
 

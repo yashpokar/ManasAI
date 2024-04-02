@@ -13,6 +13,7 @@ import { useWorkspace } from '../providers/WorkspaceProvider'
 import AddWorkspace from './AddWorkspace'
 import { EventWithPayload, ReadyEvent } from '@manasai/events'
 import { useSocket } from '../providers/SocketProvider'
+import { CancelAlert, useAlert } from '../providers/AlertProvider'
 
 const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme()
@@ -22,8 +23,10 @@ const Navbar: React.FC = () => {
     useState(false)
   const [showAddWorkspace, shouldShowAddWorkspace] = useState(false)
   const { on } = useSocket()
+  const { warning } = useAlert()
 
   const workspaceSelectorRef = useRef<HTMLDivElement>(null)
+  const alertRef = useRef<CancelAlert>()
 
   useEffect(() => {
     on('READY', (event: EventWithPayload<unknown>) => {
@@ -40,9 +43,19 @@ const Navbar: React.FC = () => {
         return
       }
 
+      if (!alertRef.current) {
+        alertRef.current = warning('Select a workspace to get started', false)
+      }
       shouldOpenShowWorkspaceSelector(true)
     })
-  }, [on, setWorkspaces, onWorkspaceChange, workspaceSelectorRef])
+  }, [
+    on,
+    setWorkspaces,
+    onWorkspaceChange,
+    workspaceSelectorRef,
+    warning,
+    alertRef
+  ])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -64,6 +77,10 @@ const Navbar: React.FC = () => {
   const onWorkspaceIdChange = (id: string) => {
     onWorkspaceChange(id)
     shouldOpenShowWorkspaceSelector(false)
+
+    if (alertRef.current) {
+      alertRef.current()
+    }
   }
 
   return (

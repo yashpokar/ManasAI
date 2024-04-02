@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
-import { useSocket } from '../providers/SocketProvider'
 import { MessageReceivedEvent } from '@manasai/events'
+
+import { useSocket } from '../providers/SocketProvider'
+import { useWorkspace } from '../providers/WorkspaceProvider'
 
 const Chat: React.FC = () => {
   const [query, setQuery] = useState('')
   const { emit } = useSocket()
+  const { workspaces } = useWorkspace()
 
   const onMessageSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,6 +44,7 @@ const Chat: React.FC = () => {
           onChange={e => setQuery(e.target.value)}
           onKeyDown={onEnterPress}
           value={query}
+          disabled={workspaces.length === 0}
         ></textarea>
 
         <button

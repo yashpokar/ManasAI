@@ -1,4 +1,8 @@
-import { Event, MessageReceivedEvent, ReadyEvent } from '@manasai/events'
+import {
+  ConnectedEvent,
+  MessageReceivedEvent,
+  ReadyEvent
+} from '@manasai/events'
 import EventEmitter from 'events'
 
 import logger from '../core/logger'
@@ -11,10 +15,16 @@ export default (events: EventEmitter) => {
     logger.info(`Message received: ${event.payload.content}`)
   })
 
-  events.on('CONNECTED', async (event: Event, socket: Socket) => {
-    logger.info('Connected', event)
+  events.on('CONNECTED', async (event: ConnectedEvent, socket: Socket) => {
+    const workspaces = await db.manager
+      .createQueryBuilder(WorkspaceEntity, 'workspace')
+      .where('workspace.deviceToken = :deviceToken', {
+        deviceToken: event.payload.deviceToken
+      })
+      .getMany()
 
-    const workspaces = await db.manager.find(WorkspaceEntity)
+    logger.debug('DEvice token', event.payload.deviceToken)
+    logger.debug('Workspaces', workspaces)
 
     socket.emit({
       type: 'READY',
