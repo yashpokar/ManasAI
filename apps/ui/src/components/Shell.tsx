@@ -9,9 +9,9 @@ const Shell: React.FC = () => {
   useEffect(() => {
     if (!playgroundRef.current) return
 
-    const backgroundColor = getComputedStyle(document.getElementById('tabs')!)
-      .getPropertyValue('background-color')
-      .trim()
+    const backgroundColor = getComputedStyle(
+      document.getElementById('tabs')!
+    ).backgroundColor
 
     const terminal = new Terminal({
       cols: 0,

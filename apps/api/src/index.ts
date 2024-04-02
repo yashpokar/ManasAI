@@ -2,6 +2,7 @@ import { createServer } from 'http'
 import { WebSocketServer } from 'ws'
 import EventEmitter from 'events'
 import { Event, EventWithPayload } from '@manasai/events'
+import handlers from './handlers'
 
 import { API_PORT } from './core/config'
 import logger from './core/logger'
@@ -14,7 +15,7 @@ const socket = new WebSocketServer({
   server
 })
 
-import('./handlers').then(({ default: handlers }) => handlers(events))
+handlers(events)
 
 socket.on('connection', ws => {
   ws.on('error', err => logger.error(`Error: ${err}`))
