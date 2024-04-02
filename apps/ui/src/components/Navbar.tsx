@@ -14,6 +14,7 @@ import AddWorkspace from './AddWorkspace'
 import { EventWithPayload, ReadyEvent } from '@manasai/events'
 import { useSocket } from '../providers/SocketProvider'
 import { CancelAlert, useAlert } from '../providers/AlertProvider'
+import { useHistory } from '../providers/HistoryProvider'
 
 const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme()
@@ -24,22 +25,24 @@ const Navbar: React.FC = () => {
   const [showAddWorkspace, shouldShowAddWorkspace] = useState(false)
   const { on } = useSocket()
   const { warning } = useAlert()
+  const { setMessages } = useHistory()
 
   const workspaceSelectorRef = useRef<HTMLDivElement>(null)
   const alertRef = useRef<CancelAlert>()
 
   useEffect(() => {
     on('READY', (event: EventWithPayload<unknown>) => {
-      const { workspaces } = event.payload as ReadyEvent['payload']
+      const { workspaces, messages } = event.payload as ReadyEvent['payload']
       setWorkspaces(workspaces)
-
-      if (workspaces.length === 1) {
-        onWorkspaceChange(workspaces[0].id)
-        return
-      }
+      setMessages(messages)
 
       if (workspaces.length === 0) {
         shouldShowAddWorkspace(true)
+        return
+      }
+
+      if (workspaces.length === 1) {
+        onWorkspaceChange(workspaces[0].id)
         return
       }
 
@@ -54,7 +57,8 @@ const Navbar: React.FC = () => {
     onWorkspaceChange,
     workspaceSelectorRef,
     warning,
-    alertRef
+    alertRef,
+    setMessages
   ])
 
   useEffect(() => {
@@ -108,11 +112,17 @@ const Navbar: React.FC = () => {
                 className="absolute z-10 right-12 -top-1 w-48 shadow-xl"
                 static
               >
-                <div className="grid p-2 rounded-lg bg-zinc-100 border-zinc-300 dark:bg-zinc-700 dark:border-zinc-800">
+                <div className="grid gap-y-1.5 p-2 rounded-lg bg-zinc-100 border-zinc-300 dark:bg-zinc-700 dark:border-zinc-800">
                   {workspaces.map(({ id, name }) => (
                     <button
                       key={id}
-                      className="flex justify-between py-2 px-4 text-left text-sm font-medium rounded-lg text-zinc-600 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-600"
+                      className={clsx(
+                        'flex justify-between py-2 px-4 text-left text-sm font-medium rounded-lg text-zinc-600 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-600',
+                        {
+                          'bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-600  hover:dark:bg-indigo-500':
+                            activeWorkspace?.id === id
+                        }
+                      )}
                       onClick={() => onWorkspaceIdChange(id)}
                       data-testid="workspace-selector-option"
                     >
@@ -125,7 +135,7 @@ const Navbar: React.FC = () => {
                   ))}
 
                   {workspaces.length > 0 && (
-                    <hr className="border-zinc-300 dark:border-zinc-800 opacity-45 my-2" />
+                    <hr className="border-zinc-300 dark:border-zinc-800 opacity-45 my-1" />
                   )}
 
                   <button

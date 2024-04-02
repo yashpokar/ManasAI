@@ -23,9 +23,6 @@ export default (events: EventEmitter) => {
       })
       .getMany()
 
-    logger.debug('DEvice token', event.payload.deviceToken)
-    logger.debug('Workspaces', workspaces)
-
     socket.emit({
       type: 'READY',
       payload: {

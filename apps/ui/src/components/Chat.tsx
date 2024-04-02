@@ -1,13 +1,22 @@
-import React, { useState } from 'react'
-import { MessageReceivedEvent } from '@manasai/events'
+import React, { useEffect, useState } from 'react'
+import { EventWithPayload, MessageReceivedEvent } from '@manasai/events'
 
 import { useSocket } from '../providers/SocketProvider'
 import { useWorkspace } from '../providers/WorkspaceProvider'
+import { useHistory } from '../providers/HistoryProvider'
+import Message from './Message'
 
 const Chat: React.FC = () => {
   const [query, setQuery] = useState('')
-  const { emit } = useSocket()
+  const { emit, on } = useSocket()
   const { workspaces } = useWorkspace()
+  const { messages } = useHistory()
+
+  useEffect(() => {
+    on('MESSAGE_RECEIVED', (event: EventWithPayload<unknown>) => {
+      console.log(event)
+    })
+  }, [on])
 
   const onMessageSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,10 +40,14 @@ const Chat: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full h-full rounded-lg bg-zinc-200 dark:bg-zinc-800">
-      <div className="flex-1"></div>
+      <div className="flex flex-col gap-y-2 md:gap-y-2.5 flex-1 p-2 md:p-4 lg:p-6 overflow-y-scroll">
+        {messages.map((message, index) => (
+          <Message key={index} {...message} />
+        ))}
+      </div>
 
       <form
-        className="relative py-2 px-4 lg:py-4 lg:px-6"
+        className="relative mt-4 pb-2 px-4 lg:pb-4 lg:px-6"
         onSubmit={onMessageSubmit}
       >
         <textarea
