@@ -8,12 +8,17 @@ import {
 import {
   ConnectedEvent,
   DisconnectedEvent,
-  EventWithPayload
+  EventWithPayload,
+  EventTypes
 } from '@manasai/events'
 import ShortUniqueId from 'short-unique-id'
 
 interface SocketContextProps {
   emit: (event: EventWithPayload<unknown>) => void
+  on: (
+    event: EventTypes,
+    listener: (event: EventWithPayload<unknown>) => void
+  ) => void
 }
 
 interface SocketProviderProps {
@@ -25,6 +30,9 @@ const DEVICE_TOKEN_KEY = 'device_token'
 
 const SocketContext = createContext<SocketContextProps>({
   emit: () => {
+    throw new Error('SocketProvider is not initialized')
+  },
+  on: () => {
     throw new Error('SocketProvider is not initialized')
   }
 })
@@ -48,6 +56,22 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
       )
     },
     [client, deviceToken]
+  )
+
+  const on = useCallback(
+    (
+      event: EventTypes,
+      listener: (event: EventWithPayload<unknown>) => void
+    ) => {
+      client.addEventListener('message', (e: MessageEvent) => {
+        const data = JSON.parse(e.data) as EventWithPayload<unknown>
+
+        if (data.type !== event) return
+
+        listener(data)
+      })
+    },
+    [client]
   )
 
   useEffect(() => {
@@ -95,7 +119,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
   }, [client, emit, deviceToken])
 
   return (
-    <SocketContext.Provider value={{ emit }}>{children}</SocketContext.Provider>
+    <SocketContext.Provider value={{ emit, on }}>
+      {children}
+    </SocketContext.Provider>
   )
 }
 

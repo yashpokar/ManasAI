@@ -7,6 +7,7 @@ interface WorkspaceContextProps {
   addWorkspace: (workspace: Workspace) => void
   onWorkspaceChange: (id: string) => void
   isNameTaken: (name: string) => boolean
+  setWorkspaces: (workspaces: Workspace[]) => void
 }
 
 interface WorkspaceProviderProps {
@@ -17,7 +18,8 @@ const WorkspaceContext = createContext<WorkspaceContextProps>({
   workspaces: [],
   addWorkspace: () => null,
   onWorkspaceChange: () => null,
-  isNameTaken: () => false
+  isNameTaken: () => false,
+  setWorkspaces: () => null
 })
 
 export const WorkspaceProvider: React.FC<WorkspaceProviderProps> = ({
@@ -45,7 +47,8 @@ export const WorkspaceProvider: React.FC<WorkspaceProviderProps> = ({
     workspaces,
     addWorkspace,
     onWorkspaceChange,
-    isNameTaken
+    isNameTaken,
+    setWorkspaces
   }
 
   if (activeWorkspaceId) {

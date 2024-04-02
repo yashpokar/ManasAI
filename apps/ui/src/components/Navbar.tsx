@@ -11,15 +11,38 @@ import clsx from 'clsx'
 import { useTheme } from '../providers/ThemeProvider'
 import { useWorkspace } from '../providers/WorkspaceProvider'
 import AddWorkspace from './AddWorkspace'
+import { EventWithPayload, ReadyEvent } from '@manasai/events'
+import { useSocket } from '../providers/SocketProvider'
 
 const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme()
-  const { workspaces, activeWorkspace, onWorkspaceChange } = useWorkspace()
+  const { workspaces, activeWorkspace, onWorkspaceChange, setWorkspaces } =
+    useWorkspace()
   const [workspaceSelectorOpen, shouldOpenShowWorkspaceSelector] =
     useState(false)
   const [showAddWorkspace, shouldShowAddWorkspace] = useState(false)
+  const { on } = useSocket()
 
   const workspaceSelectorRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    on('READY', (event: EventWithPayload<unknown>) => {
+      const { workspaces } = event.payload as ReadyEvent['payload']
+      setWorkspaces(workspaces)
+
+      if (workspaces.length === 1) {
+        onWorkspaceChange(workspaces[0].id)
+        return
+      }
+
+      if (workspaces.length === 0) {
+        shouldShowAddWorkspace(true)
+        return
+      }
+
+      shouldOpenShowWorkspaceSelector(true)
+    })
+  }, [on, setWorkspaces, onWorkspaceChange, workspaceSelectorRef])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
