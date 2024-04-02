@@ -13,7 +13,7 @@
     "api:test": "nx run api:test",
     "lint": "nx run-many --target=lint --all",
     "test": "nx run-many --target=test --all",
-    "build": "nx run-many --target=build --all",
+    "build": "nx run @manasai/events:build && nx run ui:build && nx run api:build",
     "prepare": "husky"
   },
   "lint-staged": {
