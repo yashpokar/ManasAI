@@ -3,17 +3,22 @@ import {
   WorkspaceCreatedEvent,
   WorkspaceDeletedEvent
 } from '@manasai/events'
+import fs from 'fs'
 import logger from '../core/logger'
 import { Socket } from '../types'
-import EventEmitter from 'events'
 import { WorkspaceEntity } from '../models'
 import db from '../core/database'
+import { getWorkspacePath } from '../utils'
 
-const onWorkspaceCreated = async (
+export const onWorkspaceCreated = async (
   event: WorkspaceCreatedEvent,
   socket: Socket
 ) => {
   logger.debug(`Workspace created: ${event.payload}`)
+
+  const workspaceDirectory = getWorkspacePath(event.payload.id)
+
+  fs.mkdirSync(workspaceDirectory, { recursive: true })
 
   await db.manager.save(WorkspaceEntity, {
     id: event.payload.id,
@@ -27,7 +32,7 @@ const onWorkspaceCreated = async (
   } as WorkspaceCreatedEvent)
 }
 
-const onWorkspaceDeleted = async (
+export const onWorkspaceDeleted = async (
   event: WorkspaceDeletedEvent,
   socket: Socket
 ) => {
@@ -41,12 +46,6 @@ const onWorkspaceDeleted = async (
   } as WorkspaceDeletedEvent)
 }
 
-const onWorkspaceChanged = async (event: WorkspaceChangedEvent) => {
+export const onWorkspaceChanged = async (event: WorkspaceChangedEvent) => {
   logger.debug(`Workspace changed: ${event.payload}`)
-}
-
-export default (events: EventEmitter) => {
-  events.on('WORKSPACE_CREATED', onWorkspaceCreated)
-  events.on('WORKSPACE_CHANGED', onWorkspaceChanged)
-  events.on('WORKSPACE_DELETED', onWorkspaceDeleted)
 }

@@ -139,7 +139,7 @@ const Navbar: React.FC = () => {
                   )}
 
                   <button
-                    className="py-2 text-xs font-semibold text-zinc-700 rounded-lg dark:text-green-50 hover:text-zinc-50 hover:bg-green-500"
+                    className="py-2 text-xs font-semibold text-zinc-700 rounded-lg transition duration-75 dark:text-green-50 hover:text-zinc-50 hover:bg-green-500"
                     onClick={() => shouldShowAddWorkspace(true)}
                   >
                     <PlusCircleIcon className="w-5 h-5 inline-block mr-2" />
