@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "The Manas AI",
   "scripts": {
+    "dev": "concurrently \"pnpm run ui:dev\" \"pnpm run api:dev\"",
     "ui:dev": "nx run ui:dev",
     "ui:build": "nx run ui:build",
     "ui:lint": "nx run ui:lint",
@@ -32,6 +33,7 @@
   "author": "Yash Patel <hello@yashpokar.com>",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "nx": "^18.2.1",

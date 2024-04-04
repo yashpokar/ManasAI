@@ -4,7 +4,7 @@ import EventEmitter from 'events'
 import { Event, EventWithPayload } from '@manasai/events'
 import handlers from './handlers'
 
-import { API_PORT } from './core/config'
+import { API_PORT, API_URL } from './core/config'
 import logger from './core/logger'
 import './core/database'
 
@@ -48,5 +48,5 @@ socket.on('connection', ws => {
 })
 
 server.listen(API_PORT, async () => {
-  logger.info(`API server listening on port ${API_PORT}`)
+  logger.info(`The server is running at ${API_URL}`)
 })

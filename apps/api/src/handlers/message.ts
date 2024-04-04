@@ -8,9 +8,23 @@ import logger from '../core/logger'
 import { Socket } from '../types'
 import db from '../core/database'
 import { WorkspaceEntity } from '../models'
+import { createAgentExecutor } from '../core/agent'
 
-export const onMessageReceived = (event: MessageReceivedEvent) => {
-  logger.info(`Message received: ${event.payload.content}`)
+const agentExecutor = createAgentExecutor()
+
+export const onMessageReceived = async (event: MessageReceivedEvent) => {
+  logger.debug(`Message received: ${event.payload.content}`)
+
+  if (event.payload.content === '') {
+    return
+  }
+
+  const result = await agentExecutor.invoke({
+    input: event.payload.content,
+    workspace_id: 'cGvKJs' // TODO: Get workspace ID from the socket
+  })
+
+  logger.debug(`Agent result: ${JSON.stringify(result)}`)
 }
 
 export const onConnected = async (event: ConnectedEvent, socket: Socket) => {

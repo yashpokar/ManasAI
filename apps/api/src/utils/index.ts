@@ -12,3 +12,7 @@ export const getWorkspaceDir = () => {
 export const getWorkspacePath = (workspaceId: string) => {
   return path.join(getWorkspaceDir(), workspaceId)
 }
+
+export const getFilepath = (workspaceId: string, filename: string) => {
+  return path.join(getWorkspacePath(workspaceId), filename)
+}
