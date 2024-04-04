@@ -8,7 +8,8 @@ export default new DynamicStructuredTool({
   description:
     'The tool for running terminal commands in-order to verify the generated code.',
   schema: z.object({
-    command: z.string()
+    workspaceId: z.string().describe('The project workspace ID.'),
+    command: z.string().describe('The terminal command to run.')
   }),
   func: async ({ command }) => {
     logger.debug(`Running command: ${command}...`)

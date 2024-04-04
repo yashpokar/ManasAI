@@ -9,6 +9,7 @@ export default new DynamicStructuredTool({
   name: 'browser',
   description: 'The tool for browsing the web.',
   schema: z.object({
+    workspaceId: z.string().describe('The project workspace ID.'),
     url: z
       .string()
       .optional()
