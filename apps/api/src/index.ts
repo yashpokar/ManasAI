@@ -1,7 +1,7 @@
 import { createServer } from 'http'
 import { WebSocketServer } from 'ws'
 import EventEmitter from 'events'
-import { Event, EventWithPayload } from '@manasai/events'
+import { Event, EventWithPayload } from '@manasai/common'
 import handlers from './handlers'
 
 import { API_PORT, API_URL } from './core/config'

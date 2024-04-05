@@ -3,7 +3,7 @@ import {
   DisconnectedEvent,
   EventWithPayload,
   EventTypes
-} from '@manasai/events'
+} from '@manasai/common'
 import { useDeviceInfo } from './DeviceInfoProvider'
 
 interface SocketContextProps {

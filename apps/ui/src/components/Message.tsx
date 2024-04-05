@@ -1,5 +1,5 @@
 import { UserIcon } from '@heroicons/react/24/outline'
-import { Message as MessageProps } from '@manasai/events'
+import { Message as MessageProps } from '@manasai/common'
 import React from 'react'
 import RobotIcon from './RobotIcon'
 import clsx from 'clsx'

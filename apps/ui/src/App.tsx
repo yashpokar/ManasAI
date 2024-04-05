@@ -8,7 +8,7 @@ import Alert from './components/Alert'
 import { useDeviceInfo } from './providers/DeviceInfoProvider'
 import Loader from './components/Loader'
 import { useSocket } from './providers/SocketProvider'
-import { ConnectedEvent } from '@manasai/events'
+import { ConnectedEvent } from '@manasai/common'
 
 const App: React.FC = () => {
   const { isDarkMode } = useTheme()

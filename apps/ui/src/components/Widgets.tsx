@@ -1,35 +1,92 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import Shell from './Shell'
 import Editor from './Editor'
 import WebBrowser from './WebBrowser'
 import Plan from './Plan'
+import { useSocket } from '../providers/SocketProvider'
+import {
+  EditorCodeChangedEvent,
+  EventWithPayload,
+  TerminalCommandRunningEndedEvent,
+  TerminalCommandRunningStartedEvent
+} from '@manasai/common'
+import { Command } from '../types'
+
+interface ComponentProps {
+  code?: string
+  commands: Command[]
+}
 
 interface Tab {
   name: string
-  component: React.FC
+  component: (props: ComponentProps) => React.ReactElement
 }
 
 const tabs: Tab[] = [
   {
     name: 'Shell',
-    component: Shell
+    component: ({ commands }) => <Shell commands={commands} />
   },
   {
     name: 'Browser',
-    component: WebBrowser
+    component: () => <WebBrowser />
   },
   {
     name: 'Editor',
-    component: Editor
+    component: ({ code }) => <Editor code={code} />
   },
   {
     name: 'Planner',
-    component: Plan
+    component: () => <Plan />
   }
 ]
 
 const Widgets: React.FC = () => {
+  const [code, setCode] = useState<string | undefined>()
+  const [commands, setCommands] = useState<Command[]>([])
+  const { on } = useSocket()
+
+  useEffect(() => {
+    on('EDITOR_CODE_CHANGED', (event: EventWithPayload<unknown>) => {
+      const { code } = event.payload as EditorCodeChangedEvent['payload']
+
+      console.log('Code changed:', code)
+      setCode(code)
+    })
+
+    on(
+      'TERMINAL_COMMAND_RUNNING_STARTED',
+      (event: EventWithPayload<unknown>) => {
+        const { command } =
+          event.payload as TerminalCommandRunningStartedEvent['payload']
+        setCommands(prevCommands => [
+          ...prevCommands,
+          {
+            stdout: command,
+            isOutput: false
+          }
+        ])
+      }
+    )
+
+    on('TERMINAL_COMMAND_RUNNING_ENDED', (event: EventWithPayload<unknown>) => {
+      const { output } =
+        event.payload as TerminalCommandRunningEndedEvent['payload']
+      let stdout = output
+      if (output.includes('failed')) {
+        stdout = `\x1b[31m${output}\x1b[0m`
+      }
+      setCommands(prevCommands => [
+        ...prevCommands,
+        {
+          stdout,
+          isOutput: true
+        }
+      ])
+    })
+  }, [on, setCode, setCommands])
+
   return (
     <div className="flex flex-col w-full h-full rounded-lg bg-zinc-200 dark:bg-zinc-800">
       <div className="flex flex-col flex-1 p-1.5 md:p-2.5 lg:p-6 pt-0 md:pt-0 lg:pt-0">
@@ -58,7 +115,7 @@ const Widgets: React.FC = () => {
           <Tab.Panels className="border p-1 flex-1 rounded-lg border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900">
             {tabs.map(tab => (
               <Tab.Panel className="h-full" key={tab.name}>
-                <tab.component />
+                {tab.component({ code, commands })}
               </Tab.Panel>
             ))}
           </Tab.Panels>

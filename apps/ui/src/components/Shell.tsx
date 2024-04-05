@@ -3,8 +3,13 @@ import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import '@xterm/xterm/css/xterm.css'
 import { useTheme } from '../providers/ThemeProvider'
+import { Command } from '../types'
 
-const Shell: React.FC = () => {
+interface ShellProps {
+  commands: Command[]
+}
+
+const Shell: React.FC<ShellProps> = ({ commands }) => {
   const playgroundRef = useRef<HTMLDivElement>(null)
   const { isDarkMode } = useTheme()
 
@@ -15,7 +20,7 @@ const Shell: React.FC = () => {
       cols: 0,
       rows: 0,
       fontFamily: "Menlo, Monaco, 'Courier New', monospace",
-      fontSize: 18,
+      fontSize: 14,
       theme: {
         background: isDarkMode ? '#18181b' : '#f4f4f5',
         foreground: isDarkMode ? '#f4f4f5' : '#18181b',
@@ -23,6 +28,14 @@ const Shell: React.FC = () => {
       }
     })
     terminal.write('$ ')
+
+    commands.forEach(({ stdout, isOutput }) => {
+      terminal.writeln(stdout)
+
+      if (isOutput) {
+        terminal.write('$ ')
+      }
+    })
 
     const fitAddon = new FitAddon()
     terminal.loadAddon(fitAddon)
@@ -34,7 +47,7 @@ const Shell: React.FC = () => {
     return () => {
       terminal.dispose()
     }
-  }, [playgroundRef, isDarkMode])
+  }, [playgroundRef, isDarkMode, commands])
 
   return <div ref={playgroundRef} className="p-2 h-full" />
 }

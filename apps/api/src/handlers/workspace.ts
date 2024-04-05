@@ -2,7 +2,7 @@ import {
   WorkspaceChangedEvent,
   WorkspaceCreatedEvent,
   WorkspaceDeletedEvent
-} from '@manasai/events'
+} from '@manasai/common'
 import fs from 'fs'
 import logger from '../core/logger'
 import { Socket } from '../types'

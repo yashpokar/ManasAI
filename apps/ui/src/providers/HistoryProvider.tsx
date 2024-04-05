@@ -1,4 +1,4 @@
-import { Message } from '@manasai/events'
+import { Message } from '@manasai/common'
 import React, { createContext, useContext, useState } from 'react'
 
 interface HistoryContext {

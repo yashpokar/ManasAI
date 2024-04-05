@@ -4,7 +4,7 @@ import ShortUniqueId from 'short-unique-id'
 import clsx from 'clsx'
 import { useWorkspace } from '../providers/WorkspaceProvider'
 import { useSocket } from '../providers/SocketProvider'
-import { WorkspaceCreatedEvent } from '@manasai/events'
+import { WorkspaceCreatedEvent } from '@manasai/common'
 
 interface AddWorkspaceProps {
   show: boolean

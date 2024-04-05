@@ -1,0 +1,25 @@
+FROM ubuntu:20.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    sudo \
+    curl \
+    git \
+    vim \
+    wget \
+    zip \
+    unzip \
+    ca-certificates \
+    software-properties-common \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m manasai && echo "manasai:manasai" | chpasswd && adduser manasai sudo \
+  && echo "manasai ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/manasai
+
+USER manasai
+
+CMD ["/bin/bash"]

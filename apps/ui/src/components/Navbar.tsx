@@ -11,7 +11,7 @@ import clsx from 'clsx'
 import { useTheme } from '../providers/ThemeProvider'
 import { useWorkspace } from '../providers/WorkspaceProvider'
 import AddWorkspace from './AddWorkspace'
-import { EventWithPayload, ReadyEvent } from '@manasai/events'
+import { EventWithPayload, ReadyEvent } from '@manasai/common'
 import { useSocket } from '../providers/SocketProvider'
 import { CancelAlert, useAlert } from '../providers/AlertProvider'
 import { useHistory } from '../providers/HistoryProvider'
@@ -117,10 +117,14 @@ const Navbar: React.FC = () => {
                     <button
                       key={id}
                       className={clsx(
-                        'flex justify-between py-2 px-4 text-left text-sm font-medium rounded-lg text-zinc-600 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-600',
+                        'flex justify-between py-2 px-4 text-left text-sm font-medium rounded-lg',
                         {
                           'bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-600  hover:dark:bg-indigo-500':
                             activeWorkspace?.id === id
+                        },
+                        {
+                          'text-zinc-600 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-600':
+                            activeWorkspace?.id !== id
                         }
                       )}
                       onClick={() => onWorkspaceIdChange(id)}

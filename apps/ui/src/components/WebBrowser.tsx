@@ -9,17 +9,21 @@ const WebBrowser: React.FC = () => {
         </div>
 
         <span className="py-1.5 px-4 font-medium text-sm text-zinc-700 bg-zinc-200 dark:text-zinc-50 dark:bg-zinc-700 rounded-full w-3/5">
-          https://scrapy.org/
+          Search
         </span>
       </div>
 
-      <div className="flex-1 p-2 lg:p-4 lg:pt-2.5">
-        <iframe
+      <div className="flex items-center justify-center flex-1 p-2 lg:p-4 lg:pt-2.5">
+        {/* <iframe
           title="ManasAI Browser"
           src="https://scrapy.org/"
           className="h-full w-full rounded-b-lg"
           sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-        />
+        /> */}
+
+        <p className="text-gray-500 dark:text-zinc-500">
+          No plan of action ready yet.
+        </p>
       </div>
     </div>
   )

@@ -3,7 +3,7 @@ import {
   EventWithPayload,
   Message as MessageType,
   MessageReceivedEvent
-} from '@manasai/events'
+} from '@manasai/common'
 
 import { useSocket } from '../providers/SocketProvider'
 import { useWorkspace } from '../providers/WorkspaceProvider'

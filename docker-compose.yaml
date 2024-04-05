@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile.sandbox
+    image: 'manasai-sandbox:latest'
+    container_name: 'manasai-sandbox'
+    volumes:
+      - ./workspaces:/var/www/html
+    working_dir: /var/www/html
+    healthcheck:
+      test: ["CMD", "echo", "Hello ManasAI Gang!"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    command: tail -f /dev/null

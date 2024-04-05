@@ -1,8 +1,9 @@
 import {
   ConnectedEvent,
   MessageReceivedEvent,
-  ReadyEvent
-} from '@manasai/events'
+  ReadyEvent,
+  TerminalCommandRunningEndedEvent
+} from '@manasai/common'
 
 import logger from '../core/logger'
 import { Socket } from '../types'
@@ -12,17 +13,79 @@ import { createAgentExecutor } from '../core/agent'
 
 const agentExecutor = createAgentExecutor()
 
-export const onMessageReceived = async (event: MessageReceivedEvent) => {
+const runIdMappings = new Map<string, string>()
+
+export const onMessageReceived = async (
+  event: MessageReceivedEvent,
+  socket: Socket
+) => {
   logger.debug(`Message received: ${event.payload.content}`)
 
   if (event.payload.content === '') {
     return
   }
 
-  const result = await agentExecutor.invoke({
-    input: event.payload.content,
-    workspace_id: 'cGvKJs' // TODO: Get workspace ID from the socket
-  })
+  const result = await agentExecutor.invoke(
+    {
+      input: event.payload.content,
+      workspace_id: 'cGvKJs' // TODO: Get workspace ID from the socket
+    },
+    {
+      callbacks: [
+        {
+          handleToolStart(
+            _tool,
+            input,
+            runId,
+            _parentRunId,
+            _tags,
+            _metadata,
+            name
+          ) {
+            if (!name) return
+
+            runIdMappings.set(runId, name)
+
+            if (name === 'terminal') {
+              const { command } = JSON.parse(input)
+
+              socket.emit({
+                type: 'TERMINAL_COMMAND_RUNNING_STARTED',
+                payload: {
+                  command
+                }
+              })
+            } else if (name === 'editor') {
+              const { code } = JSON.parse(input)
+
+              socket.emit({
+                type: 'EDITOR_CODE_CHANGED',
+                payload: {
+                  code
+                }
+              })
+            }
+          },
+          handleToolEnd(output: string, runId: string) {
+            logger.debug(`output: ${output}, runId: ${runId}`)
+
+            if (runIdMappings.get(runId) === 'terminal') {
+              const event: TerminalCommandRunningEndedEvent = {
+                type: 'TERMINAL_COMMAND_RUNNING_ENDED',
+                payload: {
+                  output
+                }
+              }
+
+              socket.emit(event)
+            }
+
+            runIdMappings.delete(runId)
+          }
+        }
+      ]
+    }
+  )
 
   logger.debug(`Agent result: ${JSON.stringify(result)}`)
 }

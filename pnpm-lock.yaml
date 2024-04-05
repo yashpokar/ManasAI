@@ -35,9 +35,12 @@ importers:
       '@langchain/openai':
         specifier: ^0.0.25
         version: 0.0.25
-      '@manasai/events':
+      '@manasai/common':
         specifier: workspace:^
-        version: link:../../packages/events
+        version: link:../../packages/common
+      axios:
+        specifier: ^1.6.8
+        version: 1.6.8
       dockerode:
         specifier: ^4.0.2
         version: 4.0.2
@@ -46,7 +49,7 @@ importers:
         version: 16.4.5
       langchain:
         specifier: ^0.1.30
-        version: 0.1.30(typeorm@0.3.20)(ws@8.16.0)
+        version: 0.1.30(axios@1.6.8)(typeorm@0.3.20)(ws@8.16.0)
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -70,6 +73,9 @@ importers:
         specifier: ^4.0.8
         version: 4.0.8
     devDependencies:
+      '@types/dockerode':
+        specifier: ^3.3.28
+        version: 3.3.28
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
@@ -118,9 +124,9 @@ importers:
       '@heroicons/react':
         specifier: ^2.1.3
         version: 2.1.3(react@18.2.0)
-      '@manasai/events':
+      '@manasai/common':
         specifier: workspace:^
-        version: link:../../packages/events
+        version: link:../../packages/common
       '@monaco-editor/react':
         specifier: ^4.6.0
         version: 4.6.0(monaco-editor@0.47.0)(react-dom@18.2.0)(react@18.2.0)
@@ -191,6 +197,15 @@ importers:
       vite:
         specifier: ^5.2.0
         version: 5.2.6
+
+  packages/common:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.30
+        version: 20.12.2
+      typescript:
+        specifier: ^5.2.2
+        version: 5.4.3
 
   packages/events:
     devDependencies:
@@ -1548,6 +1563,21 @@ packages:
       '@types/node': 20.12.2
     dev: true
 
+  /@types/docker-modem@3.0.6:
+    resolution: {integrity: sha512-yKpAGEuKRSS8wwx0joknWxsmLha78wNMe9R2S3UNsVOkZded8UqOrV8KoeDXoXsjndxwyF3eIhyClGbO1SEhEg==}
+    dependencies:
+      '@types/node': 20.12.2
+      '@types/ssh2': 1.15.0
+    dev: true
+
+  /@types/dockerode@3.3.28:
+    resolution: {integrity: sha512-RjY96chW88t2QvSebCsec+mQYo3/nyOr+/tVcE+0ynlOg2m/i9wPE52DhptzF75QDlhv2uDYVPqKfHKeGTn6Fg==}
+    dependencies:
+      '@types/docker-modem': 3.0.6
+      '@types/node': 20.12.2
+      '@types/ssh2': 1.15.0
+    dev: true
+
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
@@ -1604,7 +1634,6 @@ packages:
     resolution: {integrity: sha512-5pAX7ggTmWZdhUrhRWLPf+5oM7F80bcKVCBbr0zwEkTNzTJL2CWQjznpFgHYy6GrzkYi2Yjy7DHKoynFxqPV8g==}
     dependencies:
       undici-types: 5.26.5
-    dev: false
 
   /@types/node@20.11.30:
     resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
@@ -1663,6 +1692,12 @@ packages:
       '@types/http-errors': 2.0.4
       '@types/mime': 4.0.0
       '@types/node': 20.12.2
+    dev: true
+
+  /@types/ssh2@1.15.0:
+    resolution: {integrity: sha512-YcT8jP5F8NzWeevWvcyrrLB3zcneVjzYY9ZDSMAMboI+2zR1qYWFhwsyOFVzT7Jorn67vqxC0FRiw8YyG9P1ww==}
+    dependencies:
+      '@types/node': 18.19.29
     dev: true
 
   /@types/triple-beam@1.3.5:
@@ -2251,7 +2286,6 @@ packages:
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
-    dev: true
 
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -3484,7 +3518,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: true
 
   /for-each@0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -4214,7 +4247,7 @@ packages:
     resolution: {integrity: sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==}
     dev: false
 
-  /langchain@0.1.30(typeorm@0.3.20)(ws@8.16.0):
+  /langchain@0.1.30(axios@1.6.8)(typeorm@0.3.20)(ws@8.16.0):
     resolution: {integrity: sha512-5h/vNMmutQ98tbB0sPDlAileZVca6A2McFgGa3+D56Dm8mSSCzTQL2DngPA6h09DlKDpSr7+6PdFw5Hoj0ZDSw==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -4377,6 +4410,7 @@ packages:
       '@langchain/community': 0.0.44(typeorm@0.3.20)(ws@8.16.0)
       '@langchain/core': 0.1.52
       '@langchain/openai': 0.0.25
+      axios: 1.6.8
       binary-extensions: 2.3.0
       js-tiktoken: 1.0.10
       js-yaml: 4.1.0
@@ -5487,7 +5521,6 @@ packages:
 
   /proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
-    dev: true
 
   /pstree.remy@1.1.8:
     resolution: {integrity: sha512-77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w==}
