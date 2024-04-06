@@ -51,7 +51,6 @@ const Widgets: React.FC = () => {
     on('EDITOR_CODE_CHANGED', (event: EventWithPayload<unknown>) => {
       const { code } = event.payload as EditorCodeChangedEvent['payload']
 
-      console.log('Code changed:', code)
       setCode(code)
     })
 

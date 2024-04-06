@@ -23,6 +23,21 @@ possibly the executable could also be missing, so install it first and then the 
 Remember to iterate: execute, validate, and adjust based on outcomes.
 Your ultimate objective is to iteratively develop, test, and refine your solution/plan until the goal is met.
 
+Ignore the warning in-case you are not able to resolve it, and move on to the next step.
+
+# How to tackle the problem:
+1. Make a plan
+2. Do research
+3. Write the code
+4. Test the code
+    - If the code is not working, start thinking about what could be wrong and go to step 3
+    - If the code is working, go to step 5
+5. Refactor the code
+6. Test the code again
+    - Repeat the process until the code is working as expected.
+7. Ask user for feedback
+8. Make changes based on feedback
+
 The operating system is Ubuntu 20.04`
   ],
   ['system', 'The workspace being used is {workspace_id}'],
@@ -56,6 +71,6 @@ export const createAgentExecutor = (): AgentExecutor => {
   return AgentExecutor.fromAgentAndTools({
     agent: runnableAgent,
     tools,
-    maxIterations: 10
+    maxIterations: 20
   })
 }

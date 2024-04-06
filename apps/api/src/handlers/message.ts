@@ -25,10 +25,30 @@ export const onMessageReceived = async (
     return
   }
 
+  const workspace = await db.manager.findOne(WorkspaceEntity, {
+    where: {
+      active: true
+    }
+  })
+
+  if (!workspace) {
+    logger.error('No active workspace found')
+
+    return
+  }
+
+  socket.emit({
+    type: 'MESSAGE_RECEIVED',
+    payload: {
+      author: 'ASSISTANT',
+      content: `I have received your message, get some coffee and relax, I'm working on it...`
+    }
+  })
+
   const result = await agentExecutor.invoke(
     {
       input: event.payload.content,
-      workspace_id: 'cGvKJs' // TODO: Get workspace ID from the socket
+      workspace_id: workspace.id
     },
     {
       callbacks: [
@@ -87,7 +107,13 @@ export const onMessageReceived = async (
     }
   )
 
-  logger.debug(`Agent result: ${JSON.stringify(result)}`)
+  socket.emit({
+    type: 'MESSAGE_RECEIVED',
+    payload: {
+      author: 'ASSISTANT',
+      content: result.output
+    }
+  })
 }
 
 export const onConnected = async (event: ConnectedEvent, socket: Socket) => {

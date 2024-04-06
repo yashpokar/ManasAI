@@ -1,9 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import {
-  EventWithPayload,
-  Message as MessageType,
-  MessageReceivedEvent
-} from '@manasai/common'
+import React, { useState } from 'react'
+import { Message as MessageType, MessageReceivedEvent } from '@manasai/common'
 
 import { useSocket } from '../providers/SocketProvider'
 import { useWorkspace } from '../providers/WorkspaceProvider'
@@ -12,15 +8,9 @@ import Message from './Message'
 
 const Chat: React.FC = () => {
   const [query, setQuery] = useState('')
-  const { emit, on } = useSocket()
+  const { emit } = useSocket()
   const { workspaces, activeWorkspace } = useWorkspace()
   const { messages, addMessage } = useHistory()
-
-  useEffect(() => {
-    on('MESSAGE_RECEIVED', (event: EventWithPayload<unknown>) => {
-      console.log(event)
-    })
-  }, [on])
 
   const onMessageSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,7 +49,7 @@ const Chat: React.FC = () => {
         onSubmit={onMessageSubmit}
       >
         <textarea
-          className="w-full border-0 resize-none max-h-full rounded-lg text-sm leading-5 tracking-wide font-chat p-2 shadow-none md:p-3.5 bg-zinc-100 transition placeholder:text-zinc-400 focus:ring-0 focus:bg-opacity-75 dark:bg-zinc-700 dark:text-white"
+          className="w-full border-0 resize-none max-h-full rounded-lg text-sm leading-5 tracking-wide font-chat p-2 shadow-none md:p-3.5 bg-zinc-100 transition placeholder:text-zinc-400 focus:h-32 focus:ring-0 focus:bg-opacity-75 dark:bg-zinc-700 dark:text-white"
           placeholder={`Your requirements here${!activeWorkspace ? ' but after choosing workspace' : ''}...`}
           data-testid="chat-input"
           onChange={e => setQuery(e.target.value)}

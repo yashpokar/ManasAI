@@ -23,7 +23,8 @@ export const onWorkspaceCreated = async (
   await db.manager.save(WorkspaceEntity, {
     id: event.payload.id,
     name: event.payload.name,
-    deviceToken: event.payload.deviceToken
+    deviceToken: event.payload.deviceToken,
+    active: false
   })
 
   socket.emit({
@@ -48,4 +49,26 @@ export const onWorkspaceDeleted = async (
 
 export const onWorkspaceChanged = async (event: WorkspaceChangedEvent) => {
   logger.debug(`Workspace changed: ${event.payload}`)
+
+  await db.manager.transaction(async manager => {
+    manager.update(
+      WorkspaceEntity,
+      {
+        active: true
+      },
+      {
+        active: false
+      }
+    )
+
+    manager.update(
+      WorkspaceEntity,
+      {
+        id: event.payload.id
+      },
+      {
+        active: true
+      }
+    )
+  })
 }

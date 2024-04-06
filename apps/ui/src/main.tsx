@@ -14,15 +14,15 @@ const socket = new WebSocket(import.meta.env.UI_WEB_SOCKET_URL)
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <AlertProvider>
     <DeviceInfoProvider>
-      <HistoryProvider>
-        <SocketProvider client={socket}>
+      <SocketProvider client={socket}>
+        <HistoryProvider>
           <ThemeProvider>
             <WorkspaceProvider>
               <App />
             </WorkspaceProvider>
           </ThemeProvider>
-        </SocketProvider>
-      </HistoryProvider>
+        </HistoryProvider>
+      </SocketProvider>
     </DeviceInfoProvider>
   </AlertProvider>
 )

@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from 'react'
 import { Workspace } from '../types'
+import { useSocket } from './SocketProvider'
 
 interface WorkspaceContextProps {
   workspaces: Workspace[]
@@ -27,14 +28,25 @@ export const WorkspaceProvider: React.FC<WorkspaceProviderProps> = ({
 }) => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
   const [activeWorkspaceId, setActiveWorkspaceId] = useState<string>()
+  const { emit } = useSocket()
 
   const addWorkspace = useCallback((workspace: Workspace) => {
     setWorkspaces(workspaces => [...workspaces, workspace])
   }, [])
 
-  const onWorkspaceChange = useCallback((id: string) => {
-    setActiveWorkspaceId(id)
-  }, [])
+  const onWorkspaceChange = useCallback(
+    (id: string) => {
+      setActiveWorkspaceId(id)
+
+      emit({
+        type: 'WORKSPACE_CHANGED',
+        payload: {
+          id
+        }
+      })
+    },
+    [emit]
+  )
 
   const isNameTaken = useCallback(
     (name: string) => {

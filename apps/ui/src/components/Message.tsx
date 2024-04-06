@@ -11,11 +11,14 @@ const Message: React.FC<MessageProps> = ({ author, content }) => {
     <div className="flex flex-col gap-y-1.5">
       <div className={clsx('inline-flex', { 'self-end': isUser })}>
         <div
-          className={clsx('p-2 lg:py-3 lg:px-4 font-chat text-sm opacity-85', {
-            'rounded-e-full bg-zinc-100 dark:bg-zinc-700 dark:text-zinc-100':
-              !isUser,
-            'rounded-s-full text-right bg-indigo-600 text-zinc-100': isUser
-          })}
+          className={clsx(
+            'p-2 lg:p-3 font-chat text-sm opacity-85 text-ellipsis overflow-hidden',
+            {
+              'rounded-e-full mr-8 bg-zinc-100 dark:bg-zinc-700 dark:text-zinc-100':
+                !isUser,
+              'rounded-s-full text-right bg-indigo-600 text-zinc-100': isUser
+            }
+          )}
         >
           {content}
         </div>

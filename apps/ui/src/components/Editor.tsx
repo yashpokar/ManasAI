@@ -29,12 +29,14 @@ const Editor: React.FC<EditorProps> = ({ code }) => {
         <CodeEditor
           height="100%"
           theme="manas-ai"
-          defaultLanguage="javascript"
+          defaultLanguage="python"
           defaultValue={
             code ??
-            `// Welcome to ManasAI Editor! 🚀
+            `"""Welcome to ManasAI Editor! 🚀
 
-          `
+ManasAI will write a code once starts executing its plan.
+"""
+`
           }
           options={{
             fontFamily:

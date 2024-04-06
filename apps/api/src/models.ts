@@ -17,6 +17,9 @@ export class WorkspaceEntity {
   @Column({ unique: true, nullable: false })
   name: string
 
+  @Column({ nullable: false })
+  active: boolean
+
   @CreateDateColumn()
   createdAt: Date
 }
