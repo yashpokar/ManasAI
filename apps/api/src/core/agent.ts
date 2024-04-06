@@ -46,8 +46,8 @@ The operating system is Ubuntu 20.04`
 ])
 
 const model = new ChatOpenAI({
-  modelName: 'gpt-4-0125-preview',
-  temperature: 0
+  modelName: 'gpt-3.5-turbo',
+  temperature: 0.7
 })
 
 const modelWithFunctions = model.bind({
@@ -71,6 +71,6 @@ export const createAgentExecutor = (): AgentExecutor => {
   return AgentExecutor.fromAgentAndTools({
     agent: runnableAgent,
     tools,
-    maxIterations: 20
+    maxIterations: 10
   })
 }

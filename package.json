@@ -4,6 +4,7 @@
   "description": "The Manas AI",
   "scripts": {
     "dev": "concurrently \"pnpm run ui:dev\" \"pnpm run api:dev\"",
+    "start": "concurrently \"nx run ui:preview --port 6288\" \"nx run api:dev\"",
     "ui:dev": "nx run ui:dev",
     "ui:build": "nx run ui:build",
     "ui:lint": "nx run ui:lint",
