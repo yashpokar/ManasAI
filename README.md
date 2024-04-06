@@ -8,7 +8,7 @@
 
 ManasAI, inspired by the groundbreaking [Devin AI](https://www.cognition-labs.com/introducing-devin) by Cognition Labs, is an open-source venture aiming to redefine software engineering through AI. This project harnesses advanced technologies for automating development tasks, enhancing code quality, and streamlining the software lifecycle. Ideal for developers and engineers seeking AI-augmented tools to boost productivity and innovation. Join us in pioneering the next wave of AI in software engineering with ManasAI.
 
-[Demo](https://drive.google.com/file/d/1mqOhEe5mXcH_vhPbyBlDsql7MVvxaD6F/view)
+[Demo](https://github.com/yashpokar/ManasAI/assets/7402810/a53817c6-3071-4c19-9ebe-98ffdaebd7d2)
 
 > [!IMPORTANT]
 > Currently, The project is in its infancy and can be considered experimental. Many features are either not yet implemented or are not working as intended. We warmly welcome contributions to assist in its development and progress!
