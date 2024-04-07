@@ -10,6 +10,7 @@ export class ProjectService {
     return {
       id: '1',
       name,
+      isActive: true,
       createdAt: new Date()
     }
   }
@@ -21,11 +22,13 @@ export class ProjectService {
       {
         id: '1',
         name: 'Project 1',
+        isActive: true,
         createdAt: new Date()
       },
       {
         id: '2',
         name: 'Project 2',
+        isActive: false,
         createdAt: new Date()
       }
     ]
