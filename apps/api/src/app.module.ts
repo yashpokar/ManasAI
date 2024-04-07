@@ -6,6 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { join } from 'path'
 
 import { ProjectModule } from '@/modules/project.module'
+import { ProjectEntity } from './models/project'
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { ProjectModule } from '@/modules/project.module'
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: join(__dirname, '../../../..', 'database.sqlite'),
-      entities: [],
+      entities: [ProjectEntity],
       synchronize: true
     }),
     ProjectModule

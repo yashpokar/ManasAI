@@ -15,11 +15,11 @@ export class ProjectResolver {
     @Context() ctx: IContext,
     @Args('name') name: string
   ): Promise<Project> {
-    return this.service.createProject(ctx, name)
+    return this.service.create(ctx, name)
   }
 
   @Query(() => [Project])
   async listProjects(@Context() ctx: IContext): Promise<Project[]> {
-    return this.service.listProjects(ctx)
+    return this.service.list(ctx)
   }
 }
