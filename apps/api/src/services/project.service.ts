@@ -28,6 +28,15 @@ export class ProjectService {
     await queryRunner.startTransaction()
 
     try {
+      // check for duplicates by name and device id
+      const existingProject = await queryRunner.manager.findOne(ProjectEntity, {
+        where: { name, deviceId: ctx.req.deviceId }
+      })
+
+      if (existingProject) {
+        throw new Error('Project already exists')
+      }
+
       await queryRunner.manager.update(
         ProjectEntity,
         { deviceId: ctx.req.deviceId },
