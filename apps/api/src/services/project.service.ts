@@ -28,7 +28,6 @@ export class ProjectService {
     await queryRunner.startTransaction()
 
     try {
-      // check for duplicates by name and device id
       const existingProject = await queryRunner.manager.findOne(ProjectEntity, {
         where: { name, deviceId: ctx.req.deviceId }
       })
@@ -60,19 +59,10 @@ export class ProjectService {
   async list(ctx: IContext): Promise<Project[]> {
     this.logger.log(`device id ${ctx.req.deviceId}`)
 
-    return [
-      {
-        id: '1',
-        name: 'Project 1',
-        isActive: true,
-        createdAt: new Date()
-      },
-      {
-        id: '2',
-        name: 'Project 2',
-        isActive: false,
-        createdAt: new Date()
+    return this.repository.find({
+      where: {
+        deviceId: ctx.req.deviceId
       }
-    ]
+    })
   }
 }
