@@ -9,7 +9,7 @@
     "web:build": "nx run web:build",
     "web:lint": "nx run web:lint",
     "web:test": "nx run web:test",
-    "api:dev": "nx run api:dev",
+    "api:dev": "nx run api:start:dev",
     "api:build": "nx run api:build",
     "api:lint": "nx run api:lint",
     "api:test": "nx run api:test",
