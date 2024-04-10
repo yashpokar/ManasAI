@@ -7,6 +7,7 @@ import { join } from 'path'
 
 import { ProjectModule } from '@/modules/project.module'
 import { ProjectEntity } from './models/project'
+import { MessageModule } from './modules/message.module'
 
 @Module({
   imports: [
@@ -15,15 +16,17 @@ import { ProjectEntity } from './models/project'
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(__dirname, 'schema.gql')
+      autoSchemaFile: join(__dirname, 'schema.gql'),
+      installSubscriptionHandlers: true
     }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: join(__dirname, '../../../..', 'database.sqlite'),
+      database: join(__dirname, '../../../../tmp', 'database.sqlite'),
       entities: [ProjectEntity],
       synchronize: true
     }),
-    ProjectModule
+    ProjectModule,
+    MessageModule
   ],
   controllers: []
 })
