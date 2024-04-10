@@ -17,7 +17,9 @@ const Navbar: React.FC = () => {
   const { workspaces, activeWorkspace, onWorkspaceChange } = useWorkspace()
   const [workspaceSelectorOpen, shouldOpenShowWorkspaceSelector] =
     useState(false)
-  const [showAddWorkspace, shouldShowAddWorkspace] = useState(false)
+  const [showAddWorkspace, shouldShowAddWorkspace] = useState(
+    workspaces.length === 0
+  )
 
   const workspaceSelectorRef = useRef<HTMLDivElement>(null)
 
@@ -45,7 +47,9 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="flex flex-col justify-between p-2 w-full h-full rounded-lg bg-zinc-200 dark:bg-zinc-800">
-      <AddWorkspace show={workspaces.length === 0 || showAddWorkspace} />
+      {showAddWorkspace && (
+        <AddWorkspace shouldShowAddWorkspace={shouldShowAddWorkspace} />
+      )}
 
       <ul className="">
         <li className="">
@@ -100,7 +104,10 @@ const Navbar: React.FC = () => {
 
                   <button
                     className="py-2 text-xs font-semibold text-zinc-700 rounded-lg transition duration-75 dark:text-green-50 hover:text-zinc-50 hover:bg-green-500"
-                    onClick={() => shouldShowAddWorkspace(true)}
+                    onClick={() => {
+                      console.log('Add new workspace')
+                      shouldShowAddWorkspace(true)
+                    }}
                   >
                     <PlusCircleIcon className="w-5 h-5 inline-block mr-2" />
                     Add New
