@@ -9,27 +9,26 @@ import {
 import { Popover } from '@headlessui/react'
 import clsx from 'clsx'
 import { useTheme } from '../providers/ThemeProvider'
-import { useWorkspace } from '../providers/WorkspaceProvider'
-import AddWorkspace from './AddWorkspace'
+import { useWorkspace } from '../providers/ProjectProvider'
+import NewProject from './NewProject'
 
 const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme()
   const { workspaces, activeWorkspace, onWorkspaceChange } = useWorkspace()
-  const [workspaceSelectorOpen, shouldOpenShowWorkspaceSelector] =
-    useState(false)
-  const [showAddWorkspace, shouldShowAddWorkspace] = useState(
+  const [workspaceSelectorOpen, openProjectsSelector] = useState(false)
+  const [isNewProjectDialogOpen, openNewProjectDialog] = useState(
     workspaces.length === 0
   )
 
-  const workspaceSelectorRef = useRef<HTMLDivElement>(null)
+  const projectSelectorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        workspaceSelectorRef.current &&
-        !workspaceSelectorRef.current.contains(event.target as Node)
+        projectSelectorRef.current &&
+        !projectSelectorRef.current.contains(event.target as Node)
       ) {
-        shouldOpenShowWorkspaceSelector(false)
+        openProjectsSelector(false)
       }
     }
 
@@ -38,22 +37,23 @@ const Navbar: React.FC = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [workspaceSelectorRef])
+  }, [projectSelectorRef])
 
   const onWorkspaceIdChange = (id: string) => {
     onWorkspaceChange(id)
-    shouldOpenShowWorkspaceSelector(false)
+    openProjectsSelector(false)
   }
 
   return (
     <nav className="flex flex-col justify-between p-2 w-full h-full rounded-lg bg-zinc-200 dark:bg-zinc-800">
-      {showAddWorkspace && (
-        <AddWorkspace shouldShowAddWorkspace={shouldShowAddWorkspace} />
-      )}
+      <NewProject
+        visible={isNewProjectDialogOpen}
+        setVisibility={openNewProjectDialog}
+      />
 
       <ul className="">
         <li className="">
-          <Popover className="relative text-center" ref={workspaceSelectorRef}>
+          <Popover className="relative text-center" ref={projectSelectorRef}>
             <Popover.Button
               className={clsx(
                 'p-0.5 md:p-1.5 rounded-full focus:outline-none hover:bg-zinc-300 dark:hover:bg-zinc-700',
@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
                   'bg-zinc-300 dark:bg-zinc-700': workspaceSelectorOpen
                 }
               )}
-              onClick={() => shouldOpenShowWorkspaceSelector(ps => !ps)}
+              onClick={() => openProjectsSelector(ps => !ps)}
               data-testid="workspace-selector-button"
             >
               <QueueListIcon className="w-6 h-6 text-zinc-900 dark:text-zinc-50" />
@@ -106,7 +106,7 @@ const Navbar: React.FC = () => {
                     className="py-2 text-xs font-semibold text-zinc-700 rounded-lg transition duration-75 dark:text-green-50 hover:text-zinc-50 hover:bg-green-500"
                     onClick={() => {
                       console.log('Add new workspace')
-                      shouldShowAddWorkspace(true)
+                      openNewProjectDialog(true)
                     }}
                   >
                     <PlusCircleIcon className="w-5 h-5 inline-block mr-2" />

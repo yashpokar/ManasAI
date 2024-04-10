@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { useWorkspace } from '../providers/WorkspaceProvider'
+import { useWorkspace } from '../providers/ProjectProvider'
 import { useHistory } from '../providers/HistoryProvider'
 import Message from './Message'
 

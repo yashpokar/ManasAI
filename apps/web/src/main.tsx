@@ -3,7 +3,7 @@ import App from './App.tsx'
 import { ThemeProvider } from './providers/ThemeProvider.tsx'
 
 import './index.css'
-import { WorkspaceProvider } from './providers/WorkspaceProvider.tsx'
+import { WorkspaceProvider } from './providers/ProjectProvider.tsx'
 import { DeviceInfoProvider } from './providers/DeviceInfoProvider.tsx'
 import { HistoryProvider } from './providers/HistoryProvider.tsx'
 
