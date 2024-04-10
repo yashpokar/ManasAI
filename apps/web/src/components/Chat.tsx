@@ -1,31 +1,18 @@
 import React, { useState } from 'react'
-import { Message as MessageType, MessageReceivedEvent } from '@manasai/common'
 
-import { useSocket } from '../providers/SocketProvider'
 import { useWorkspace } from '../providers/WorkspaceProvider'
 import { useHistory } from '../providers/HistoryProvider'
 import Message from './Message'
 
 const Chat: React.FC = () => {
   const [query, setQuery] = useState('')
-  const { emit } = useSocket()
   const { workspaces, activeWorkspace } = useWorkspace()
-  const { messages, addMessage } = useHistory()
+  const { messages } = useHistory()
 
   const onMessageSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const payload: MessageType = {
-      author: 'USER',
-      content: query
-    }
-
-    emit({
-      type: 'MESSAGE_RECEIVED',
-      payload
-    } as MessageReceivedEvent)
-
-    addMessage(payload)
+    console.log(query)
 
     setQuery('')
   }

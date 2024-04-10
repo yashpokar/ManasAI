@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import Shell from './Shell'
 import Editor from './Editor'
 import WebBrowser from './WebBrowser'
 import Plan from './Plan'
-import { useSocket } from '../providers/SocketProvider'
-import {
-  EditorCodeChangedEvent,
-  EventWithPayload,
-  TerminalCommandRunningEndedEvent,
-  TerminalCommandRunningStartedEvent
-} from '@manasai/common'
 import { Command } from '../types'
 
 interface ComponentProps {
@@ -43,48 +36,8 @@ const tabs: Tab[] = [
 ]
 
 const Widgets: React.FC = () => {
-  const [code, setCode] = useState<string | undefined>()
-  const [commands, setCommands] = useState<Command[]>([])
-  const { on } = useSocket()
-
-  useEffect(() => {
-    on('EDITOR_CODE_CHANGED', (event: EventWithPayload<unknown>) => {
-      const { code } = event.payload as EditorCodeChangedEvent['payload']
-
-      setCode(code)
-    })
-
-    on(
-      'TERMINAL_COMMAND_RUNNING_STARTED',
-      (event: EventWithPayload<unknown>) => {
-        const { command } =
-          event.payload as TerminalCommandRunningStartedEvent['payload']
-        setCommands(prevCommands => [
-          ...prevCommands,
-          {
-            stdout: command,
-            isOutput: false
-          }
-        ])
-      }
-    )
-
-    on('TERMINAL_COMMAND_RUNNING_ENDED', (event: EventWithPayload<unknown>) => {
-      const { output } =
-        event.payload as TerminalCommandRunningEndedEvent['payload']
-      let stdout = output
-      if (output.includes('failed')) {
-        stdout = `\x1b[31m${output}\x1b[0m`
-      }
-      setCommands(prevCommands => [
-        ...prevCommands,
-        {
-          stdout,
-          isOutput: true
-        }
-      ])
-    })
-  }, [on, setCode, setCommands])
+  const [code] = useState<string | undefined>()
+  const [commands] = useState<Command[]>([])
 
   return (
     <div className="flex flex-col w-full h-full rounded-lg bg-zinc-200 dark:bg-zinc-800">

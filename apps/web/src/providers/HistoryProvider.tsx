@@ -1,16 +1,10 @@
-import {
-  EventWithPayload,
-  Message,
-  MessageReceivedEvent
-} from '@manasai/common'
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
-import { useSocket } from './SocketProvider'
+import React, { createContext, useCallback, useContext, useState } from 'react'
+
+interface Message {
+  id: string
+  content: string
+  author: 'USER' | 'ASSISTANT' | 'SYSTEM'
+}
 
 interface HistoryContext {
   messages: Message[]
@@ -32,17 +26,10 @@ export const HistoryProvider: React.FC<HistoryProviderProps> = ({
   children
 }) => {
   const [messages, setMessages] = useState<Message[]>([])
-  const { on } = useSocket()
 
   const addMessage = useCallback((message: Message) => {
     setMessages(prevMessages => [...prevMessages, message])
   }, [])
-
-  useEffect(() => {
-    on('MESSAGE_RECEIVED', (event: EventWithPayload<unknown>) => {
-      addMessage(event.payload as MessageReceivedEvent['payload'])
-    })
-  }, [on, addMessage])
 
   return (
     <HistoryContext.Provider value={{ messages, setMessages, addMessage }}>

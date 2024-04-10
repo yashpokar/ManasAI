@@ -3,8 +3,6 @@ import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ShortUniqueId from 'short-unique-id'
 import clsx from 'clsx'
 import { useWorkspace } from '../providers/WorkspaceProvider'
-import { useSocket } from '../providers/SocketProvider'
-import { WorkspaceCreatedEvent } from '@manasai/common'
 
 interface AddWorkspaceProps {
   show: boolean
@@ -16,7 +14,6 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
   const [name, setName] = useState('')
   const [visibility, setVisibility] = useState(show)
   const [error, setError] = useState('')
-  const { emit } = useSocket()
 
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -53,14 +50,6 @@ const AddWorkspace: React.FC<AddWorkspaceProps> = ({ show }) => {
       name,
       id
     })
-
-    emit({
-      type: 'WORKSPACE_CREATED',
-      payload: {
-        id,
-        name
-      }
-    } as WorkspaceCreatedEvent)
 
     // TODO: wait for the workspace to be created, let the server acknowledge it
     // before closing the modal

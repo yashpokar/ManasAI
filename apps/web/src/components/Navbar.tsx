@@ -11,55 +11,15 @@ import clsx from 'clsx'
 import { useTheme } from '../providers/ThemeProvider'
 import { useWorkspace } from '../providers/WorkspaceProvider'
 import AddWorkspace from './AddWorkspace'
-import { EventWithPayload, ReadyEvent } from '@manasai/common'
-import { useSocket } from '../providers/SocketProvider'
-import { CancelAlert, useAlert } from '../providers/AlertProvider'
-import { useHistory } from '../providers/HistoryProvider'
 
 const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme()
-  const { workspaces, activeWorkspace, onWorkspaceChange, setWorkspaces } =
-    useWorkspace()
+  const { workspaces, activeWorkspace, onWorkspaceChange } = useWorkspace()
   const [workspaceSelectorOpen, shouldOpenShowWorkspaceSelector] =
     useState(false)
   const [showAddWorkspace, shouldShowAddWorkspace] = useState(false)
-  const { on } = useSocket()
-  const { warning } = useAlert()
-  const { setMessages } = useHistory()
 
   const workspaceSelectorRef = useRef<HTMLDivElement>(null)
-  const alertRef = useRef<CancelAlert>()
-
-  useEffect(() => {
-    on('READY', (event: EventWithPayload<unknown>) => {
-      const { workspaces, messages } = event.payload as ReadyEvent['payload']
-      setWorkspaces(workspaces)
-      setMessages(messages)
-
-      if (workspaces.length === 0) {
-        shouldShowAddWorkspace(true)
-        return
-      }
-
-      if (workspaces.length === 1) {
-        onWorkspaceChange(workspaces[0].id)
-        return
-      }
-
-      if (!alertRef.current) {
-        alertRef.current = warning('Select a workspace to get started', false)
-      }
-      shouldOpenShowWorkspaceSelector(true)
-    })
-  }, [
-    on,
-    setWorkspaces,
-    onWorkspaceChange,
-    workspaceSelectorRef,
-    warning,
-    alertRef,
-    setMessages
-  ])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -81,10 +41,6 @@ const Navbar: React.FC = () => {
   const onWorkspaceIdChange = (id: string) => {
     onWorkspaceChange(id)
     shouldOpenShowWorkspaceSelector(false)
-
-    if (alertRef.current) {
-      alertRef.current()
-    }
   }
 
   return (
