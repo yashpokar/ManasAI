@@ -17,6 +17,11 @@ const config: CodegenConfig = {
       ],
       presetConfig: {
         gqlTagName: 'gql'
+      },
+      config: {
+        withHooks: true,
+        withComponent: false,
+        withHOC: false
       }
     },
     './graphql.schema.json': {
