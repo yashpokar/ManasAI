@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import '@xterm/xterm/css/xterm.css'
@@ -13,7 +13,7 @@ const Shell: React.FC<ShellProps> = ({ commands }) => {
   const playgroundRef = useRef<HTMLDivElement>(null)
   const { isDarkMode } = useTheme()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!playgroundRef.current) return
 
     const terminal = new Terminal({
