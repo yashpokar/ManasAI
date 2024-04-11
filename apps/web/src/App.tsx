@@ -1,6 +1,6 @@
 import React from 'react'
 import Chat from './components/Chat'
-import Widgets from './components/Widgets'
+import Tools from './components/Tools'
 import Navbar from './components/Navbar'
 import { useTheme } from './providers/ThemeProvider'
 import { useDeviceInfo } from './providers/DeviceInfoProvider'
@@ -25,7 +25,7 @@ const App: React.FC = () => {
         data-mode={isDarkMode ? 'dark' : 'light'}
       >
         <div className="flex-1">
-          <Widgets />
+          <Tools />
         </div>
 
         <div className="flex-1">

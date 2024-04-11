@@ -35,7 +35,7 @@ const tabs: Tab[] = [
   }
 ]
 
-const Widgets: React.FC = () => {
+const Tools: React.FC = () => {
   const [code] = useState<string | undefined>()
   const [commands] = useState<Command[]>([])
 
@@ -77,4 +77,4 @@ const Widgets: React.FC = () => {
   )
 }
 
-export default Widgets
+export default Tools
