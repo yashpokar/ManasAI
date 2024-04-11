@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 
-import { useWorkspace } from '../providers/ProjectProvider'
+import { useProject } from '../providers/ProjectProvider'
 import { useHistory } from '../providers/HistoryProvider'
 import Message from './Message'
 
 const Chat: React.FC = () => {
   const [query, setQuery] = useState('')
-  const { workspaces, activeWorkspace } = useWorkspace()
+  const { workspaces, activeWorkspace } = useProject()
   const { messages } = useHistory()
 
   const onMessageSubmit = (e: React.FormEvent) => {

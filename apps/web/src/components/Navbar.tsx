@@ -9,12 +9,12 @@ import {
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 import { useTheme } from '../providers/ThemeProvider'
-import { useWorkspace } from '../providers/ProjectProvider'
+import { useProject } from '../providers/ProjectProvider'
 import NewProject from './NewProject'
 
 const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme()
-  const { workspaces, activeWorkspace, onWorkspaceChange } = useWorkspace()
+  const { workspaces, activeWorkspace, onWorkspaceChange } = useProject()
   const [isNewProjectDialogOpen, openNewProjectDialog] = useState(
     workspaces.length === 0
   )

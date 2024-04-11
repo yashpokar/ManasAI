@@ -1,57 +1,82 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useCallback, useState } from 'react'
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ShortUniqueId from 'short-unique-id'
 import clsx from 'clsx'
-import { useWorkspace } from '../providers/ProjectProvider'
+import { useProject } from '../providers/ProjectProvider'
 import { Dialog, Transition } from '@headlessui/react'
 import { useTheme } from '../providers/ThemeProvider'
+import { gql, useMutation } from '@apollo/client'
 
 interface NewWorkspaceProps {
   visible: boolean
   setVisibility: (visible: boolean) => void
 }
 
+const CREATE_NEW_PROJECT = gql`
+  mutation CreateProject($name: String!) {
+    createProject(name: $name) {
+      id
+      name
+      createdAt
+    }
+  }
+`
+
 const NewProject: React.FC<NewWorkspaceProps> = ({
   setVisibility,
   visible
 }) => {
+  const [createProject, { error }] = useMutation(CREATE_NEW_PROJECT)
   const { workspaces, addWorkspace, onWorkspaceChange, isNameTaken } =
-    useWorkspace()
+    useProject()
   const [name, setName] = useState('')
-  const [error, setError] = useState('')
+  const [validationError, setValidationError] = useState('')
   const { isDarkMode } = useTheme()
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const onSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault()
 
-    const id = new ShortUniqueId().randomUUID(6)
+      const id = new ShortUniqueId().randomUUID(6)
 
-    if (isNameTaken(name)) {
-      setError('Project name already taken')
-      return
-    }
+      if (isNameTaken(name)) {
+        setValidationError('Project name already taken')
+        return
+      }
 
-    addWorkspace({
+      createProject({
+        variables: {
+          name
+        }
+      })
+
+      addWorkspace({
+        name,
+        id
+      })
+
+      onWorkspaceChange(id)
+      setName('')
+      setVisibility(false)
+    },
+    [
+      createProject,
+      setVisibility,
+      addWorkspace,
+      onWorkspaceChange,
       name,
-      id
-    })
-
-    // TODO: wait for the workspace to be created, let the server acknowledge it
-    // before closing the modal
-
-    onWorkspaceChange(id)
-    setName('')
-    setVisibility(false)
-  }
+      isNameTaken
+    ]
+  )
 
   const onProjectNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value.replace(/[^a-zA-Z0-9_-]/g, '')
     if (name.length > 0 && !/^[a-zA-Z]/.test(name)) {
-      setError('Project name must start with a letter')
+      setValidationError('Project name must start with a letter')
       return
     }
 
-    setError('')
+    setValidationError('')
     setName(name)
   }
 
@@ -110,7 +135,7 @@ const NewProject: React.FC<NewWorkspaceProps> = ({
 
                         {error && (
                           <span className="text-red-500 text-xs font-semibold mt-1">
-                            {error}
+                            {validationError}
                           </span>
                         )}
                       </div>

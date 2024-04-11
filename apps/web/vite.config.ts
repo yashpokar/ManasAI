@@ -8,5 +8,5 @@ export default defineConfig({
     port: parseInt(process.env.UI_PORT || '6288')
   },
   envDir: '../../',
-  envPrefix: 'UI_'
+  envPrefix: ['UI_', 'API_']
 })

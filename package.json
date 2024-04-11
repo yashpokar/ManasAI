@@ -8,6 +8,7 @@
     "web:dev": "nx run web:dev",
     "web:build": "nx run web:build",
     "web:lint": "nx run web:lint",
+    "web:gql-gen": "nx run web:gql-gen",
     "web:test": "nx run web:test",
     "api:dev": "nx run api:start:dev",
     "api:build": "nx run api:build",

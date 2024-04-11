@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useState } from 'react'
 import { Workspace } from '../types'
 
-interface WorkspaceContextProps {
+interface ProjectContextProps {
   workspaces: Workspace[]
   activeWorkspace?: Workspace
   addWorkspace: (workspace: Workspace) => void
@@ -14,7 +14,7 @@ interface WorkspaceProviderProps {
   children: React.ReactNode
 }
 
-const WorkspaceContext = createContext<WorkspaceContextProps>({
+const ProjectContext = createContext<ProjectContextProps>({
   workspaces: [],
   addWorkspace: () => null,
   onWorkspaceChange: () => null,
@@ -45,7 +45,7 @@ export const WorkspaceProvider: React.FC<WorkspaceProviderProps> = ({
     [workspaces]
   )
 
-  const context: WorkspaceContextProps = {
+  const context: ProjectContextProps = {
     workspaces,
     addWorkspace,
     onWorkspaceChange,
@@ -58,18 +58,18 @@ export const WorkspaceProvider: React.FC<WorkspaceProviderProps> = ({
   }
 
   return (
-    <WorkspaceContext.Provider value={context}>
+    <ProjectContext.Provider value={context}>
       {children}
-    </WorkspaceContext.Provider>
+    </ProjectContext.Provider>
   )
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useWorkspace = () => {
-  const context = useContext(WorkspaceContext)
+export const useProject = () => {
+  const context = useContext(ProjectContext)
 
   if (context === undefined) {
-    throw new Error('useWorkspace must be used within a WorkspaceProvider')
+    throw new Error('useProject must be used within a WorkspaceProvider')
   }
 
   return context
