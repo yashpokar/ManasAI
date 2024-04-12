@@ -22,6 +22,7 @@ export interface IProjectContext {
   createProject: (projectName: string) => void
   changeActiveProject: (projectId: string) => void
   isProjectNameTaken: (name: string) => Promise<boolean>
+  listProjects: () => void
   processing: () => void
 }
 

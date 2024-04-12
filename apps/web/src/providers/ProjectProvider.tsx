@@ -32,6 +32,17 @@ const CHANGE_ACTIVE_PROJECT_MUTATION = gql`
   }
 `
 
+const LIST_PROJECTS_QUERY = gql`
+  query ListProjects {
+    listProjects {
+      id
+      name
+      isActive
+      createdAt
+    }
+  }
+`
+
 const CHECK_PROJECT_NAME_AVAILABILITY_QUERY = gql`
   query IsProjectNameTaken($name: String!) {
     isProjectNameTaken(name: $name)
@@ -60,6 +71,7 @@ export const ProjectContext = createContext<IProjectContext>({
   changeActiveProject: () => {},
   isProjectNameTaken: async () => false,
   processing: () => {},
+  listProjects: () => {},
   loading: false
 })
 
@@ -86,6 +98,15 @@ const ProjectProvider: React.FC<ProviderProps> = ({ children }) => {
     CHECK_PROJECT_NAME_AVAILABILITY_QUERY
   )
 
+  const [listProjects] = useLazyQuery(LIST_PROJECTS_QUERY, {
+    onCompleted: ({ listProjects }) => {
+      dispatch({
+        type: LIST_PROJECTS,
+        payload: listProjects
+      })
+    }
+  })
+
   const [state, dispatch] = useReducer(
     (state: ProjectState, action: ProjectAction) => {
       switch (action.type) {
@@ -100,6 +121,8 @@ const ProjectProvider: React.FC<ProviderProps> = ({ children }) => {
           return {
             ...state,
             projects: action.payload,
+            activeProject:
+              action.payload.find(project => project.isActive) || null,
             loading: false
           }
         case CHANGE_ACTIVE_PROJECT:
@@ -149,9 +172,14 @@ const ProjectProvider: React.FC<ProviderProps> = ({ children }) => {
         })
         return isProjectNameTaken
       },
+      listProjects: () => {
+        dispatch({ type: LOADING })
+
+        listProjects()
+      },
       processing: () => dispatch({ type: LOADING })
     }),
-    [create, changeActive, checkProjectNameAvailability]
+    [create, changeActive, checkProjectNameAvailability, listProjects]
   )
 
   return (

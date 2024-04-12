@@ -18,6 +18,7 @@ const DeviceProvider: React.FC<ProviderProps> = ({ children }) => {
     localStorage.setItem(DEVICE_ID, id)
     setId(id)
     setupCompleted(true)
+    setLoading(false)
   }, [])
 
   useEffect(() => {

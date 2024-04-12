@@ -16,6 +16,7 @@ import DeviceProvider from '@/providers/DeviceProvider.tsx'
 import HistoryProvider from '@/providers/HistoryProvider.tsx'
 
 import './index.css'
+import { StrictMode } from 'react'
 
 const httpLink = new HttpLink({ uri: `${import.meta.env.API_URL}/graphql` })
 
@@ -38,15 +39,17 @@ const client = new ApolloClient({
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <ThemeProvider>
-    <ApolloProvider client={client}>
-      <DeviceProvider>
-        <HistoryProvider>
-          <ProjectProvider>
-            <App />
-          </ProjectProvider>
-        </HistoryProvider>
-      </DeviceProvider>
-    </ApolloProvider>
-  </ThemeProvider>
+  <StrictMode>
+    <ThemeProvider>
+      <ApolloProvider client={client}>
+        <DeviceProvider>
+          <HistoryProvider>
+            <ProjectProvider>
+              <App />
+            </ProjectProvider>
+          </HistoryProvider>
+        </DeviceProvider>
+      </ApolloProvider>
+    </ThemeProvider>
+  </StrictMode>
 )

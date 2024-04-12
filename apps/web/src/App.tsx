@@ -8,11 +8,19 @@ import useDevice from '@/hooks/use-device'
 import { DARK_MODE, LIGHT_MODE } from '@/constants'
 import Splash from '@/Splash'
 import useDeviceIdGenerator from '@/hooks/use-device-id-generator'
+import useProject from './hooks/use-project'
 
 const App: React.FC = () => {
   const { isDarkMode } = useTheme()
   const { generateDeviceId, deviceId } = useDeviceIdGenerator()
   const { isSetup, setupDevice, loading } = useDevice()
+  const { listProjects } = useProject()
+
+  useEffect(() => {
+    if (isSetup) {
+      listProjects()
+    }
+  }, [listProjects, isSetup])
 
   useEffect(() => {
     if (!isSetup && !loading) {

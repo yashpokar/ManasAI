@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import {
   SunIcon,
   MoonIcon,
@@ -10,7 +10,7 @@ import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 import useTheme from '@/hooks/use-theme'
 import useProject from '@/hooks/use-project'
-import NewProject from './NewProject'
+import NewProject from '@/components/NewProject'
 
 const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme()
@@ -20,6 +20,12 @@ const Navbar: React.FC = () => {
   )
 
   const projectSelectorRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (projects.length > 0) {
+      openNewProjectDialog(false)
+    }
+  }, [projects, activeProject])
 
   return (
     <nav className="flex flex-col justify-between p-2 w-full h-full rounded-lg bg-zinc-200 dark:bg-zinc-800">

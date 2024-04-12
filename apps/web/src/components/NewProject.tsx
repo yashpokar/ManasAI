@@ -75,11 +75,9 @@ const NewProject: React.FC<Props> = ({ setVisibility, visible }) => {
               >
                 <Dialog.Panel className="flex items-center justify-center h-full pointer-events-auto w-screen">
                   <div className="p-4 md:p-6 lg:p-10 rounded-lg w-1/3 bg-zinc-50 dark:bg-zinc-900">
-                    <div className="">
-                      <Dialog.Title className="font-semibold select-none text-zinc-700 dark:text-zinc-100">
-                        New Project
-                      </Dialog.Title>
-                    </div>
+                    <Dialog.Title className="font-semibold select-none text-zinc-700 dark:text-zinc-100">
+                      New Project
+                    </Dialog.Title>
 
                     <form
                       className="grid gap-2 md:gap-4 lg:gap-6 mt-4"
