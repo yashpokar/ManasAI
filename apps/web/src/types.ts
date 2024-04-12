@@ -1,4 +1,4 @@
-import { Project } from '@/__generated__/graphql'
+import { Project } from '@/gql/graphql'
 import { LOADED, LOADING } from '@/constants'
 
 export interface Command {

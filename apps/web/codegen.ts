@@ -8,27 +8,17 @@ const config: CodegenConfig = {
   schema: `${apiURL}/graphql`,
   documents: 'src/**/*.{ts,tsx}',
   generates: {
-    './src/__generated__/': {
+    './src/gql/': {
       preset: 'client',
-      plugins: [
-        'typescript',
-        'typescript-operations',
-        'typescript-react-apollo'
-      ],
+      plugins: [],
       presetConfig: {
         gqlTagName: 'gql'
-      },
-      config: {
-        withHooks: true,
-        withComponent: false,
-        withHOC: false
       }
     },
     './graphql.schema.json': {
       plugins: ['introspection']
     }
-  },
-  ignoreNoDocuments: true
+  }
 }
 
 export default config

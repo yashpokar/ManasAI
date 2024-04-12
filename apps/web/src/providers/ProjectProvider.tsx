@@ -7,7 +7,7 @@ import {
   LOADED,
   LOADING
 } from '@/constants'
-import { Project } from '@/__generated__/graphql'
+import { Project } from '@/gql/graphql'
 import { gql, useLazyQuery, useMutation } from '@apollo/client'
 
 const CREATE_PROJECT_MUTATION = gql`
