@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import {
   SunIcon,
   MoonIcon,
@@ -19,8 +19,6 @@ const Navbar: React.FC = () => {
     projects.length === 0
   )
 
-  const projectSelectorRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     if (projects.length > 0) {
       openNewProjectDialog(false)
@@ -36,7 +34,7 @@ const Navbar: React.FC = () => {
 
       <ul className="">
         <li className="">
-          <Popover className="relative text-center" ref={projectSelectorRef}>
+          <Popover className="relative text-center">
             {({ open, close }) => (
               <>
                 <Popover.Button
