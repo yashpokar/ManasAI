@@ -1,11 +1,47 @@
 import React, { createContext, useMemo, useReducer } from 'react'
-import { IProjectContext, ProviderProps } from '@/types'
-import { ADD_PROJECT, CHANGE_ACTIVE_PROJECT, LIST_PROJECTS } from '@/constants'
+import { FormActions, IProjectContext, ProviderProps } from '@/types'
+import {
+  ADD_PROJECT,
+  CHANGE_ACTIVE_PROJECT,
+  LIST_PROJECTS,
+  LOADED,
+  LOADING
+} from '@/constants'
 import { Project } from '@/__generated__/graphql'
+import { gql, useLazyQuery, useMutation } from '@apollo/client'
+
+const CREATE_PROJECT_MUTATION = gql`
+  mutation CreateProject($name: String!) {
+    createProject(name: $name) {
+      id
+      name
+      isActive
+      createdAt
+    }
+  }
+`
+
+const CHANGE_ACTIVE_PROJECT_MUTATION = gql`
+  mutation ChangeActiveProject($projectId: String!) {
+    changeActiveProject(projectId: $projectId) {
+      id
+      name
+      isActive
+      createdAt
+    }
+  }
+`
+
+const CHECK_PROJECT_NAME_AVAILABILITY_QUERY = gql`
+  query IsProjectNameTaken($name: String!) {
+    isProjectNameTaken(name: $name)
+  }
+`
 
 type ProjectState = {
   projects: Project[]
   activeProject: Project | null
+  loading: boolean
 }
 
 type ProjectAction =
@@ -15,69 +51,107 @@ type ProjectAction =
     }
   | { type: typeof LIST_PROJECTS; payload: Project[] }
   | { type: typeof CHANGE_ACTIVE_PROJECT; payload: string }
+  | FormActions
 
 export const ProjectContext = createContext<IProjectContext>({
   projects: [],
   activeProject: null,
   createProject: () => {},
   changeActiveProject: () => {},
-  isProjectNameTaken: () => false
+  isProjectNameTaken: async () => false,
+  processing: () => {},
+  loading: false
 })
 
 const ProjectProvider: React.FC<ProviderProps> = ({ children }) => {
+  const [create] = useMutation(CREATE_PROJECT_MUTATION, {
+    onCompleted: ({ createProject }) => {
+      dispatch({
+        type: ADD_PROJECT,
+        payload: createProject
+      })
+    }
+  })
+
+  const [changeActive] = useMutation(CHANGE_ACTIVE_PROJECT_MUTATION, {
+    onCompleted: ({ changeActiveProject }) => {
+      dispatch({
+        type: CHANGE_ACTIVE_PROJECT,
+        payload: changeActiveProject.id
+      })
+    }
+  })
+
+  const [checkProjectNameAvailability] = useLazyQuery(
+    CHECK_PROJECT_NAME_AVAILABILITY_QUERY
+  )
+
   const [state, dispatch] = useReducer(
     (state: ProjectState, action: ProjectAction) => {
       switch (action.type) {
         case ADD_PROJECT:
           return {
             ...state,
-            projects: [...state.projects, action.payload]
+            activeProject: action.payload,
+            projects: [...state.projects, action.payload],
+            loading: false
           }
         case LIST_PROJECTS:
           return {
             ...state,
-            projects: action.payload
+            projects: action.payload,
+            loading: false
           }
         case CHANGE_ACTIVE_PROJECT:
           return {
             ...state,
             activeProject:
               state.projects.find(project => project.id === action.payload) ||
-              null
+              null,
+            loading: false
+          }
+        case LOADING:
+          return {
+            ...state,
+            loading: true
+          }
+        case LOADED:
+          return {
+            ...state,
+            loading: false
           }
         default:
           return state
       }
     },
-    { projects: [], activeProject: null }
+    { projects: [], activeProject: null, loading: false }
   )
 
   const actions = useMemo(
     () => ({
-      createProject: (
-        project: Omit<Project, 'id' | 'isActive' | 'createdAt'>
-      ) => {
-        dispatch({
-          type: ADD_PROJECT,
-          payload: {
-            ...project,
-            id: Math.random().toString(),
-            createdAt: new Date().toISOString(),
-            isActive: false
-          }
+      createProject: async (name: string) => {
+        dispatch({ type: LOADING })
+
+        create({ variables: { name } })
+      },
+      changeActiveProject: async (projectId: string) => {
+        dispatch({ type: LOADING })
+
+        changeActive({
+          variables: { projectId }
         })
       },
-      changeActiveProject: (projectId: string) => {
-        dispatch({
-          type: CHANGE_ACTIVE_PROJECT,
-          payload: projectId
+      isProjectNameTaken: async (name: string) => {
+        const {
+          data: { isProjectNameTaken }
+        } = await checkProjectNameAvailability({
+          variables: { name }
         })
+        return isProjectNameTaken
       },
-      isProjectNameTaken: (name: string) => {
-        return state.projects.some(project => project.name === name)
-      }
+      processing: () => dispatch({ type: LOADING })
     }),
-    [state]
+    [create, changeActive, checkProjectNameAvailability]
   )
 
   return (

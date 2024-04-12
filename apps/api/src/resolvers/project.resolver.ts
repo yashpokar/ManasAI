@@ -24,6 +24,24 @@ export class ProjectResolver {
     return this.service.list(ctx)
   }
 
+  @Query(() => Boolean)
+  @UseGuards(DeviceIdGuard)
+  async isProjectNameTaken(
+    @Context() ctx: IContext,
+    @Args('name') name: string
+  ): Promise<boolean> {
+    return this.service.isNameTaken(ctx, name)
+  }
+
+  @Mutation(() => Project)
+  @UseGuards(DeviceIdGuard)
+  async changeActiveProject(
+    @Context() ctx: IContext,
+    @Args('projectId') projectId: string
+  ): Promise<Project> {
+    return this.service.changeActive(ctx, projectId)
+  }
+
   @Mutation(() => String)
   generateDeviceId(): string {
     return this.service.generateDeviceId()

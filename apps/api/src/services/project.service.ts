@@ -67,6 +67,51 @@ export class ProjectService {
     })
   }
 
+  async isNameTaken(ctx: IContext, name: string): Promise<boolean> {
+    const project = await this.repository.findOne({
+      where: { name, deviceId: ctx.req.deviceId }
+    })
+
+    return !!project
+  }
+
+  async changeActive(ctx: IContext, projectId: string): Promise<Project> {
+    const queryRunner = this.dataSource.createQueryRunner()
+
+    await queryRunner.connect()
+    await queryRunner.startTransaction()
+
+    try {
+      await queryRunner.manager.update(
+        ProjectEntity,
+        { deviceId: ctx.req.deviceId },
+        { isActive: false }
+      )
+
+      const project = await queryRunner.manager.findOne(ProjectEntity, {
+        where: { id: projectId, deviceId: ctx.req.deviceId }
+      })
+
+      if (!project) {
+        throw new Error('Project not found')
+      }
+
+      project.isActive = true
+
+      await queryRunner.manager.save(project)
+
+      await queryRunner.commitTransaction()
+
+      return project
+    } catch (error) {
+      await queryRunner.rollbackTransaction()
+
+      throw error
+    } finally {
+      await queryRunner.release()
+    }
+  }
+
   generateDeviceId(): string {
     return randomUUID()
   }

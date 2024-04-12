@@ -4,6 +4,8 @@ import clsx from 'clsx'
 import useProject from '@/hooks/use-project'
 import { Dialog, Transition } from '@headlessui/react'
 import useTheme from '@/hooks/use-theme'
+import { DARK_MODE, LIGHT_MODE } from '@/constants'
+import Loader from './Loader'
 
 interface Props {
   visible: boolean
@@ -11,38 +13,43 @@ interface Props {
 }
 
 const NewProject: React.FC<Props> = ({ setVisibility, visible }) => {
-  const { projects, createProject, isProjectNameTaken } = useProject()
+  const { projects, isProjectNameTaken, loading, processing, createProject } =
+    useProject()
   const [name, setName] = useState('')
   const [error, setError] = useState('')
   const { isDarkMode } = useTheme()
 
   const onSubmit = useCallback(
-    (e: React.FormEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault()
+      processing()
 
-      if (isProjectNameTaken(name)) {
+      if (await isProjectNameTaken(name)) {
         setError('Project name already taken')
         return
       }
 
-      createProject({ name })
+      createProject(name)
 
       setName('')
       setVisibility(false)
     },
-    [createProject, setVisibility, name, isProjectNameTaken]
+    [setVisibility, name, isProjectNameTaken, processing, createProject]
   )
 
-  const onProjectNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.value.replace(/[^a-zA-Z0-9_-]/g, '')
-    if (name.length > 0 && !/^[a-zA-Z]/.test(name)) {
-      setError('Project name must start with a letter')
-      return
-    }
+  const onProjectNameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const name = e.target.value.replace(/[^a-zA-Z0-9_-]/g, '')
+      if (name.length > 0 && !/^[a-zA-Z]/.test(name)) {
+        setError('Project name must start with a letter')
+        return
+      }
 
-    setError('')
-    setName(name)
-  }
+      setError('')
+      setName(name)
+    },
+    []
+  )
 
   return (
     <Transition.Root show={visible} as={Fragment}>
@@ -50,7 +57,7 @@ const NewProject: React.FC<Props> = ({ setVisibility, visible }) => {
         onClose={() => setVisibility(false)}
         as="div"
         className="relative z-30"
-        data-mode={isDarkMode ? 'dark' : 'light'}
+        data-mode={isDarkMode ? DARK_MODE : LIGHT_MODE}
       >
         <div className="fixed inset-0 bg-zinc-400 dark:bg-zinc-700 bg-opacity-80 dark:bg-opacity-80" />
 
@@ -126,7 +133,11 @@ const NewProject: React.FC<Props> = ({ setVisibility, visible }) => {
                           className="flex items-center text-xs font-semibold py-2 px-4 select-none rounded-lg text-zinc-100 focus:outline-none dark:text-zinc-100 bg-green-600 hover:bg-green-700 focus:bg-green-700"
                           data-testid="submit-add-project-button"
                         >
-                          <PlusIcon className="w-5 h-5 mr-1" />
+                          {loading ? (
+                            <Loader className="h-4 w-4 text-zinc-100 mr-2" />
+                          ) : (
+                            <PlusIcon className="w-5 h-5 mr-1" />
+                          )}
                           Create
                         </button>
                       </div>

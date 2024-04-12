@@ -1,9 +1,5 @@
-import { Project } from './__generated__/graphql'
-
-export interface Workspace {
-  id: string
-  name: string
-}
+import { Project } from '@/__generated__/graphql'
+import { LOADED, LOADING } from '@/constants'
 
 export interface Command {
   stdout: string
@@ -22,16 +18,17 @@ export interface IThemeContext {
 export interface IProjectContext {
   projects: Project[]
   activeProject: Project | null
-  createProject: (
-    project: Omit<Project, 'id' | 'isActive' | 'createdAt'>
-  ) => void
+  loading: boolean
+  createProject: (projectName: string) => void
   changeActiveProject: (projectId: string) => void
-  isProjectNameTaken: (name: string) => boolean
+  isProjectNameTaken: (name: string) => Promise<boolean>
+  processing: () => void
 }
 
 export interface IDeviceContext {
   id: string | null
   isSetup: boolean
+  loading: boolean
   setupDevice: (id: string) => void
 }
 
@@ -46,3 +43,11 @@ export interface IHistoryContext {
   addMessage: (message: Message) => void
   setMessages: (messages: Message[]) => void
 }
+
+export type FormActions =
+  | {
+      type: typeof LOADING
+    }
+  | {
+      type: typeof LOADED
+    }
