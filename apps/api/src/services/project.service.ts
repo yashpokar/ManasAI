@@ -2,6 +2,7 @@ import { Project, ProjectEntity } from '@/models/project'
 import { IContext } from '@/types/context'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { randomUUID } from 'crypto'
 import { DataSource, Repository } from 'typeorm'
 
 @Injectable()
@@ -64,5 +65,9 @@ export class ProjectService {
         deviceId: ctx.req.deviceId
       }
     })
+  }
+
+  generateDeviceId(): string {
+    return randomUUID()
   }
 }

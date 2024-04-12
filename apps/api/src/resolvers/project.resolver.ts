@@ -6,11 +6,11 @@ import { UseGuards } from '@nestjs/common'
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()
-@UseGuards(DeviceIdGuard)
 export class ProjectResolver {
   constructor(private readonly service: ProjectService) {}
 
   @Mutation(() => Project)
+  @UseGuards(DeviceIdGuard)
   async createProject(
     @Context() ctx: IContext,
     @Args('name') name: string
@@ -19,7 +19,13 @@ export class ProjectResolver {
   }
 
   @Query(() => [Project])
+  @UseGuards(DeviceIdGuard)
   async listProjects(@Context() ctx: IContext): Promise<Project[]> {
     return this.service.list(ctx)
+  }
+
+  @Mutation(() => String)
+  generateDeviceId(): string {
+    return this.service.generateDeviceId()
   }
 }
