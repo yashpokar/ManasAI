@@ -1,2 +1,0 @@
-export const LOADING = 'LOADING'
-export const FORM_SUBMITTING = 'FORM_SUBMITTING'

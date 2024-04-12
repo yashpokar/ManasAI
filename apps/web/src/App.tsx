@@ -1,14 +1,15 @@
 import React from 'react'
-import Chat from './components/Chat'
-import Tools from './components/Tools'
-import Navbar from './components/Navbar'
-import { useTheme } from './providers/ThemeProvider'
-import { useDeviceInfo } from './providers/DeviceInfoProvider'
-import Loader from './components/Loader'
+
+import Chat from '@/components/Chat'
+import Tools from '@/components/Tools'
+import Navbar from '@/components/Navbar'
+import Loader from '@/components/Loader'
+import useTheme from '@/hooks/use-theme'
+import useDevice from '@/hooks/use-device'
 
 const App: React.FC = () => {
   const { isDarkMode } = useTheme()
-  const { isLoading } = useDeviceInfo()
+  const { isLoading } = useDevice()
 
   if (isLoading) {
     return (

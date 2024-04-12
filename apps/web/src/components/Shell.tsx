@@ -2,8 +2,8 @@ import { useLayoutEffect, useRef } from 'react'
 import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
-import { useTheme } from '../providers/ThemeProvider'
-import { Command } from '../types'
+import useTheme from '@/hooks/use-theme'
+import { Command } from '@/types'
 
 interface ShellProps {
   commands: Command[]

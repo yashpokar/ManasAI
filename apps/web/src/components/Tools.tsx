@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Tab } from '@headlessui/react'
-import Shell from './Shell'
-import Editor from './Editor'
-import WebBrowser from './WebBrowser'
-import Plan from './Plan'
-import { Command } from '../types'
+import Shell from '@/components/Shell'
+import Editor from '@/components/Editor'
+import WebBrowser from '@/components/WebBrowser'
+import Plan from '@/components/Plan'
+import { Command } from '@/types'
 
 interface ComponentProps {
   code?: string

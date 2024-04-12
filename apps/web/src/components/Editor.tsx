@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import CodeEditor, { useMonaco } from '@monaco-editor/react'
-import { useTheme } from '../providers/ThemeProvider'
+import useTheme from '@/hooks/use-theme'
 
 interface EditorProps {
   code?: string

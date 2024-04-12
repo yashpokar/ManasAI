@@ -21,8 +21,6 @@ jobs:
         run: |
           npm install -g pnpm
           pnpm install
-          pnpm add @manasai/common --filter ui --workspace
-          pnpm add @manasai/common --filter api --workspace
 
       - name: 🧹 Lint
         run: pnpm lint

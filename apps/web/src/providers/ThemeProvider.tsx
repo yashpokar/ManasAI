@@ -1,22 +1,13 @@
-import React, { createContext, useCallback, useContext, useEffect } from 'react'
+import { DARK_MODE_KEY } from '@/constants'
+import { ProviderProps, IThemeContext } from '@/types'
+import React, { createContext, useCallback, useEffect } from 'react'
 
-interface ThemeContextProps {
-  isDarkMode: boolean
-  toggleTheme: () => void
-}
-
-interface ThemeProviderProps {
-  children: React.ReactNode
-}
-
-const ThemeContext = createContext<ThemeContextProps>({
+export const ThemeContext = createContext<IThemeContext>({
   isDarkMode: true,
   toggleTheme: () => {}
 })
 
-const DARK_MODE_KEY = 'darkMode'
-
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+const ThemeProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isDarkMode, setDarkMode] = React.useState<boolean>(true)
 
   const toggleTheme = useCallback(() => {
@@ -42,13 +33,4 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useTheme = () => {
-  const context = useContext(ThemeContext)
-
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider')
-  }
-
-  return context
-}
+export default ThemeProvider

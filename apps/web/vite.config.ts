@@ -7,6 +7,11 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.UI_PORT || '6288')
   },
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
+  },
   envDir: '../../',
   envPrefix: ['UI_', 'API_']
 })

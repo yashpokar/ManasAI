@@ -1,82 +1,46 @@
 import React, { Fragment, useCallback, useState } from 'react'
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import ShortUniqueId from 'short-unique-id'
 import clsx from 'clsx'
-import { useProject } from '../providers/ProjectProvider'
+import useProject from '@/hooks/use-project'
 import { Dialog, Transition } from '@headlessui/react'
-import { useTheme } from '../providers/ThemeProvider'
-import { gql, useMutation } from '@apollo/client'
+import useTheme from '@/hooks/use-theme'
 
-interface NewWorkspaceProps {
+interface Props {
   visible: boolean
   setVisibility: (visible: boolean) => void
 }
 
-const CREATE_NEW_PROJECT = gql`
-  mutation CreateProject($name: String!) {
-    createProject(name: $name) {
-      id
-      name
-      createdAt
-    }
-  }
-`
-
-const NewProject: React.FC<NewWorkspaceProps> = ({
-  setVisibility,
-  visible
-}) => {
-  const [createProject, { error }] = useMutation(CREATE_NEW_PROJECT)
-  const { workspaces, addWorkspace, onWorkspaceChange, isNameTaken } =
-    useProject()
+const NewProject: React.FC<Props> = ({ setVisibility, visible }) => {
+  const { projects, createProject, isProjectNameTaken } = useProject()
   const [name, setName] = useState('')
-  const [validationError, setValidationError] = useState('')
+  const [error, setError] = useState('')
   const { isDarkMode } = useTheme()
 
   const onSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault()
 
-      const id = new ShortUniqueId().randomUUID(6)
-
-      if (isNameTaken(name)) {
-        setValidationError('Project name already taken')
+      if (isProjectNameTaken(name)) {
+        setError('Project name already taken')
         return
       }
 
-      createProject({
-        variables: {
-          name
-        }
-      })
+      createProject({ name })
 
-      addWorkspace({
-        name,
-        id
-      })
-
-      onWorkspaceChange(id)
       setName('')
       setVisibility(false)
     },
-    [
-      createProject,
-      setVisibility,
-      addWorkspace,
-      onWorkspaceChange,
-      name,
-      isNameTaken
-    ]
+    [createProject, setVisibility, name, isProjectNameTaken]
   )
 
   const onProjectNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value.replace(/[^a-zA-Z0-9_-]/g, '')
     if (name.length > 0 && !/^[a-zA-Z]/.test(name)) {
-      setValidationError('Project name must start with a letter')
+      setError('Project name must start with a letter')
       return
     }
 
-    setValidationError('')
+    setError('')
     setName(name)
   }
 
@@ -135,7 +99,7 @@ const NewProject: React.FC<NewWorkspaceProps> = ({
 
                         {error && (
                           <span className="text-red-500 text-xs font-semibold mt-1">
-                            {validationError}
+                            {error}
                           </span>
                         )}
                       </div>
@@ -146,11 +110,11 @@ const NewProject: React.FC<NewWorkspaceProps> = ({
                           className={clsx(
                             'flex items-center text-xs font-semibold py-2 px-4 select-none rounded-lg text-zinc-700 bg-zinc-200 disabled:cursor-not-allowed focus:outline-none dark:text-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 focus:bg-zinc-300 dark:focus:bg-zinc-700 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400',
                             {
-                              'hover:bg-zinc-300': workspaces.length > 0
+                              'hover:bg-zinc-300': projects.length > 0
                             }
                           )}
-                          data-testid="close-add-workspace-button"
-                          disabled={workspaces.length === 0}
+                          data-testid="close-add-project-button"
+                          disabled={projects.length === 0}
                           onClick={() => setVisibility(false)}
                         >
                           <XMarkIcon className="w-5 h-5 mr-1" />
@@ -160,7 +124,7 @@ const NewProject: React.FC<NewWorkspaceProps> = ({
                         <button
                           type="submit"
                           className="flex items-center text-xs font-semibold py-2 px-4 select-none rounded-lg text-zinc-100 focus:outline-none dark:text-zinc-100 bg-green-600 hover:bg-green-700 focus:bg-green-700"
-                          data-testid="submit-add-workspace-button"
+                          data-testid="submit-add-project-button"
                         >
                           <PlusIcon className="w-5 h-5 mr-1" />
                           Create

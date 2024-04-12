@@ -1,8 +1,8 @@
 import { UserIcon } from '@heroicons/react/24/outline'
-import { Message as MessageProps } from '@manasai/common'
 import React from 'react'
 import RobotIcon from './RobotIcon'
 import clsx from 'clsx'
+import { Message as MessageProps } from '@/types'
 
 const Message: React.FC<MessageProps> = ({ author, content }) => {
   const isUser = author === 'USER'

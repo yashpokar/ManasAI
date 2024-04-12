@@ -8,15 +8,15 @@ import {
 } from '@heroicons/react/24/outline'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
-import { useTheme } from '../providers/ThemeProvider'
-import { useProject } from '../providers/ProjectProvider'
+import useTheme from '@/hooks/use-theme'
+import useProject from '@/hooks/use-project'
 import NewProject from './NewProject'
 
 const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme()
-  const { workspaces, activeWorkspace, onWorkspaceChange } = useProject()
+  const { projects, activeProject, changeActiveProject } = useProject()
   const [isNewProjectDialogOpen, openNewProjectDialog] = useState(
-    workspaces.length === 0
+    projects.length === 0
   )
 
   const projectSelectorRef = useRef<HTMLDivElement>(null)
@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
                     }
                   )}
                   onClick={close}
-                  data-testid="workspace-selector-button"
+                  data-testid="project-selector-button"
                 >
                   <QueueListIcon className="w-6 h-6 text-zinc-900 dark:text-zinc-50" />
                 </Popover.Button>
@@ -58,35 +58,35 @@ const Navbar: React.FC = () => {
                 >
                   <Popover.Panel className="absolute z-10 right-12 -top-1 w-48 shadow-xl">
                     <div className="grid gap-y-1.5 p-2 rounded-lg bg-zinc-100 border-zinc-300 dark:bg-zinc-700 dark:border-zinc-800">
-                      {workspaces.map(({ id, name }) => (
+                      {projects.map(({ id, name }) => (
                         <button
                           key={id}
                           className={clsx(
                             'flex justify-between py-2 px-4 text-left text-sm font-medium rounded-lg',
                             {
                               'bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-600  hover:dark:bg-indigo-500':
-                                activeWorkspace?.id === id
+                                activeProject?.id === id
                             },
                             {
                               'text-zinc-600 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-600':
-                                activeWorkspace?.id !== id
+                                activeProject?.id !== id
                             }
                           )}
                           onClick={() => {
-                            onWorkspaceChange(id)
+                            changeActiveProject(id)
                             close()
                           }}
-                          data-testid="workspace-selector-option"
+                          data-testid="project-selector-option"
                         >
                           {name}
 
-                          {activeWorkspace?.id === id && (
+                          {activeProject?.id === id && (
                             <CheckIcon className="w-4 h-4" strokeWidth={2.5} />
                           )}
                         </button>
                       ))}
 
-                      {workspaces.length > 0 && (
+                      {projects.length > 0 && (
                         <hr className="border-zinc-300 dark:border-zinc-800 opacity-45 my-1" />
                       )}
 

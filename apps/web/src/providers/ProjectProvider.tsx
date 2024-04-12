@@ -1,76 +1,90 @@
-import React, { createContext, useCallback, useContext, useState } from 'react'
-import { Workspace } from '../types'
+import React, { createContext, useMemo, useReducer } from 'react'
+import { IProjectContext, ProviderProps } from '@/types'
+import { ADD_PROJECT, CHANGE_ACTIVE_PROJECT, LIST_PROJECTS } from '@/constants'
+import { Project } from '@/__generated__/graphql'
 
-interface ProjectContextProps {
-  workspaces: Workspace[]
-  activeWorkspace?: Workspace
-  addWorkspace: (workspace: Workspace) => void
-  onWorkspaceChange: (id: string) => void
-  isNameTaken: (name: string) => boolean
-  setWorkspaces: (workspaces: Workspace[]) => void
+type ProjectState = {
+  projects: Project[]
+  activeProject: Project | null
 }
 
-interface WorkspaceProviderProps {
-  children: React.ReactNode
-}
+type ProjectAction =
+  | {
+      type: typeof ADD_PROJECT
+      payload: Project
+    }
+  | { type: typeof LIST_PROJECTS; payload: Project[] }
+  | { type: typeof CHANGE_ACTIVE_PROJECT; payload: string }
 
-const ProjectContext = createContext<ProjectContextProps>({
-  workspaces: [],
-  addWorkspace: () => null,
-  onWorkspaceChange: () => null,
-  isNameTaken: () => false,
-  setWorkspaces: () => null
+export const ProjectContext = createContext<IProjectContext>({
+  projects: [],
+  activeProject: null,
+  createProject: () => {},
+  changeActiveProject: () => {},
+  isProjectNameTaken: () => false
 })
 
-export const WorkspaceProvider: React.FC<WorkspaceProviderProps> = ({
-  children
-}) => {
-  const [workspaces, setWorkspaces] = useState<Workspace[]>([])
-  const [activeWorkspaceId, setActiveWorkspaceId] = useState<string>()
-
-  const addWorkspace = useCallback((workspace: Workspace) => {
-    setWorkspaces(workspaces => [...workspaces, workspace])
-  }, [])
-
-  const onWorkspaceChange = useCallback((id: string) => {
-    setActiveWorkspaceId(id)
-
-    // TODO: change it in the database as well
-  }, [])
-
-  const isNameTaken = useCallback(
-    (name: string) => {
-      return workspaces.some(w => w.name === name)
+const ProjectProvider: React.FC<ProviderProps> = ({ children }) => {
+  const [state, dispatch] = useReducer(
+    (state: ProjectState, action: ProjectAction) => {
+      switch (action.type) {
+        case ADD_PROJECT:
+          return {
+            ...state,
+            projects: [...state.projects, action.payload]
+          }
+        case LIST_PROJECTS:
+          return {
+            ...state,
+            projects: action.payload
+          }
+        case CHANGE_ACTIVE_PROJECT:
+          return {
+            ...state,
+            activeProject:
+              state.projects.find(project => project.id === action.payload) ||
+              null
+          }
+        default:
+          return state
+      }
     },
-    [workspaces]
+    { projects: [], activeProject: null }
   )
 
-  const context: ProjectContextProps = {
-    workspaces,
-    addWorkspace,
-    onWorkspaceChange,
-    isNameTaken,
-    setWorkspaces
-  }
-
-  if (activeWorkspaceId) {
-    context.activeWorkspace = workspaces.find(w => w.id === activeWorkspaceId)
-  }
+  const actions = useMemo(
+    () => ({
+      createProject: (
+        project: Omit<Project, 'id' | 'isActive' | 'createdAt'>
+      ) => {
+        dispatch({
+          type: ADD_PROJECT,
+          payload: {
+            ...project,
+            id: Math.random().toString(),
+            createdAt: new Date().toISOString(),
+            isActive: false
+          }
+        })
+      },
+      changeActiveProject: (projectId: string) => {
+        dispatch({
+          type: CHANGE_ACTIVE_PROJECT,
+          payload: projectId
+        })
+      },
+      isProjectNameTaken: (name: string) => {
+        return state.projects.some(project => project.name === name)
+      }
+    }),
+    [state]
+  )
 
   return (
-    <ProjectContext.Provider value={context}>
+    <ProjectContext.Provider value={{ ...state, ...actions }}>
       {children}
     </ProjectContext.Provider>
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useProject = () => {
-  const context = useContext(ProjectContext)
-
-  if (context === undefined) {
-    throw new Error('useProject must be used within a WorkspaceProvider')
-  }
-
-  return context
-}
+export default ProjectProvider

@@ -1,30 +1,13 @@
-import React, { createContext, useCallback, useContext, useState } from 'react'
+import { IHistoryContext, Message, ProviderProps } from '@/types'
+import React, { createContext, useCallback, useState } from 'react'
 
-interface Message {
-  id: string
-  content: string
-  author: 'USER' | 'ASSISTANT' | 'SYSTEM'
-}
-
-interface HistoryContext {
-  messages: Message[]
-  addMessage: (message: Message) => void
-  setMessages: (messages: Message[]) => void
-}
-
-interface HistoryProviderProps {
-  children: React.ReactNode
-}
-
-const HistoryContext = createContext<HistoryContext>({
+export const HistoryContext = createContext<IHistoryContext>({
   messages: [],
   addMessage: () => {},
   setMessages: () => {}
 })
 
-export const HistoryProvider: React.FC<HistoryProviderProps> = ({
-  children
-}) => {
+const HistoryProvider: React.FC<ProviderProps> = ({ children }) => {
   const [messages, setMessages] = useState<Message[]>([])
 
   const addMessage = useCallback((message: Message) => {
@@ -38,13 +21,4 @@ export const HistoryProvider: React.FC<HistoryProviderProps> = ({
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useHistory = (): HistoryContext => {
-  const context = useContext(HistoryContext)
-
-  if (!context) {
-    throw new Error('useHistory must be used within a HistoryProvider')
-  }
-
-  return context
-}
+export default HistoryProvider
