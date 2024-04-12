@@ -53,3 +53,26 @@ To run ManasAI, execute the following command:
 ```shell
 make run
 ```
+
+## Roadmap
+
+- [x] Multi project
+- [ ] Multi model
+- [ ] Multi agent
+- [x] Dedeicated sandbox to test the code in isolation
+  - [x] Terminal tool to display the commands (ran by the agent) and the output
+  - [ ] Allow the user to run the commands
+- [ ] Dedicated web browser to test web based code in isolation
+  - [x] Browser tool to display the output
+  - [ ] Multiple driver support (Chrome, Firefox, Safari, etc.)
+- [ ] Dedicated mobile amulator to test mobile based code in isolation
+  - [ ] Mobile tool to display the output
+- [ ] Dedicated desktop amulator to test desktop based code in isolation
+  - [ ] Desktop tool to display the output
+- [ ] Code editor
+  - [ ] Display the code written by the agent
+  - [ ] Allow the user to edit the code
+
+## Contributing
+
+We welcome contributions to ManasAI! Please refer to the [Contributing Guidelines](docs/CONTRIBUTING.md) for more information on how to get involved.
