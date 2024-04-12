@@ -1,44 +1,30 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Tab } from '@headlessui/react'
 import Shell from '@/components/Shell'
 import Editor from '@/components/Editor'
 import WebBrowser from '@/components/WebBrowser'
 import Plan from '@/components/Plan'
-import { Command } from '@/types'
 
-interface ComponentProps {
-  code?: string
-  commands: Command[]
-}
-
-interface Tab {
-  name: string
-  component: (props: ComponentProps) => React.ReactElement
-}
-
-const tabs: Tab[] = [
+const tabs = [
   {
     name: 'Shell',
-    component: ({ commands }) => <Shell commands={commands} />
+    component: <Shell />
   },
   {
     name: 'Browser',
-    component: () => <WebBrowser />
+    component: <WebBrowser />
   },
   {
     name: 'Editor',
-    component: ({ code }) => <Editor code={code} />
+    component: <Editor />
   },
   {
     name: 'Planner',
-    component: () => <Plan />
+    component: <Plan />
   }
 ]
 
 const Tools: React.FC = () => {
-  const [code] = useState<string | undefined>()
-  const [commands] = useState<Command[]>([])
-
   return (
     <div className="flex flex-col w-full h-full rounded-lg bg-zinc-200 dark:bg-zinc-800">
       <div className="flex flex-col flex-1 p-1.5 md:p-2.5 lg:p-6 pt-0 md:pt-0 lg:pt-0">
@@ -67,7 +53,7 @@ const Tools: React.FC = () => {
           <Tab.Panels className="border p-1 flex-1 rounded-lg border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900">
             {tabs.map(tab => (
               <Tab.Panel className="h-full" key={tab.name}>
-                {tab.component({ code, commands })}
+                {tab.component}
               </Tab.Panel>
             ))}
           </Tab.Panels>

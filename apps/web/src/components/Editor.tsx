@@ -2,11 +2,7 @@ import React, { useEffect } from 'react'
 import CodeEditor, { useMonaco } from '@monaco-editor/react'
 import useTheme from '@/hooks/use-theme'
 
-interface EditorProps {
-  code?: string
-}
-
-const Editor: React.FC<EditorProps> = ({ code }) => {
+const Editor: React.FC = () => {
   const monaco = useMonaco()
   const { isDarkMode } = useTheme()
 
@@ -30,14 +26,11 @@ const Editor: React.FC<EditorProps> = ({ code }) => {
           height="100%"
           theme="manas-ai"
           defaultLanguage="python"
-          defaultValue={
-            code ??
-            `"""Welcome to ManasAI Editor! 🚀
+          defaultValue={`"""Welcome to ManasAI Editor! 🚀
 
 ManasAI will write a code once starts executing its plan.
 """
-`
-          }
+`}
           options={{
             fontFamily:
               'SF Mono, Menlo, Roboto Mono, Ubuntu Mono, Oxygen Mono, monospace',

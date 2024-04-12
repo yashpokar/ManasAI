@@ -1,11 +1,6 @@
 import { Project } from '@/gql/graphql'
 import { LOADED, LOADING } from '@/constants'
 
-export interface Command {
-  stdout: string
-  isOutput: boolean
-}
-
 export interface ProviderProps {
   children: React.ReactNode
 }
