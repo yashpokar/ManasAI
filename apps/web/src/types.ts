@@ -30,8 +30,9 @@ export interface IProjectContext {
 }
 
 export interface IDeviceContext {
-  token: string | null
-  isLoading: boolean
+  id: string | null
+  isSetup: boolean
+  setupDevice: (id: string) => void
 }
 
 export interface Message {

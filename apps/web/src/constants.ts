@@ -1,5 +1,8 @@
 export const DARK_MODE_KEY = 'darkMode'
-export const DEVICE_TOKEN_KEY = 'deviceToken'
+export const DARK_MODE = 'dark'
+export const LIGHT_MODE = 'light'
+
+export const DEVICE_ID = 'deviceId'
 
 export const ADD_PROJECT = 'ADD_PROJECT'
 export const LIST_PROJECTS = 'LIST_PROJECTS'

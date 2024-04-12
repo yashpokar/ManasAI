@@ -1,30 +1,25 @@
-import { DEVICE_TOKEN_KEY } from '@/constants'
+import { DEVICE_ID } from '@/constants'
 import { IDeviceContext, ProviderProps } from '@/types'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 export const DeviceContext = React.createContext<IDeviceContext>({
-  token: null,
-  isLoading: true
+  id: null,
+  isSetup: false,
+  setupDevice: () => {}
 })
 
 const DeviceProvider: React.FC<ProviderProps> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(null)
-  const [isLoading, loading] = useState(true)
+  const [id, setId] = useState<string | null>(null)
+  const [isSetup, setupCompleted] = useState<boolean>(false)
 
-  useEffect(() => {
-    if (token) return
-
-    let storedToken = localStorage.getItem(DEVICE_TOKEN_KEY)
-    if (!storedToken) {
-      storedToken = Math.random().toString(36).substring(2)
-      localStorage.setItem(DEVICE_TOKEN_KEY, storedToken)
-    }
-    setToken(storedToken)
-    loading(false)
-  }, [token])
+  const setupDevice = useCallback((id: string) => {
+    localStorage.setItem(DEVICE_ID, id)
+    setId(id)
+    setupCompleted(true)
+  }, [])
 
   return (
-    <DeviceContext.Provider value={{ token, isLoading }}>
+    <DeviceContext.Provider value={{ id, isSetup, setupDevice }}>
       {children}
     </DeviceContext.Provider>
   )

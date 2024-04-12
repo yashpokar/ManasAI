@@ -15,7 +15,7 @@ export class DeviceIdGuard implements CanActivate {
     const gqlContext = GqlExecutionContext.create(context)
     const request = gqlContext.getContext().req
 
-    const deviceId = request?.headers?.['device-id']
+    const deviceId = request?.headers?.['x-device-id']
     if (!deviceId) {
       throw new UnauthorizedException('DeviceId is mandatory')
     }

@@ -11,7 +11,7 @@ import HistoryProvider from '@/providers/HistoryProvider.tsx'
 import './index.css'
 
 const client = new ApolloClient({
-  uri: import.meta.env.API_URL,
+  uri: `${import.meta.env.API_URL}/graphql`,
   cache: new InMemoryCache()
 })
 
