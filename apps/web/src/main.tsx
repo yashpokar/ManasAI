@@ -14,7 +14,7 @@ import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 
 import App from '@/App.tsx'
 
-import { DEVICE_ID } from '@/constants'
+import { DEVICE_ID, PROJECT_ID } from '@/constants'
 import ThemeProvider from '@/providers/ThemeProvider.tsx'
 import ProjectProvider from '@/providers/ProjectProvider.tsx'
 import DeviceProvider from '@/providers/DeviceProvider.tsx'
@@ -55,7 +55,8 @@ const deviceLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
-      'x-device-id': localStorage.getItem(DEVICE_ID)
+      'x-device-id': localStorage.getItem(DEVICE_ID),
+      'x-project-id': localStorage.getItem(PROJECT_ID)
     }
   }))
 

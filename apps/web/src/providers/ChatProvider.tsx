@@ -24,7 +24,6 @@ const MESSAGES_SUBSCRIPTION = gql`
 `
 
 export const ChatContext = createContext<IChatContext>({
-  sending: false,
   messages: [],
   sendMessage: () => {},
   setMessages: () => {}
@@ -32,14 +31,7 @@ export const ChatContext = createContext<IChatContext>({
 
 const ChatProvider: React.FC<ProviderProps> = ({ children }) => {
   const [messages, setMessages] = useState<Message[]>([])
-  const [sendMessage, { loading: sending }] = useMutation(
-    SEND_MESSAGE_MUTATION,
-    {
-      onCompleted: ({ data }) => {
-        console.log(`Message sent with id: ${data.createMessage.id}`)
-      }
-    }
-  )
+  const [sendMessage] = useMutation(SEND_MESSAGE_MUTATION)
 
   useSubscription(MESSAGES_SUBSCRIPTION, {
     variables: {
@@ -71,8 +63,7 @@ const ChatProvider: React.FC<ProviderProps> = ({ children }) => {
       value={{
         messages,
         setMessages,
-        sendMessage: sendMessageToServer,
-        sending
+        sendMessage: sendMessageToServer
       }}
     >
       {children}

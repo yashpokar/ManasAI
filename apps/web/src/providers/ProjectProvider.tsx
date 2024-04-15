@@ -1,11 +1,12 @@
-import React, { createContext, useMemo, useReducer } from 'react'
+import React, { createContext, useEffect, useMemo, useReducer } from 'react'
 import { FormActions, IProjectContext, ProviderProps } from '@/types'
 import {
   ADD_PROJECT,
   CHANGE_ACTIVE_PROJECT,
   LIST_PROJECTS,
   LOADED,
-  LOADING
+  LOADING,
+  PROJECT_ID
 } from '@/constants'
 import { Project } from '@/gql/graphql'
 import { gql, useLazyQuery, useMutation } from '@apollo/client'
@@ -149,6 +150,12 @@ const ProjectProvider: React.FC<ProviderProps> = ({ children }) => {
     },
     { projects: [], activeProject: null, loading: false }
   )
+
+  useEffect(() => {
+    if (!state.loading && state.activeProject) {
+      localStorage.setItem(PROJECT_ID, state.activeProject.id)
+    }
+  }, [state.loading, state.activeProject])
 
   const actions = useMemo(
     () => ({

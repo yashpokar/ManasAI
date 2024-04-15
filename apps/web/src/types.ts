@@ -30,12 +30,11 @@ export interface IDeviceContext {
 
 export interface Message {
   id: string
-  content: string
+  content: string | React.ReactNode
   author: 'USER' | 'ASSISTANT' | 'SYSTEM'
 }
 
 export interface IChatContext {
-  sending: boolean
   messages: Message[]
   sendMessage: (content: string) => void
   setMessages: (messages: Message[]) => void

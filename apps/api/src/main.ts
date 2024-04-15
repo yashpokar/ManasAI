@@ -8,7 +8,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: configService.get('UI_HOST'),
-    allowedHeaders: 'Content-Type, Accept, X-Device-ID'
+    allowedHeaders: 'Content-Type, Accept, X-Device-ID, X-Project-ID'
   })
 
   await app.listen(parseInt(configService.get('API_PORT') || '6287'))

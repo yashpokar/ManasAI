@@ -20,11 +20,14 @@ const Chat: React.FC = () => {
     [query, sendMessage]
   )
 
-  const onEnterPress = (e: React.KeyboardEvent) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-      return onMessageSubmit(e)
-    }
-  }
+  const onEnterPress = useCallback(
+    (e: React.KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        return onMessageSubmit(e)
+      }
+    },
+    [onMessageSubmit]
+  )
 
   return (
     <div className="flex flex-col w-full h-full rounded-lg bg-zinc-200 dark:bg-zinc-800">
