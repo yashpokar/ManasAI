@@ -1,21 +1,24 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import useProject from '@/hooks/use-project'
-import useHistory from '@/hooks/use-history'
+import useChat from '@/hooks/use-chat'
 import Message from './Message'
 
 const Chat: React.FC = () => {
   const [query, setQuery] = useState('')
   const { projects, activeProject } = useProject()
-  const { messages } = useHistory()
+  const { messages, sendMessage } = useChat()
 
-  const onMessageSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const onMessageSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault()
 
-    console.log(query)
+      sendMessage(query)
 
-    setQuery('')
-  }
+      setQuery('')
+    },
+    [query, sendMessage]
+  )
 
   const onEnterPress = (e: React.KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {

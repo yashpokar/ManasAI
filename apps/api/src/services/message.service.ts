@@ -20,8 +20,6 @@ export class MessageService {
     ctx: IContext,
     input: CreateMessageInput
   ): Promise<MessageEntity> {
-    this.logger.debug(`message created: ${input}`)
-
     const queryRunner = this.dataSource.createQueryRunner()
 
     await queryRunner.connect()

@@ -12,7 +12,7 @@ export class ProjectIdGuard implements CanActivate {
     const gqlContext = GqlExecutionContext.create(context)
     const request = gqlContext.getContext().req
 
-    const projectId = request?.headers?.['x-active-project-id']
+    const projectId = request?.headers?.['x-project-id']
     if (!projectId) {
       throw new UnauthorizedException('ProjectId is mandatory')
     }

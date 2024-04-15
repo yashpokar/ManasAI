@@ -19,9 +19,9 @@ import { MessageEntity } from '@/models/message'
       driver: ApolloDriver,
       autoSchemaFile: join(__dirname, 'schema.gql'),
       subscriptions: {
-        'graphql-ws': true
-      },
-      installSubscriptionHandlers: true
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true
+      }
     }),
     TypeOrmModule.forRoot({
       type: 'sqlite',

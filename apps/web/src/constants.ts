@@ -3,6 +3,7 @@ export const DARK_MODE = 'dark'
 export const LIGHT_MODE = 'light'
 
 export const DEVICE_ID = 'deviceId'
+export const PROJECT_ID = 'projectId'
 
 export const LOADING = 'LOADING'
 export const LOADED = 'LOADED'

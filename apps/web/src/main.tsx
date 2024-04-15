@@ -10,6 +10,7 @@ import {
 } from '@apollo/client'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 
 import App from '@/App.tsx'
 
@@ -22,17 +23,25 @@ import ChatProvider from '@/providers/ChatProvider'
 import './index.css'
 import { createClient } from 'graphql-ws'
 
+const inDevelopment = import.meta.env.MODE === 'development'
+
+if (inDevelopment) {
+  loadDevMessages()
+  loadErrorMessages()
+}
+
 const httpLink = new HttpLink({ uri: `${import.meta.env.API_URL}/graphql` })
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: `${import.meta.env.API_URL}/graphql`
+    url: `${import.meta.env.API_WS_URL}/graphql`
   })
 )
 
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query)
+
     return (
       definition.kind === 'OperationDefinition' &&
       definition.operation === 'subscription'

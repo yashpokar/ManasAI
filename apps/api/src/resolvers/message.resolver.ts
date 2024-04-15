@@ -14,16 +14,14 @@ import {
 import { PubSub } from 'graphql-subscriptions'
 
 @Resolver()
-@UseGuards(DeviceIdGuard, ProjectIdGuard)
 export class MessageResolver {
   private readonly logger = new Logger(MessageResolver.name)
-  private pubSub: PubSub
+  private pubSub: PubSub = new PubSub()
 
-  constructor(private readonly service: MessageService) {
-    this.pubSub = new PubSub()
-  }
+  constructor(private readonly service: MessageService) {}
 
   @Mutation(() => Message)
+  @UseGuards(DeviceIdGuard, ProjectIdGuard)
   async createMessage(
     @Context() ctx: IContext,
     @Args('input') input: CreateMessageInput
@@ -34,9 +32,21 @@ export class MessageResolver {
     return message
   }
 
-  @Subscription(() => Message)
-  async onMessage(@Context() ctx: IContext): Promise<AsyncIterator<Message>> {
-    this.logger.log(`Subscribing to messages from ${ctx}`)
+  @Subscription(() => Message, {
+    filter: (payload, variables) => {
+      return (
+        payload.onMessage.project.deviceId === variables.deviceId &&
+        payload.onMessage.project.id === variables.projectId
+      )
+    }
+  })
+  async onMessage(
+    @Args('projectId') projectId: string,
+    @Args('deviceId') deviceId: string
+  ): Promise<AsyncIterator<Message>> {
+    this.logger.log(
+      `Subscribing to messages for project ${projectId} and device ${deviceId}`
+    )
 
     return this.pubSub.asyncIterator('message')
   }

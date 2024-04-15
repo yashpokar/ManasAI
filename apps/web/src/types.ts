@@ -35,8 +35,9 @@ export interface Message {
 }
 
 export interface IChatContext {
+  sending: boolean
   messages: Message[]
-  addMessage: (message: Message) => void
+  sendMessage: (content: string) => void
   setMessages: (messages: Message[]) => void
 }
 
