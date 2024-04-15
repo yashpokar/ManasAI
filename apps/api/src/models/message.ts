@@ -1,4 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { ProjectEntity } from '@/models/project'
 
 export enum Author {
   USER = 'USER',
@@ -25,4 +27,22 @@ export class CreateMessageInput {
 
   @Field()
   author: Author
+}
+
+@Entity()
+export class MessageEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string
+
+  @Column()
+  content: string
+
+  @Column()
+  author: Author
+
+  @ManyToOne(() => ProjectEntity, project => project.messages)
+  project: ProjectEntity
+
+  @Column()
+  createdAt: Date
 }

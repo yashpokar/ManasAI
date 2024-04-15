@@ -112,6 +112,12 @@ export class ProjectService {
     }
   }
 
+  async getActive(ctx: IContext): Promise<Project> {
+    return this.repository.findOne({
+      where: { deviceId: ctx.req.deviceId, isActive: true }
+    })
+  }
+
   generateDeviceId(): string {
     return randomUUID()
   }

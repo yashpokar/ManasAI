@@ -137,7 +137,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: ^3.9.10
-        version: 3.9.10(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)(subscriptions-transport-ws@0.11.0)
+        version: 3.9.10(@types/react@18.2.74)(graphql-ws@5.16.0)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@headlessui/react':
         specifier: ^1.7.18
         version: 1.7.18(react-dom@18.2.0)(react@18.2.0)
@@ -162,15 +162,15 @@ importers:
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
+      graphql-ws:
+        specifier: ^5.16.0
+        version: 5.16.0(graphql@16.8.1)
       react:
         specifier: ^18.2.0
         version: 18.2.0
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
-      subscriptions-transport-ws:
-        specifier: ^0.11.0
-        version: 0.11.0(graphql@16.8.1)
     devDependencies:
       '@graphql-codegen/cli':
         specifier: 5.0.2
@@ -312,7 +312,7 @@ packages:
       graphql: 16.8.1
     dev: false
 
-  /@apollo/client@3.9.10(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)(subscriptions-transport-ws@0.11.0):
+  /@apollo/client@3.9.10(@types/react@18.2.74)(graphql-ws@5.16.0)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-w8i/Lk1P0vvWZF0Xb00XPonn79/0rgRJ1vopBlVudVuy9QP29/NZXK0rI2xJIN6VrKuEqJZaVGJC+7k23I2sfA==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
@@ -336,6 +336,7 @@ packages:
       '@wry/trie': 0.5.0
       graphql: 16.8.1
       graphql-tag: 2.12.6(graphql@16.8.1)
+      graphql-ws: 5.16.0(graphql@16.8.1)
       hoist-non-react-statics: 3.3.2
       optimism: 0.18.0
       prop-types: 15.8.1
@@ -343,7 +344,6 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
       rehackt: 0.0.6(@types/react@18.2.74)(react@18.2.0)
       response-iterator: 0.2.6
-      subscriptions-transport-ws: 0.11.0(graphql@16.8.1)
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
       tslib: 2.6.2
@@ -1897,7 +1897,7 @@ packages:
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       '@types/ws': 8.5.10
       graphql: 16.8.1
-      graphql-ws: 5.14.3(graphql@16.8.1)
+      graphql-ws: 5.16.0(graphql@16.8.1)
       isomorphic-ws: 5.0.0(ws@8.16.0)
       tslib: 2.6.2
       ws: 8.16.0
@@ -6276,6 +6276,15 @@ packages:
 
   /graphql-ws@5.14.3(graphql@16.8.1):
     resolution: {integrity: sha512-F/i2xNIVbaEF2xWggID0X/UZQa2V8kqKDPO8hwmu53bVOcTL7uNkxnexeEgSCVxYBQUTUNEI8+e4LO1FOhKPKQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      graphql: '>=0.11 <=16'
+    dependencies:
+      graphql: 16.8.1
+    dev: false
+
+  /graphql-ws@5.16.0(graphql@16.8.1):
+    resolution: {integrity: sha512-Ju2RCU2dQMgSKtArPbEtsK5gNLnsQyTNIo/T7cZNp96niC1x0KdJNZV0TIoilceBPQwfb5itrGl8pkFeOUMl4A==}
     engines: {node: '>=10'}
     peerDependencies:
       graphql: '>=0.11 <=16'

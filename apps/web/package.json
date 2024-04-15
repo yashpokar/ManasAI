@@ -21,9 +21,9 @@
     "@xterm/xterm": "^5.5.0",
     "clsx": "^2.1.0",
     "graphql": "^16.8.1",
+    "graphql-ws": "^5.16.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "subscriptions-transport-ws": "^0.11.0"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.2",

@@ -1,11 +1,15 @@
+import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   ApolloLink,
-  HttpLink
+  HttpLink,
+  split
 } from '@apollo/client'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { getMainDefinition } from '@apollo/client/utilities'
 
 import App from '@/App.tsx'
 
@@ -16,9 +20,27 @@ import DeviceProvider from '@/providers/DeviceProvider.tsx'
 import HistoryProvider from '@/providers/HistoryProvider.tsx'
 
 import './index.css'
-import { StrictMode } from 'react'
+import { createClient } from 'graphql-ws'
 
 const httpLink = new HttpLink({ uri: `${import.meta.env.API_URL}/graphql` })
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: `${import.meta.env.API_URL}/graphql`
+  })
+)
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query)
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    )
+  },
+  wsLink,
+  httpLink
+)
 
 const deviceLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
@@ -31,7 +53,7 @@ const deviceLink = new ApolloLink((operation, forward) => {
   return forward(operation)
 })
 
-const link = ApolloLink.from([deviceLink, httpLink])
+const link = ApolloLink.from([deviceLink, splitLink])
 
 const client = new ApolloClient({
   link,

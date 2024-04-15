@@ -7,18 +7,17 @@ import {
 import { GqlExecutionContext } from '@nestjs/graphql'
 
 @Injectable()
-export class DeviceIdGuard implements CanActivate {
+export class ProjectIdGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const gqlContext = GqlExecutionContext.create(context)
-
     const request = gqlContext.getContext().req
 
-    const deviceId = request?.headers?.['x-device-id']
-    if (!deviceId) {
-      throw new UnauthorizedException('DeviceId is mandatory')
+    const projectId = request?.headers?.['x-active-project-id']
+    if (!projectId) {
+      throw new UnauthorizedException('ProjectId is mandatory')
     }
 
-    request.deviceId = deviceId
+    request.projectId = projectId
     return true
   }
 }

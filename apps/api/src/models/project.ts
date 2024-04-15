@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { MessageEntity } from '@/models/message'
 
 @ObjectType()
 export class Project {
@@ -32,4 +33,7 @@ export class ProjectEntity {
 
   @Column()
   createdAt: Date
+
+  @OneToMany(() => MessageEntity, message => message.project)
+  messages: MessageEntity[]
 }

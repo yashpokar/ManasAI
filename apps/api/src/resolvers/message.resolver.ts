@@ -1,6 +1,9 @@
+import { ProjectIdGuard } from '@/guards/project-id.guard'
+import { DeviceIdGuard } from '@/guards/device-id.guard'
 import { Message, CreateMessageInput } from '@/models/message'
+import { MessageService } from '@/services/message.service'
 import { IContext } from '@/types/context'
-import { Logger } from '@nestjs/common'
+import { Logger, UseGuards } from '@nestjs/common'
 import {
   Args,
   Context,
@@ -11,11 +14,12 @@ import {
 import { PubSub } from 'graphql-subscriptions'
 
 @Resolver()
+@UseGuards(DeviceIdGuard, ProjectIdGuard)
 export class MessageResolver {
   private readonly logger = new Logger(MessageResolver.name)
   private pubSub: PubSub
 
-  constructor() {
+  constructor(private readonly service: MessageService) {
     this.pubSub = new PubSub()
   }
 
@@ -24,11 +28,7 @@ export class MessageResolver {
     @Context() ctx: IContext,
     @Args('input') input: CreateMessageInput
   ): Promise<Message> {
-    const message = {
-      id: '1',
-      content: input.content,
-      author: input.author
-    }
+    const message = await this.service.create(ctx, input)
 
     this.pubSub.publish('message', { onMessage: message })
     return message
