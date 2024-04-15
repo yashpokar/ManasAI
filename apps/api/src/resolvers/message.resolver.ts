@@ -45,8 +45,11 @@ export class MessageResolver {
     @Args('deviceId') deviceId: string
   ): Promise<AsyncIterator<Message>> {
     if (!projectId || !deviceId) {
-      throw new Error('Missing required arguments')
+      throw new Error(`Missing required arguments, 'projectId' and 'deviceId'`)
     }
+
+    // Note: idially we should check if the project and device exists
+    // but for the sake of simplicity we are skipping that check
 
     return this.pubSub.asyncIterator('message')
   }
