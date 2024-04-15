@@ -34,7 +34,7 @@ export interface Message {
   author: 'USER' | 'ASSISTANT' | 'SYSTEM'
 }
 
-export interface IHistoryContext {
+export interface IChatContext {
   messages: Message[]
   addMessage: (message: Message) => void
   setMessages: (messages: Message[]) => void

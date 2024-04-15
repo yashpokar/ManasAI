@@ -1,13 +1,13 @@
-import { IHistoryContext, Message, ProviderProps } from '@/types'
+import { IChatContext, Message, ProviderProps } from '@/types'
 import React, { createContext, useCallback, useState } from 'react'
 
-export const HistoryContext = createContext<IHistoryContext>({
+export const ChatContext = createContext<IChatContext>({
   messages: [],
   addMessage: () => {},
   setMessages: () => {}
 })
 
-const HistoryProvider: React.FC<ProviderProps> = ({ children }) => {
+const ChatProvider: React.FC<ProviderProps> = ({ children }) => {
   const [messages, setMessages] = useState<Message[]>([])
 
   const addMessage = useCallback((message: Message) => {
@@ -15,10 +15,10 @@ const HistoryProvider: React.FC<ProviderProps> = ({ children }) => {
   }, [])
 
   return (
-    <HistoryContext.Provider value={{ messages, setMessages, addMessage }}>
+    <ChatContext.Provider value={{ messages, setMessages, addMessage }}>
       {children}
-    </HistoryContext.Provider>
+    </ChatContext.Provider>
   )
 }
 
-export default HistoryProvider
+export default ChatProvider

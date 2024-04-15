@@ -17,7 +17,7 @@ import { DEVICE_ID } from '@/constants'
 import ThemeProvider from '@/providers/ThemeProvider.tsx'
 import ProjectProvider from '@/providers/ProjectProvider.tsx'
 import DeviceProvider from '@/providers/DeviceProvider.tsx'
-import HistoryProvider from '@/providers/HistoryProvider.tsx'
+import ChatProvider from '@/providers/ChatProvider'
 
 import './index.css'
 import { createClient } from 'graphql-ws'
@@ -65,11 +65,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ThemeProvider>
       <ApolloProvider client={client}>
         <DeviceProvider>
-          <HistoryProvider>
+          <ChatProvider>
             <ProjectProvider>
               <App />
             </ProjectProvider>
-          </HistoryProvider>
+          </ChatProvider>
         </DeviceProvider>
       </ApolloProvider>
     </ThemeProvider>
