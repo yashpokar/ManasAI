@@ -44,9 +44,9 @@ export class MessageResolver {
     @Args('projectId') projectId: string,
     @Args('deviceId') deviceId: string
   ): Promise<AsyncIterator<Message>> {
-    this.logger.log(
-      `Subscribing to messages for project ${projectId} and device ${deviceId}`
-    )
+    if (!projectId || !deviceId) {
+      throw new Error('Missing required arguments')
+    }
 
     return this.pubSub.asyncIterator('message')
   }
