@@ -28,10 +28,7 @@ export class MessageResolver {
     @Args('input') input: CreateMessageInput
   ): Promise<Message> {
     this.logger.debug(`creating message for project ${ctx.req.projectId}`)
-    const message = await this.service.create(ctx, input)
-
-    this.pubsubService.publish('message', { onMessage: message })
-    return message
+    return await this.service.create(ctx, input)
   }
 
   @Subscription(() => Message, {
@@ -46,13 +43,6 @@ export class MessageResolver {
     @Args('projectId') projectId: string,
     @Args('deviceId') deviceId: string
   ): Promise<AsyncIterator<Message>> {
-    if (!projectId || !deviceId) {
-      throw new Error(`Missing required arguments, 'projectId' and 'deviceId'`)
-    }
-
-    // Note: idially we should check if the project and device exists
-    // but for the sake of simplicity we are skipping that check
-
-    return this.pubsubService.asyncIterator('message')
+    return this.service.subscribe(projectId, deviceId)
   }
 }

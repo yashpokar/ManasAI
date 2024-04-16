@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common'
 import Agent from './agent'
 
+@Injectable()
 class OpenAIAgent extends Agent {
   async act(): Promise<void> {
-    console.log('OpenAIAgent acting')
+    this.logger.log('OpenAIAgent acting')
   }
 }
 

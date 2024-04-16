@@ -1,6 +1,7 @@
 import { CreateMessageInput, MessageEntity } from '@/models/message'
 import { ProjectEntity } from '@/models/project'
 import { IContext } from '@/types/context'
+import { PubSubService } from '@core/core/providers/pubsub.service'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, Repository } from 'typeorm'
@@ -13,7 +14,12 @@ export class MessageService {
     @InjectRepository(MessageEntity)
     private readonly repository: Repository<MessageEntity>,
 
-    private dataSource: DataSource
+    @InjectRepository(ProjectEntity)
+    private readonly projectRepository: Repository<ProjectEntity>,
+
+    private dataSource: DataSource,
+
+    private readonly pubsubService: PubSubService
   ) {}
 
   async create(
@@ -46,6 +52,8 @@ export class MessageService {
 
       await queryRunner.commitTransaction()
 
+      this.pubsubService.publish('message', { onMessage: message })
+
       return message
     } catch (error) {
       await queryRunner.rollbackTransaction()
@@ -60,5 +68,21 @@ export class MessageService {
     return this.repository.find({
       where: { project: { id: ctx.req.projectId } }
     })
+  }
+
+  async subscribe(projectId: string, deviceId: string) {
+    if (!projectId || !deviceId) {
+      throw new Error(`Missing required arguments, 'projectId' and 'deviceId'`)
+    }
+
+    if (
+      !(await this.projectRepository.findOne({
+        where: { id: projectId, deviceId }
+      }))
+    ) {
+      throw new Error(`Project and device combination not found`)
+    }
+
+    return this.pubsubService.asyncIterator('message')
   }
 }

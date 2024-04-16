@@ -20,6 +20,7 @@ import { MessageEntity } from '@/models/message'
       autoSchemaFile: join(__dirname, 'schema.gql'),
       subscriptions: {
         'graphql-ws': true,
+        // Note: subscriptions-transport-ws is a fallback for clients that do not support graphql-ws
         'subscriptions-transport-ws': true
       }
     }),

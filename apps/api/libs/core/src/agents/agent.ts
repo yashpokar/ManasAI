@@ -1,6 +1,9 @@
+import { Logger } from '@nestjs/common'
 import { AgentExecutor, AgentExecutorInput } from 'langchain/agents'
 
 abstract class Agent {
+  protected logger = new Logger(this.constructor.name)
+
   constructor(private readonly executorInput: AgentExecutorInput) {}
 
   abstract act(): Promise<void>
