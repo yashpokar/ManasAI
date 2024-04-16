@@ -33,7 +33,7 @@
     "LLM"
   ],
   "author": "Yash Patel <hello@yashpokar.com>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2",
     "husky": "^9.0.11",

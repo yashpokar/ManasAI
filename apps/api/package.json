@@ -1,13 +1,15 @@
 {
   "name": "api",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "description": "Backend API for ManasAI",
+  "author": {
+    "name": "Yash Patel",
+    "email": "hello@yashpokar.com"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -21,6 +23,8 @@
   },
   "dependencies": {
     "@apollo/server": "^4.10.2",
+    "@langchain/core": "^0.1.57",
+    "@langchain/openai": "^0.0.28",
     "@nestjs/apollo": "^12.1.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
@@ -28,12 +32,16 @@
     "@nestjs/graphql": "^12.1.1",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
+    "axios": "^1.6.8",
+    "dockerode": "^4.0.2",
     "graphql": "^16.8.1",
     "graphql-subscriptions": "^2.0.0",
+    "langchain": "^0.1.33",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "sqlite3": "^5.1.7",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -64,7 +72,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -72,7 +80,14 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@core/core(|/.*)$": "<rootDir>/libs/core/src/$1"
+    }
   }
 }

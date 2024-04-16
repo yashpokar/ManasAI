@@ -11,14 +11,15 @@ import {
   Resolver,
   Subscription
 } from '@nestjs/graphql'
-import { PubSub } from 'graphql-subscriptions'
+import { PubSubService } from '@core/core/providers/pubsub.service'
 
 @Resolver()
 export class MessageResolver {
   private readonly logger = new Logger(MessageResolver.name)
-  private pubSub: PubSub = new PubSub()
-
-  constructor(private readonly service: MessageService) {}
+  constructor(
+    private readonly service: MessageService,
+    private readonly pubsubService: PubSubService
+  ) {}
 
   @Mutation(() => Message)
   @UseGuards(DeviceIdGuard, ProjectIdGuard)
@@ -26,9 +27,10 @@ export class MessageResolver {
     @Context() ctx: IContext,
     @Args('input') input: CreateMessageInput
   ): Promise<Message> {
+    this.logger.debug(`creating message for project ${ctx.req.projectId}`)
     const message = await this.service.create(ctx, input)
 
-    this.pubSub.publish('message', { onMessage: message })
+    this.pubsubService.publish('message', { onMessage: message })
     return message
   }
 
@@ -51,6 +53,6 @@ export class MessageResolver {
     // Note: idially we should check if the project and device exists
     // but for the sake of simplicity we are skipping that check
 
-    return this.pubSub.asyncIterator('message')
+    return this.pubsubService.asyncIterator('message')
   }
 }

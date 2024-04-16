@@ -15,10 +15,13 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@core/core": ["libs/core/src"],
+      "@core/core/*": ["libs/core/src/*"]
     }
   }
 }
