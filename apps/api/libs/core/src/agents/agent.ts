@@ -1,3 +1,4 @@
+import { Message } from '@/models/message'
 import { Logger } from '@nestjs/common'
 import { AgentExecutor, AgentExecutorInput } from 'langchain/agents'
 
@@ -6,7 +7,7 @@ abstract class Agent {
 
   constructor(private readonly executorInput: AgentExecutorInput) {}
 
-  abstract act(): Promise<void>
+  abstract act(question: string, previousMessage: Message[]): Promise<void>
 
   public getExecutor(
     input: Partial<AgentExecutorInput> = {

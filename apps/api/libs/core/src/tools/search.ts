@@ -1,7 +1,9 @@
 import { z } from 'zod'
 import axios from 'axios'
 import { Tool } from './tool'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 class SearchTool extends Tool {
   protected name = 'web-search'
   protected description = `Tool that allows an agent to search anything on the web using duckduckgo.`
@@ -29,4 +31,4 @@ class SearchTool extends Tool {
   }
 }
 
-export default new SearchTool()
+export default SearchTool

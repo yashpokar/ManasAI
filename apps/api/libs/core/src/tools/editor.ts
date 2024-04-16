@@ -1,6 +1,9 @@
 import { z } from 'zod'
 import { Tool } from './tool'
+import { Injectable } from '@nestjs/common'
+import FileSystemService from '../providers/file-system.service'
 
+@Injectable()
 class EditorTool extends Tool {
   protected name = 'editor'
   protected description = `Tool that allows an agent to write, read and delete files or directories in the file system.`
@@ -14,7 +17,11 @@ class EditorTool extends Tool {
     data: z.string().optional().describe('The data to write to the file.')
   })
 
-  public async execute(params: z.infer<typeof this.schema>) {
+  constructor(private readonly fileSystemService: FileSystemService) {
+    super()
+  }
+
+  async execute(params: z.infer<typeof this.schema>) {
     this.logger.debug(
       `Performing action: ${params.action} on path: ${params.path}`
     )
@@ -23,4 +30,4 @@ class EditorTool extends Tool {
   }
 }
 
-export default new EditorTool()
+export default EditorTool

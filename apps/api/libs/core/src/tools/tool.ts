@@ -17,7 +17,7 @@ export abstract class Tool<
 
   abstract execute(params: z.infer<T>): Promise<any>
 
-  public toDynamicStructuredTool(): DynamicStructuredToolInput {
+  toDynamicStructuredTool(): DynamicStructuredToolInput {
     return {
       name: this.name,
       description: this.description,

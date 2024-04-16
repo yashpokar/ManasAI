@@ -1,6 +1,9 @@
 import { z } from 'zod'
 import { Tool } from './tool'
+import { Injectable } from '@nestjs/common'
+import DockerService from '../providers/docker.service'
 
+@Injectable()
 class TerminalTool extends Tool {
   protected name = 'terminal'
   protected description = `Tool executes commands in isolated sandbox environment.`
@@ -10,11 +13,15 @@ class TerminalTool extends Tool {
     command: z.string().describe('The shell command to execute.')
   })
 
-  public async execute(params: z.infer<typeof this.schema>) {
+  constructor(private readonly dockerService: DockerService) {
+    super()
+  }
+
+  async execute(params: z.infer<typeof this.schema>) {
     this.logger.debug(`Executing shell command: ${params.command}`)
 
     return params.command
   }
 }
 
-export default new TerminalTool()
+export default TerminalTool

@@ -12,8 +12,8 @@ export class AIService {
 
   @OnEvent(MESSAGE_RECEIVED_EVENT)
   async invoke(message: MessageEntity): Promise<void> {
-    this.logger.debug(`invoking AI agent for message ${message.id}`)
+    this.logger.debug(`invoking AI agent for message ${message.content}`)
 
-    await this.agent.act()
+    await this.agent.act(message.content)
   }
 }

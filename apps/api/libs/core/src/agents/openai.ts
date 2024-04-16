@@ -3,8 +3,8 @@ import Agent from './agent'
 
 @Injectable()
 class OpenAIAgent extends Agent {
-  async act(): Promise<void> {
-    this.logger.log('OpenAIAgent acting')
+  async act(question: string): Promise<void> {
+    this.logger.log(`OpenAIAgent acting on question: ${question}`)
   }
 }
 

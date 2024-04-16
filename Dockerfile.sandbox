@@ -17,9 +17,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -m manasai && echo "manasai:manasai" | chpasswd && adduser manasai sudo \
-  && echo "manasai ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/manasai
+RUN useradd -m ubuntu && echo "ubuntu:ubuntu" | chpasswd && adduser ubuntu sudo \
+  && echo "ubuntu ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ubuntu
 
-USER manasai
+USER ubuntu
 
 CMD ["/bin/bash"]

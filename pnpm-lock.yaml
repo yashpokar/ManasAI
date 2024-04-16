@@ -59,6 +59,9 @@ importers:
       '@nestjs/typeorm':
         specifier: ^10.0.2
         version: 10.0.2(@nestjs/common@10.3.7(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.7(@nestjs/common@10.3.7(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.3.7)(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))
+      '@types/dockerode':
+        specifier: ^3.3.28
+        version: 3.3.28
       axios:
         specifier: ^1.6.8
         version: 1.6.8
@@ -2096,6 +2099,12 @@ packages:
   '@types/cookiejar@2.1.5':
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==}
 
+  '@types/docker-modem@3.0.6':
+    resolution: {integrity: sha512-yKpAGEuKRSS8wwx0joknWxsmLha78wNMe9R2S3UNsVOkZded8UqOrV8KoeDXoXsjndxwyF3eIhyClGbO1SEhEg==}
+
+  '@types/dockerode@3.3.28':
+    resolution: {integrity: sha512-RjY96chW88t2QvSebCsec+mQYo3/nyOr+/tVcE+0ynlOg2m/i9wPE52DhptzF75QDlhv2uDYVPqKfHKeGTn6Fg==}
+
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
 
@@ -2182,6 +2191,9 @@ packages:
 
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
+
+  '@types/ssh2@1.15.0':
+    resolution: {integrity: sha512-YcT8jP5F8NzWeevWvcyrrLB3zcneVjzYY9ZDSMAMboI+2zR1qYWFhwsyOFVzT7Jorn67vqxC0FRiw8YyG9P1ww==}
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -8185,6 +8197,17 @@ snapshots:
 
   '@types/cookiejar@2.1.5': {}
 
+  '@types/docker-modem@3.0.6':
+    dependencies:
+      '@types/node': 20.12.5
+      '@types/ssh2': 1.15.0
+
+  '@types/dockerode@3.3.28':
+    dependencies:
+      '@types/docker-modem': 3.0.6
+      '@types/node': 20.12.5
+      '@types/ssh2': 1.15.0
+
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 8.56.7
@@ -8286,6 +8309,10 @@ snapshots:
       '@types/http-errors': 2.0.4
       '@types/node': 20.12.5
       '@types/send': 0.17.4
+
+  '@types/ssh2@1.15.0':
+    dependencies:
+      '@types/node': 18.19.31
 
   '@types/stack-utils@2.0.3': {}
 

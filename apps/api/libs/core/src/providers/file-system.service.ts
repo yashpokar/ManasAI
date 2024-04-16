@@ -27,6 +27,17 @@ class FileSystemService {
       throw error
     }
   }
+
+  async deleteFile(path: string): Promise<void> {
+    this.logger.debug(`Deleting file from ${path}...`)
+
+    try {
+      fs.unlinkSync(path)
+    } catch (error) {
+      this.logger.error(`Failed to delete file from ${path}.`)
+      throw error
+    }
+  }
 }
 
 export default FileSystemService
