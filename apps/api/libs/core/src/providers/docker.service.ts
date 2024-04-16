@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
 @Injectable()
-class Docker {}
+class DockerServuce {}
 
-export default Docker
+export default DockerServuce

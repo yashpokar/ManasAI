@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common'
 import fs from 'fs'
 
 @Injectable()
-class FileSystem {
+class FileSystemService {
   private logger = new Logger(FileSystem.name)
 
   async readFile(path: string): Promise<string> {
@@ -29,4 +29,4 @@ class FileSystem {
   }
 }
 
-export default FileSystem
+export default FileSystemService

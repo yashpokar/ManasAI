@@ -1,5 +1,10 @@
-import { MESSAGE_CREATED_EVENT, TOPIC_MESSAGE } from '@/constants'
-import { CreateMessageInput, MessageEntity } from '@/models/message'
+import {
+  MESSAGE_CREATED_EVENT,
+  MESSAGE_RECEIVED_EVENT,
+  MESSAGE_SENT_EVENT,
+  TOPIC_MESSAGE
+} from '@core/core/constants'
+import { Author, CreateMessageInput, MessageEntity } from '@/models/message'
 import { ProjectEntity } from '@/models/project'
 import { IContext } from '@/types/context'
 import { PubSubService } from '@core/core/providers/pubsub.service'
@@ -91,9 +96,15 @@ export class MessageService {
   }
 
   @OnEvent(MESSAGE_CREATED_EVENT)
-  async onMessageCreated(message: MessageEntity) {
+  async onMessageCreated(message: MessageEntity): Promise<boolean> {
     this.logger.debug(`sending message to subscribers`)
 
-    this.pubsubService.publish(TOPIC_MESSAGE, { onMessage: message })
+    await this.pubsubService.publish(TOPIC_MESSAGE, { onMessage: message })
+
+    if (message.author === Author.USER) {
+      return this.eventEmitter.emit(MESSAGE_RECEIVED_EVENT, message)
+    }
+
+    return this.eventEmitter.emit(MESSAGE_SENT_EVENT, message)
   }
 }

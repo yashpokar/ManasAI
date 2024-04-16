@@ -9,8 +9,8 @@ export class PubSubService {
     this.pubSub = new PubSub()
   }
 
-  publish(trigger: string, payload: any) {
-    this.pubSub.publish(trigger, payload)
+  async publish(trigger: string, payload: any) {
+    return this.pubSub.publish(trigger, payload)
   }
 
   asyncIterator<T = any>(trigger: string) {
