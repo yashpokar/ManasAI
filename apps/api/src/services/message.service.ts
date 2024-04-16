@@ -1,8 +1,10 @@
+import { MESSAGE_CREATED_EVENT, TOPIC_MESSAGE } from '@/constants'
 import { CreateMessageInput, MessageEntity } from '@/models/message'
 import { ProjectEntity } from '@/models/project'
 import { IContext } from '@/types/context'
 import { PubSubService } from '@core/core/providers/pubsub.service'
 import { Injectable, Logger } from '@nestjs/common'
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, Repository } from 'typeorm'
 
@@ -19,7 +21,9 @@ export class MessageService {
 
     private dataSource: DataSource,
 
-    private readonly pubsubService: PubSubService
+    private readonly pubsubService: PubSubService,
+
+    private readonly eventEmitter: EventEmitter2
   ) {}
 
   async create(
@@ -52,7 +56,7 @@ export class MessageService {
 
       await queryRunner.commitTransaction()
 
-      this.pubsubService.publish('message', { onMessage: message })
+      this.eventEmitter.emit(MESSAGE_CREATED_EVENT, message)
 
       return message
     } catch (error) {
@@ -83,6 +87,13 @@ export class MessageService {
       throw new Error(`Project and device combination not found`)
     }
 
-    return this.pubsubService.asyncIterator('message')
+    return this.pubsubService.asyncIterator(TOPIC_MESSAGE)
+  }
+
+  @OnEvent(MESSAGE_CREATED_EVENT)
+  async onMessageCreated(message: MessageEntity) {
+    this.logger.debug(`sending message to subscribers`)
+
+    this.pubsubService.publish(TOPIC_MESSAGE, { onMessage: message })
   }
 }

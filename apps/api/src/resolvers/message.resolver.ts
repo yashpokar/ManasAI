@@ -11,15 +11,11 @@ import {
   Resolver,
   Subscription
 } from '@nestjs/graphql'
-import { PubSubService } from '@core/core/providers/pubsub.service'
 
 @Resolver()
 export class MessageResolver {
   private readonly logger = new Logger(MessageResolver.name)
-  constructor(
-    private readonly service: MessageService,
-    private readonly pubsubService: PubSubService
-  ) {}
+  constructor(private readonly service: MessageService) {}
 
   @Mutation(() => Message)
   @UseGuards(DeviceIdGuard, ProjectIdGuard)
@@ -28,7 +24,7 @@ export class MessageResolver {
     @Args('input') input: CreateMessageInput
   ): Promise<Message> {
     this.logger.debug(`creating message for project ${ctx.req.projectId}`)
-    return await this.service.create(ctx, input)
+    return this.service.create(ctx, input)
   }
 
   @Subscription(() => Message, {

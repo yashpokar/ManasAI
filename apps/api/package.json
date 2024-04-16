@@ -24,12 +24,12 @@
   "dependencies": {
     "@apollo/server": "^4.10.2",
     "@langchain/core": "^0.1.57",
-    "@langchain/langgraph": "^0.0.12",
     "@langchain/openai": "^0.0.28",
     "@nestjs/apollo": "^12.1.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/event-emitter": "^2.0.4",
     "@nestjs/graphql": "^12.1.1",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",

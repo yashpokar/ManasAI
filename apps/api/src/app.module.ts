@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { join } from 'path'
 
@@ -14,6 +15,15 @@ import { MessageEntity } from '@/models/message'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true
+    }),
+    EventEmitterModule.forRoot({
+      wildcard: false,
+      delimiter: '::',
+      newListener: false,
+      removeListener: false,
+      maxListeners: 10,
+      verboseMemoryLeak: false,
+      ignoreErrors: false
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
