@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { Tool } from './tool'
 import { Injectable } from '@nestjs/common'
 import FileSystemService from '../providers/file-system.service'
+import { join } from 'path'
 
 @Injectable()
 class EditorTool extends Tool {
@@ -13,7 +14,12 @@ class EditorTool extends Tool {
     action: z
       .enum(['READ', 'WRITE', 'DELETE'])
       .describe('The action to perform.'),
-    path: z.string().describe('The path to the file or directory.'),
+    filename: z.string().describe('The name of the file to edit or write.'),
+    path: z
+      .string()
+      .describe(
+        'The abstolute path from the project root to the file or directory.'
+      ),
     data: z.string().optional().describe('The data to write to the file.')
   })
 
@@ -21,12 +27,21 @@ class EditorTool extends Tool {
     super()
   }
 
-  async execute(params: z.infer<typeof this.schema>) {
-    this.logger.debug(
-      `Performing action: ${params.action} on path: ${params.path}`
-    )
+  async execute({ path, action, filename, data }: z.infer<typeof this.schema>) {
+    this.logger.debug(`Performing action: ${action} on path: ${path}`)
 
-    return `Action: ${params.action} on path: ${params.path} completed.`
+    const location = join(path, filename)
+
+    switch (action) {
+      case 'READ':
+        return this.fileSystemService.readFile(location)
+      case 'WRITE':
+        return this.fileSystemService.writeFile(location, data || '')
+      case 'DELETE':
+        return this.fileSystemService.deleteFile(location)
+      default:
+        throw new Error(`Action: ${action} not supported.`)
+    }
   }
 }
 
