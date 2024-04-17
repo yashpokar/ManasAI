@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { AIService } from './ai.service'
 import { PubSubService } from './providers/pubsub.service'
-import OpenAIAgent from './agents/openai'
+import AgentsOrchestrator from './agents/orchestrator'
 import EditorTool from './tools/editor'
 import BrowserTool from './tools/browser'
 import TerminalTool from './tools/terminal'
@@ -19,7 +19,7 @@ import DockerService from './providers/docker.service'
     BrowserTool,
     TerminalTool,
     SearchTool,
-    OpenAIAgent,
+    AgentsOrchestrator,
     AIService
   ]
 })

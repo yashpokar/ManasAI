@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { Tool } from './tool'
 import { Injectable } from '@nestjs/common'
+import { Tool } from './tool'
 import DockerService from '../providers/docker.service'
 
 @Injectable()
@@ -15,12 +15,14 @@ class TerminalTool extends Tool {
 
   constructor(private readonly dockerService: DockerService) {
     super()
+
+    this.dockerService.init()
   }
 
-  async execute(params: z.infer<typeof this.schema>) {
-    this.logger.debug(`Executing shell command: ${params.command}`)
+  async execute({ command, projectId }: z.infer<typeof this.schema>) {
+    this.logger.debug(`Executing shell command: ${command}`)
 
-    return params.command
+    return this.dockerService.executeCommand(command, projectId)
   }
 }
 

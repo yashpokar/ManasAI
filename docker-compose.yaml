@@ -8,8 +8,8 @@ services:
     image: 'manasai-sandbox:latest'
     container_name: 'manasai-sandbox'
     volumes:
-      - ./workspaces:/var/www/html
-    working_dir: /var/www/html
+      - ./workspaces:/
+    working_dir: /
     healthcheck:
       test: ["CMD", "echo", "Hello ManasAI Gang!"]
       interval: 30s

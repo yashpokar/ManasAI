@@ -12,6 +12,7 @@ import Agent from './agent'
 
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
+import { BaseMessage } from '@langchain/core/messages'
 
 const planExecuteState = {
   input: {
@@ -22,7 +23,7 @@ const planExecuteState = {
     default: () => []
   },
   pastSteps: {
-    value: (x, y) => x.concat(y),
+    value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
     default: () => []
   },
   response: {

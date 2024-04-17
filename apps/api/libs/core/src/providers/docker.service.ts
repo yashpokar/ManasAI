@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import * as Docker from 'dockerode'
+import { SANDBOX_DOCKER_IMAGE_NAME } from '../constants'
 
 @Injectable()
 class DockerService {
@@ -15,32 +16,41 @@ class DockerService {
     this.logger.debug('Initializing Docker service...')
 
     const containers = await this.docker.listContainers()
-    // TODO: do not hardcode container name
-    const container = containers.find(c => c.Names.includes('manasai-sandbox'))
-
-    if (!container) {
-      this.logger.debug('Creating sandbox container...')
-
-      // TODO: what if the image does not exist?
-      // TODO: do not hardcode image name
-      this.container = await this.docker.createContainer({
-        Image: 'manasai/sandbox'
-      })
-
-      await this.container.start()
-    }
-  }
-
-  async executeCommand(
-    commands: string[],
-    workingDir?: string
-  ): Promise<string> {
-    this.logger.debug(
-      `Executing docker command: ${commands.join(' ')}, workingDir: ${workingDir}`
+    const container = containers.find(c =>
+      c.Names.includes(SANDBOX_DOCKER_IMAGE_NAME)
     )
 
+    // TODO: what is the container is stopped?
+
+    if (!container) {
+      this.logger.debug('Preparing sandbox...')
+
+      const container = await this.docker.createContainer({
+        Image: SANDBOX_DOCKER_IMAGE_NAME,
+        Tty: true,
+        AttachStdout: true,
+        AttachStderr: true,
+        name: SANDBOX_DOCKER_IMAGE_NAME
+      })
+
+      await container.start()
+
+      this.container = container
+      return
+    }
+
+    this.container = this.docker.getContainer(container.Id)
+  }
+
+  async executeCommand(command: string, workingDir?: string): Promise<string> {
+    this.logger.debug(
+      `Executing docker command: ${command}, workingDir: ${workingDir}`
+    )
+
+    const commands = command.split(' ')
+
     if (!this.container) {
-      throw new Error('Sandbox container not initialized.')
+      throw new Error('Sandbox not initialized.')
     }
 
     const exec = await this.container.exec({
