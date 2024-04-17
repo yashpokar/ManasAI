@@ -1,6 +1,8 @@
 import { z } from 'zod'
 import { Tool } from './tool'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 class BrowserTool extends Tool {
   protected name = 'browser'
   protected description = `Tool that allows an agent to test/preview web page using playwright so that it can know if generated code is working as expected.`
