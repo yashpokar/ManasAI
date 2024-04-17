@@ -17,4 +17,4 @@ class BrowserTool extends Tool {
   }
 }
 
-export default new BrowserTool()
+export default BrowserTool

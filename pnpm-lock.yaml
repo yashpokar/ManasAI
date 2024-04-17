@@ -32,6 +32,9 @@ importers:
       '@langchain/core':
         specifier: ^0.1.57
         version: 0.1.57
+      '@langchain/langgraph':
+        specifier: ^0.0.12
+        version: 0.0.12
       '@langchain/openai':
         specifier: ^0.0.28
         version: 0.0.28(encoding@0.1.13)
@@ -1648,6 +1651,10 @@ packages:
 
   '@langchain/core@0.1.57':
     resolution: {integrity: sha512-6wOwidPkkRcANrOKl88+YYpm3jHfpg6W8EqZHQCImSAlxdEhyDSq2eeQKHOPCFCrfNWkClaNn+Wlzzz4Qwf9Tg==}
+    engines: {node: '>=18'}
+
+  '@langchain/langgraph@0.0.12':
+    resolution: {integrity: sha512-f1N5eV3w7Y59P3rSjgNmjYoqghAPuxRUQTKX922OOhwYT0vmPVlmi99aduRHXK1oJDA3tVQCqrUkDV6D154Pnw==}
     engines: {node: '>=18'}
 
   '@langchain/openai@0.0.28':
@@ -7768,6 +7775,10 @@ snapshots:
       uuid: 9.0.1
       zod: 3.22.4
       zod-to-json-schema: 3.22.5(zod@3.22.4)
+
+  '@langchain/langgraph@0.0.12':
+    dependencies:
+      '@langchain/core': 0.1.57
 
   '@langchain/openai@0.0.28(encoding@0.1.13)':
     dependencies:

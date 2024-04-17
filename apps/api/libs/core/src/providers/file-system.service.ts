@@ -4,7 +4,7 @@ import fs from 'fs'
 
 @Injectable()
 class FileSystemService {
-  private logger = new Logger(FileSystem.name)
+  private logger = new Logger(FileSystemService.name)
 
   async readFile(path: string): Promise<string> {
     this.logger.debug(`Reading file from ${path}...`)

@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common'
-import Docker, { Container } from 'dockerode'
+import * as Docker from 'dockerode'
 
 @Injectable()
 class DockerService {
   private logger = new Logger(DockerService.name)
   private docker: Docker
-  private container: Container
+  private container: Docker.Container
 
   constructor() {
     this.docker = new Docker()

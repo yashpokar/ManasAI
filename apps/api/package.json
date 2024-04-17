@@ -24,6 +24,7 @@
   "dependencies": {
     "@apollo/server": "^4.10.2",
     "@langchain/core": "^0.1.57",
+    "@langchain/langgraph": "^0.0.12",
     "@langchain/openai": "^0.0.28",
     "@nestjs/apollo": "^12.1.0",
     "@nestjs/common": "^10.0.0",
