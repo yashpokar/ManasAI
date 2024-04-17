@@ -15,14 +15,12 @@ class DockerService {
   async init(): Promise<void> {
     this.logger.debug('Initializing Docker service...')
 
-    const containers = await this.docker.listContainers()
-    const container = containers.find(c =>
-      c.Names.includes(SANDBOX_DOCKER_IMAGE_NAME)
-    )
+    const containers = await this.docker.listContainers({
+      all: true,
+      filters: { name: [SANDBOX_DOCKER_IMAGE_NAME] }
+    })
 
-    // TODO: what is the container is stopped?
-
-    if (!container) {
+    if (!containers) {
       this.logger.debug('Preparing sandbox...')
 
       const container = await this.docker.createContainer({
@@ -39,7 +37,14 @@ class DockerService {
       return
     }
 
+    const container = containers[0]
+
     this.container = this.docker.getContainer(container.Id)
+
+    if (container.State === 'exited') {
+      this.logger.debug('Starting container...')
+      await this.container.start()
+    }
   }
 
   async executeCommand(command: string, workingDir?: string): Promise<string> {
