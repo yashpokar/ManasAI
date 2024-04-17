@@ -12,11 +12,11 @@ class SearchTool extends Tool {
     query: z.string().describe('The query to search for.')
   })
 
-  public async execute(params: z.infer<typeof this.schema>) {
-    this.logger.debug(`Searching for ${params.query} on the web...`)
+  public async execute({ query }: z.infer<typeof this.schema>) {
+    this.logger.debug(`Searching for ${query} on the web...`)
 
     const resp = await axios.get(
-      `https://api.duckduckgo.com/?q=${params.query}&format=json`
+      `https://api.duckduckgo.com/?q=${query}&format=json`
     )
 
     this.logger.debug(
