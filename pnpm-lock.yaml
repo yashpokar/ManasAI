@@ -95,6 +95,9 @@ importers:
       zod:
         specifier: ^3.22.4
         version: 3.22.4
+      zod-to-json-schema:
+        specifier: ^3.22.5
+        version: 3.22.5(zod@3.22.4)
     devDependencies:
       '@nestjs/cli':
         specifier: ^10.0.0
