@@ -1,17 +1,31 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { JsonOutputFunctionsParser } from 'langchain/output_parsers'
+import { ChatOpenAI } from '@langchain/openai'
 import Agent from './agent'
 import { AgentOutput, AgentState } from '../types/agent'
-import { ChatOpenAI } from '@langchain/openai'
+import planFunction from '../functions/plan'
+import { OPENAI_SERVICE } from '../constants'
 
 @Injectable()
-class PlannerAgent extends Agent<ChatOpenAI> {
-  async act(state: AgentState): Promise<Partial<AgentState>> {
-    this.logger.debug(`Acting the given state: ${state}`)
+class PlannerAgent extends Agent {
+  constructor(
+    @Inject(OPENAI_SERVICE)
+    private readonly model: ChatOpenAI
+  ) {
+    super()
+  }
 
-    const prompt = this.getPromptTemplate('planner')
-    const parser = new JsonOutputFunctionsParser({ argsOnly: true })
-    const planner = prompt.pipe(this.model).pipe(parser)
+  async act(state: AgentState): Promise<Partial<AgentState>> {
+    this.logger.debug(`Acting the given state: `, state)
+
+    this.model.bind({
+      functions: [planFunction],
+      function_call: planFunction
+    })
+
+    const planner = this.getPromptTemplate('planner')
+      .pipe(this.model)
+      .pipe(new JsonOutputFunctionsParser({ argsOnly: true }))
 
     const plan: AgentOutput = await planner.invoke({
       objective: state.input

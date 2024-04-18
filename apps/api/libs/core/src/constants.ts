@@ -7,6 +7,8 @@ export const TOPIC_MESSAGE = 'message'
 export const PLANNER_NODE = 'planner'
 export const AGENT_NODE = 'agent'
 export const REPLANNER_NODE = 'replan'
-export const ACTION_NODE = 'action'
+
+export const CONTINUE = 'continue'
+export const EXIT = 'exit'
 
 export const OPENAI_SERVICE = 'openai'

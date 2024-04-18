@@ -1,34 +1,57 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { MessageEntity } from '@/models/message'
-import { ChatOpenAI } from '@langchain/openai'
 import AgentsOrchestrator from './agents/orchestrator'
-import { MESSAGE_RECEIVED_EVENT } from './constants'
+import {
+  AGENT_NODE,
+  CONTINUE,
+  EXIT,
+  MESSAGE_RECEIVED_EVENT,
+  PLANNER_NODE,
+  REPLANNER_NODE
+} from './constants'
 import OpenAIAgent from './agents/openai'
+import PlannerAgent from './agents/planner'
+import RePlannerAgent from './agents/replanner'
+import { AgentState } from './types/agent'
+import { END } from '@langchain/langgraph'
 
 @Injectable()
 export class AIService {
-  private readonly logger = new Logger(AIService.name)
-
   constructor(
     private readonly orchestrator: AgentsOrchestrator,
-    private readonly openaiAgent: OpenAIAgent
+    private readonly openaiAgent: OpenAIAgent,
+    private readonly plannerAgent: PlannerAgent,
+    private readonly replannerAgent: RePlannerAgent
   ) {}
 
   @OnEvent(MESSAGE_RECEIVED_EVENT)
   async invoke(message: MessageEntity): Promise<void> {
-    // TODO: Implement a way to select the model based on the user's preferences
-    const model = new ChatOpenAI({
-      modelName: 'gpt-4-turbo',
-      temperature: 0
+    this.orchestrator.orchestrate({
+      nodes: [
+        [PLANNER_NODE, this.plannerAgent],
+        [AGENT_NODE, this.openaiAgent],
+        [REPLANNER_NODE, this.replannerAgent]
+      ],
+      edges: [
+        [PLANNER_NODE, AGENT_NODE],
+        [AGENT_NODE, REPLANNER_NODE],
+        [REPLANNER_NODE, PLANNER_NODE]
+      ],
+      conditionalEdges: [
+        [
+          REPLANNER_NODE,
+          ({ response }: AgentState) => (response ? CONTINUE : EXIT),
+          {
+            [CONTINUE]: PLANNER_NODE,
+            [EXIT]: END
+          }
+        ]
+      ],
+      entryPoint: PLANNER_NODE
     })
 
-    this.openaiAgent.initialize({
-      model,
-      tools: this.orchestrator.getStructuredTools()
-    })
-
-    const results = this.orchestrator.act({
+    this.orchestrator.act({
       args: {
         input: message.content,
         plan: [],
@@ -39,9 +62,5 @@ export class AIService {
         recursionLimit: 50
       }
     })
-
-    for await (const result of results) {
-      this.logger.debug(`Received result: ${JSON.stringify(result)}`)
-    }
   }
 }

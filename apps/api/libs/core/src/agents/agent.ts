@@ -1,34 +1,21 @@
-import { Injectable, Logger } from '@nestjs/common'
-import path from 'path'
+import * as path from 'path'
 import * as fs from 'fs'
-import { AgentInitilizationInput, AgentState } from '../types/agent'
-import { BaseChatModel } from '@langchain/core/language_models/chat_models'
+import { AgentState } from '../types/agent'
 import { ChatPromptTemplate, ParamsFromFString } from '@langchain/core/prompts'
-import { Tool } from '@langchain/core/tools'
+import { Logger } from '@nestjs/common'
 
-@Injectable()
-abstract class Agent<M extends BaseChatModel> {
-  protected logger = new Logger(this.constructor.name)
-  protected model: M
-  protected tools: Tool[]
+abstract class Agent {
+  protected readonly logger = new Logger(this.constructor.name)
 
   protected getPromptTemplate(
     filename: string
   ): ChatPromptTemplate<ParamsFromFString<string>, any> {
     const prompt = fs.readFileSync(
-      path.join(__dirname, `../prompts/${filename}.tpl`),
+      path.resolve(__dirname, `../libs/core/src/prompts/${filename}.tpl`),
       'utf8'
     )
 
     return ChatPromptTemplate.fromTemplate(prompt)
-  }
-
-  async initialize({
-    model,
-    tools
-  }: AgentInitilizationInput<M>): Promise<void> {
-    this.model = model
-    this.tools = tools
   }
 
   abstract act(state: AgentState): Promise<Partial<AgentState>>

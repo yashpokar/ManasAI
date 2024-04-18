@@ -1,6 +1,6 @@
-import { RunnableLike } from '@langchain/core/runnables'
 import { PregelOptions } from '@langchain/langgraph/dist/pregel'
 import { AgentState } from './agent'
+import Agent from '../agents/agent'
 
 export interface OrchestratorActInput {
   args: AgentState
@@ -8,8 +8,8 @@ export interface OrchestratorActInput {
 }
 
 export interface OrchestratorOrchestrateInput {
-  nodes: Map<string, RunnableLike>
+  nodes: [string, Agent][]
   edges: [string, string][]
-  conditionalEdges: [string, CallableFunction, Record<string, string>?][]
+  conditionalEdges: [string, CallableFunction, Record<string, string>][]
   entryPoint: string
 }

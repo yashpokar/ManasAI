@@ -12,6 +12,8 @@ import FileSystemService from './providers/file-system.service'
 import DockerService from './providers/docker.service'
 import OpenAIAgent from './agents/openai'
 import { OPENAI_SERVICE } from './constants'
+import RePlannerAgent from './agents/replanner'
+import PlannerAgent from './agents/planner'
 
 @Module({
   imports: [ConfigModule],
@@ -39,6 +41,8 @@ import { OPENAI_SERVICE } from './constants'
     TerminalTool,
     SearchTool,
     OpenAIAgent,
+    PlannerAgent,
+    RePlannerAgent,
     AgentsOrchestrator,
     AIService
   ],
@@ -46,11 +50,6 @@ import { OPENAI_SERVICE } from './constants'
     PubSubService,
     FileSystemService,
     DockerService,
-    EditorTool,
-    BrowserTool,
-    TerminalTool,
-    SearchTool,
-    OpenAIAgent,
     AgentsOrchestrator,
     AIService
   ]

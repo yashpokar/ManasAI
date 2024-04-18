@@ -6,24 +6,13 @@ import {
   OrchestratorActInput,
   OrchestratorOrchestrateInput
 } from '../types/orchestrator'
-import EditorTool from '../tools/editor'
-import TerminalTool from '../tools/terminal'
-import BrowserTool from '../tools/browser'
-import SearchTool from '../tools/search'
-import { toStructuredTools } from '../tools/tool'
-import { Tool } from '@langchain/core/tools'
 
 @Injectable()
 class AgentsOrchestrator {
   private readonly logger = new Logger(AgentsOrchestrator.name)
   private graph: StateGraph<AgentState>
 
-  constructor(
-    private readonly editor: EditorTool,
-    private readonly browser: BrowserTool,
-    private readonly terminal: TerminalTool,
-    private readonly search: SearchTool
-  ) {
+  constructor() {
     this.graph = new StateGraph({
       channels: {
         input: {
@@ -52,11 +41,11 @@ class AgentsOrchestrator {
     entryPoint
   }: OrchestratorOrchestrateInput) {
     this.logger.debug(
-      `Orchestrating nodes: ${nodes} and edges: ${edges}, entryPoint: ${entryPoint}`
+      `Orchestrating nodes: ${JSON.stringify(nodes)} and edges: ${JSON.stringify(edges)}, entryPoint: ${JSON.stringify(entryPoint)}`
     )
 
     for (const [name, node] of nodes) {
-      this.graph.addNode(name, node)
+      this.graph.addNode(name, node.act.bind(node))
     }
 
     for (const [from, to] of edges) {
@@ -78,26 +67,14 @@ class AgentsOrchestrator {
     this.graph.setEntryPoint(entryPoint)
   }
 
-  async *act({
-    args,
-    config
-  }: OrchestratorActInput): AsyncGenerator<any, void, undefined> {
+  async act({ args, config }: OrchestratorActInput): Promise<void> {
     this.logger.debug(`Acting on input: ${args}`)
 
     const graph = this.graph.compile()
 
     for await (const event of await graph.stream(args, config)) {
-      yield event
+      this.logger.log(`Event: ${JSON.stringify(event)}`, event)
     }
-  }
-
-  getStructuredTools(): Tool[] {
-    return toStructuredTools([
-      this.editor,
-      this.browser,
-      this.terminal,
-      this.search
-    ])
   }
 }
 
