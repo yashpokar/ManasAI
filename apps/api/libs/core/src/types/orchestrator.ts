@@ -1,8 +1,9 @@
 import { RunnableLike } from '@langchain/core/runnables'
 import { PregelOptions } from '@langchain/langgraph/dist/pregel'
+import { AgentState } from './agent'
 
 export interface OrchestratorActInput {
-  input: string
+  args: AgentState
   config?: PregelOptions
 }
 

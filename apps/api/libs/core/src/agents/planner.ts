@@ -10,7 +10,7 @@ class PlannerAgent extends Agent {
 
     const prompt = this.getPromptTemplate('planner')
     const parser = new JsonOutputFunctionsParser({ argsOnly: true })
-    const planner = prompt.pipe(this.llm).pipe(parser)
+    const planner = prompt.pipe(this.model).pipe(parser)
 
     const plan: AgentOutput = await planner.invoke({
       objective: state.input

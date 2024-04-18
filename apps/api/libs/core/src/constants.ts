@@ -8,3 +8,5 @@ export const PLANNER_NODE = 'planner'
 export const AGENT_NODE = 'agent'
 export const REPLANNER_NODE = 'replan'
 export const ACTION_NODE = 'action'
+
+export const OPENAI_SERVICE = 'openai'

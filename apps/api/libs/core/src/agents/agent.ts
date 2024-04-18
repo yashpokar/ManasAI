@@ -1,14 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common'
 import path from 'path'
 import * as fs from 'fs'
-import { AgentState } from '../types/agent'
+import { AgentInitilizationInput, AgentState } from '../types/agent'
 import { BaseChatModel } from '@langchain/core/language_models/chat_models'
 import { ChatPromptTemplate, ParamsFromFString } from '@langchain/core/prompts'
+import { Tool } from '@langchain/core/tools'
 
 @Injectable()
 abstract class Agent {
   protected logger = new Logger(this.constructor.name)
-  protected llm: BaseChatModel
+  protected model: BaseChatModel
+  protected tools: Tool[]
 
   protected getPromptTemplate(
     filename: string
@@ -21,8 +23,9 @@ abstract class Agent {
     return ChatPromptTemplate.fromTemplate(prompt)
   }
 
-  async initialize(llm: BaseChatModel): Promise<void> {
-    this.llm = llm
+  async initialize({ model, tools }: AgentInitilizationInput): Promise<void> {
+    this.model = model
+    this.tools = tools
   }
 
   abstract act(state: AgentState): Promise<Partial<AgentState>>

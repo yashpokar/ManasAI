@@ -23,10 +23,18 @@ export class AIService {
       temperature: 0
     })
 
-    this.openaiAgent.initialize(model)
+    this.openaiAgent.initialize({
+      model,
+      tools: this.orchestrator.getStructuredTools()
+    })
 
     const results = this.orchestrator.act({
-      input: message.content,
+      args: {
+        input: message.content,
+        plan: [],
+        pastSteps: [],
+        response: null
+      },
       config: {
         recursionLimit: 50
       }

@@ -79,19 +79,19 @@ class AgentsOrchestrator {
   }
 
   async *act({
-    input,
+    args,
     config
   }: OrchestratorActInput): AsyncGenerator<any, void, undefined> {
-    this.logger.debug(`Acting on input: ${input}`)
+    this.logger.debug(`Acting on input: ${args}`)
 
     const graph = this.graph.compile()
 
-    for await (const event of await graph.stream(input, config)) {
+    for await (const event of await graph.stream(args, config)) {
       yield event
     }
   }
 
-  private getStructuredTools(): Tool[] {
+  getStructuredTools(): Tool[] {
     return toStructuredTools([
       this.editor,
       this.browser,

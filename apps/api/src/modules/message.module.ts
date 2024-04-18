@@ -8,10 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 @Module({
   imports: [TypeOrmModule.forFeature([ProjectEntity, MessageEntity]), AIModule],
-  providers: [
-    // TODO: instead of listing all the providers here, import AIModule from @core/core
-    MessageService,
-    MessageResolver
-  ]
+  providers: [MessageService, MessageResolver]
 })
 export class MessageModule {}

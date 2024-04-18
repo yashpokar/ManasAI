@@ -14,7 +14,7 @@ class RePlannerAgent extends Agent {
     const replanner = createOpenAIFnRunnable({
       functions: [],
       outputParser: parser,
-      llm: this.llm,
+      llm: this.model,
       prompt
     })
 

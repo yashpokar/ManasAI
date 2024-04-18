@@ -1,15 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common'
 import * as Docker from 'dockerode'
-import { SANDBOX_DOCKER_IMAGE_NAME } from '../config'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 class DockerService {
   private logger = new Logger(DockerService.name)
   private docker: Docker
   private container: Docker.Container
+  private sandboxImageName: string
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     this.docker = new Docker()
+    this.sandboxImageName = this.configService.get<string>('SANDBOX_IMAGE_NAME')
   }
 
   async initialize(): Promise<void> {
@@ -17,18 +19,18 @@ class DockerService {
 
     const containers = await this.docker.listContainers({
       all: true,
-      filters: { name: [SANDBOX_DOCKER_IMAGE_NAME] }
+      filters: { name: [this.sandboxImageName] }
     })
 
     if (!containers) {
       this.logger.debug('Preparing sandbox...')
 
       const container = await this.docker.createContainer({
-        Image: SANDBOX_DOCKER_IMAGE_NAME,
+        Image: this.sandboxImageName,
         Tty: true,
         AttachStdout: true,
         AttachStderr: true,
-        name: SANDBOX_DOCKER_IMAGE_NAME
+        name: this.sandboxImageName
       })
 
       await container.start()

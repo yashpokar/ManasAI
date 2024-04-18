@@ -1,2 +1,0 @@
-export const SANDBOX_DOCKER_IMAGE_NAME = process.env.API_SANDBOX_IMAGE_NAME
-export const SANDBOX_DOCKER_IMAGE_TAG = process.env.API_SANDBOX_IMAGE_TAG
