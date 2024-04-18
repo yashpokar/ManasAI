@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { Tool } from './tool'
 import { Injectable } from '@nestjs/common'
+import { chromium } from 'playwright'
 
 @Injectable()
 class BrowserTool extends Tool {
@@ -12,10 +13,21 @@ class BrowserTool extends Tool {
     url: z.string().describe('The URL to test/preview.')
   })
 
-  public async execute(params: z.infer<typeof this.schema>) {
-    this.logger.debug(`Testing/previewing URL: ${params.url}`)
+  public async execute({ url }) {
+    this.logger.debug(`Testing/previewing URL: ${url}`)
 
-    return params.url
+    // TODO: turn the headless mode to true after testing is done
+    const browser = await chromium.launch({ headless: false })
+    const context = await browser.newContext()
+    const page = await context.newPage()
+
+    await page.goto(url)
+
+    const content = await page.content()
+
+    await browser.close()
+
+    return content
   }
 }
 

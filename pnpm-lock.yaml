@@ -79,7 +79,10 @@ importers:
         version: 2.0.0(graphql@16.8.1)
       langchain:
         specifier: ^0.1.33
-        version: 0.1.33(axios@1.6.8)(encoding@0.1.13)(ignore@5.3.1)(lodash@4.17.21)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0)
+        version: 0.1.33(axios@1.6.8)(encoding@0.1.13)(ignore@5.3.1)(lodash@4.17.21)(playwright@1.43.1)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0)
+      playwright:
+        specifier: ^1.43.1
+        version: 1.43.1
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
@@ -3582,6 +3585,11 @@ packages:
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -5056,6 +5064,16 @@ packages:
   pkg-dir@4.2.0:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
+
+  playwright-core@1.43.1:
+    resolution: {integrity: sha512-EI36Mto2Vrx6VF7rm708qSnesVQKbxEWvPrfA1IPY6HgczBplDx7ENtx+K2n4kJ41sLLkuGfmb0ZLSSXlDhqPg==}
+    engines: {node: '>=16'}
+    hasBin: true
+
+  playwright@1.43.1:
+    resolution: {integrity: sha512-V7SoH0ai2kNt1Md9E3Gwas5B9m8KR2GVvwZnAI6Pg0m3sh7UvgiYhRrhsziCmqMJNouPckiOhk8T+9bSAK0VIA==}
+    engines: {node: '>=16'}
+    hasBin: true
 
   pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
@@ -9975,6 +9993,9 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -10829,7 +10850,7 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  langchain@0.1.33(axios@1.6.8)(encoding@0.1.13)(ignore@5.3.1)(lodash@4.17.21)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0):
+  langchain@0.1.33(axios@1.6.8)(encoding@0.1.13)(ignore@5.3.1)(lodash@4.17.21)(playwright@1.43.1)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0):
     dependencies:
       '@anthropic-ai/sdk': 0.9.1(encoding@0.1.13)
       '@langchain/community': 0.0.48(encoding@0.1.13)(lodash@4.17.21)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0)
@@ -10851,6 +10872,7 @@ snapshots:
     optionalDependencies:
       axios: 1.6.8
       ignore: 5.3.1
+      playwright: 1.43.1
       typeorm: 0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4))
       ws: 8.16.0
     transitivePeerDependencies:
@@ -11621,6 +11643,14 @@ snapshots:
   pkg-dir@4.2.0:
     dependencies:
       find-up: 4.1.0
+
+  playwright-core@1.43.1: {}
+
+  playwright@1.43.1:
+    dependencies:
+      playwright-core: 1.43.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   pluralize@8.0.0: {}
 

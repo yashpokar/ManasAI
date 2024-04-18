@@ -19,7 +19,7 @@ class TerminalTool extends Tool {
     this.dockerService.init()
   }
 
-  async execute({ command, projectId }: z.infer<typeof this.schema>) {
+  async execute({ command, projectId }) {
     this.logger.debug(`Executing shell command: ${command}`)
 
     return this.dockerService.executeCommand(command, projectId)

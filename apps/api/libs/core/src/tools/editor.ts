@@ -27,7 +27,7 @@ class EditorTool extends Tool {
     super()
   }
 
-  async execute({ path, action, filename, data }: z.infer<typeof this.schema>) {
+  async execute({ path, action, filename, data }) {
     this.logger.debug(`Performing action: ${action} on path: ${path}`)
 
     const location = join(path, filename)

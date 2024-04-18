@@ -12,7 +12,7 @@ class SearchTool extends Tool {
     query: z.string().describe('The query to search for.')
   })
 
-  public async execute({ query }: z.infer<typeof this.schema>) {
+  public async execute({ query }) {
     this.logger.debug(`Searching for ${query} on the web...`)
 
     const resp = await axios.get(
