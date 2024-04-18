@@ -3,6 +3,7 @@ import { ProjectEntity } from '@/models/project'
 import { MessageResolver } from '@/resolvers/message.resolver'
 import { MessageService } from '@/services/message.service'
 import { AIService } from '@core/core'
+import OpenAIAgent from '@core/core/agents/openai'
 import AgentsOrchestrator from '@core/core/agents/orchestrator'
 import DockerService from '@core/core/providers/docker.service'
 import FileSystemService from '@core/core/providers/file-system.service'
@@ -17,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 @Module({
   imports: [TypeOrmModule.forFeature([ProjectEntity, MessageEntity])],
   providers: [
+    // TODO: instead of listing all the providers here, import AIModule from @core/core
     PubSubService,
     FileSystemService,
     DockerService,
@@ -24,6 +26,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
     BrowserTool,
     TerminalTool,
     SearchTool,
+    OpenAIAgent,
     AgentsOrchestrator,
     AIService,
     MessageService,

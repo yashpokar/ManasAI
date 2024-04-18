@@ -8,6 +8,7 @@ import TerminalTool from './tools/terminal'
 import SearchTool from './tools/search'
 import FileSystemService from './providers/file-system.service'
 import DockerService from './providers/docker.service'
+import OpenAIAgent from './agents/openai'
 
 @Module({
   providers: [AIService],
@@ -19,6 +20,7 @@ import DockerService from './providers/docker.service'
     BrowserTool,
     TerminalTool,
     SearchTool,
+    OpenAIAgent,
     AgentsOrchestrator,
     AIService
   ]
