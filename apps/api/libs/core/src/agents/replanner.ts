@@ -3,9 +3,10 @@ import { JsonOutputFunctionsParser } from 'langchain/output_parsers'
 import Agent from './agent'
 import { AgentOutput, AgentState } from '../types/agent'
 import { createOpenAIFnRunnable } from 'langchain/chains/openai_functions'
+import { ChatOpenAI } from '@langchain/openai'
 
 @Injectable()
-class RePlannerAgent extends Agent {
+class RePlannerAgent extends Agent<ChatOpenAI> {
   async act(state: AgentState): Promise<Partial<AgentState>> {
     this.logger.debug(`Acting the given state: ${state}`)
 

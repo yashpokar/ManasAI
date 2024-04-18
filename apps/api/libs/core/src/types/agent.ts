@@ -13,7 +13,7 @@ export interface AgentOutput {
   response?: string
 }
 
-export interface AgentInitilizationInput {
-  model: BaseChatModel
+export interface AgentInitilizationInput<M extends BaseChatModel> {
+  model: M
   tools: Tool[]
 }

@@ -7,9 +7,9 @@ import { ChatPromptTemplate, ParamsFromFString } from '@langchain/core/prompts'
 import { Tool } from '@langchain/core/tools'
 
 @Injectable()
-abstract class Agent {
+abstract class Agent<M extends BaseChatModel> {
   protected logger = new Logger(this.constructor.name)
-  protected model: BaseChatModel
+  protected model: M
   protected tools: Tool[]
 
   protected getPromptTemplate(
@@ -23,7 +23,10 @@ abstract class Agent {
     return ChatPromptTemplate.fromTemplate(prompt)
   }
 
-  async initialize({ model, tools }: AgentInitilizationInput): Promise<void> {
+  async initialize({
+    model,
+    tools
+  }: AgentInitilizationInput<M>): Promise<void> {
     this.model = model
     this.tools = tools
   }

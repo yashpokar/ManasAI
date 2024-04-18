@@ -1376,8 +1376,8 @@ packages:
   '@kamilkisiela/fast-url-parser@1.1.4':
     resolution: {integrity: sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==}
 
-  '@langchain/community@0.0.48':
-    resolution: {integrity: sha512-jG7dpJkgKtwbrSLsxW4mXmECopTj5tRt4+B+QcKCqZm7yEghFR44Xj5OkDWtzzsjpL47RJck5AJ8MsQnmi7WDQ==}
+  '@langchain/community@0.0.50':
+    resolution: {integrity: sha512-ZxS0qmvEKlRYPtIPnzSa+un82mqi+DpxEsME6aLJSxEmQpk4vwoArcL/KzHEtM8vsi3ZKB15f7BNS6Qp00rizg==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
@@ -1419,7 +1419,7 @@ packages:
       '@tensorflow/tfjs-converter': '*'
       '@tensorflow/tfjs-core': '*'
       '@upstash/redis': ^1.20.6
-      '@upstash/vector': ^1.0.2
+      '@upstash/vector': ^1.0.7
       '@vercel/kv': ^0.2.3
       '@vercel/postgres': ^0.5.0
       '@writerai/writer-sdk': ^0.40.2
@@ -7766,7 +7766,7 @@ snapshots:
 
   '@kamilkisiela/fast-url-parser@1.1.4': {}
 
-  '@langchain/community@0.0.48(encoding@0.1.13)(lodash@4.17.21)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0)':
+  '@langchain/community@0.0.50(encoding@0.1.13)(lodash@4.17.21)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0)':
     dependencies:
       '@langchain/core': 0.1.57
       '@langchain/openai': 0.0.28(encoding@0.1.13)
@@ -10853,7 +10853,7 @@ snapshots:
   langchain@0.1.33(axios@1.6.8)(encoding@0.1.13)(ignore@5.3.1)(lodash@4.17.21)(playwright@1.43.1)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0):
     dependencies:
       '@anthropic-ai/sdk': 0.9.1(encoding@0.1.13)
-      '@langchain/community': 0.0.48(encoding@0.1.13)(lodash@4.17.21)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0)
+      '@langchain/community': 0.0.50(encoding@0.1.13)(lodash@4.17.21)(typeorm@0.3.20(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.12.5)(typescript@5.4.4)))(ws@8.16.0)
       '@langchain/core': 0.1.57
       '@langchain/openai': 0.0.28(encoding@0.1.13)
       binary-extensions: 2.3.0
