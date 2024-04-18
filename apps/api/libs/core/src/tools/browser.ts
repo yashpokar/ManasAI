@@ -10,11 +10,15 @@ class BrowserTool extends Tool {
 
   protected schema = z.object({
     projectId: z.string().describe('The project ID to execute the command in.'),
-    url: z.string().describe('The URL to test/preview.')
+    url: z
+      .string()
+      .describe(
+        'The URL to test/preview if deployed then http or https or localhost.'
+      )
   })
 
   public async execute({ url }) {
-    this.logger.debug(`Testing/previewing URL: ${url}`)
+    this.logger.debug(`testing or previewing URL: ${url}`)
 
     // TODO: turn the headless mode to true after testing is done
     const browser = await chromium.launch({ headless: false })

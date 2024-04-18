@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import * as Docker from 'dockerode'
-import { SANDBOX_DOCKER_IMAGE_NAME } from '../constants'
+import { SANDBOX_DOCKER_IMAGE_NAME } from '../config'
 
 @Injectable()
 class DockerService {
@@ -12,7 +12,7 @@ class DockerService {
     this.docker = new Docker()
   }
 
-  async init(): Promise<void> {
+  async initialize(): Promise<void> {
     this.logger.debug('Initializing Docker service...')
 
     const containers = await this.docker.listContainers({

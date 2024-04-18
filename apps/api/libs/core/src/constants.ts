@@ -4,5 +4,7 @@ export const MESSAGE_RECEIVED_EVENT = 'message::received'
 
 export const TOPIC_MESSAGE = 'message'
 
-export const SANDBOX_DOCKER_IMAGE_NAME = process.env.API_SANDBOX_IMAGE_NAME
-export const SANDBOX_DOCKER_IMAGE_TAG = process.env.API_SANDBOX_IMAGE_TAG
+export const PLANNER_NODE = 'planner'
+export const AGENT_NODE = 'agent'
+export const REPLANNER_NODE = 'replan'
+export const ACTION_NODE = 'action'

@@ -16,7 +16,7 @@ class TerminalTool extends Tool {
   constructor(private readonly dockerService: DockerService) {
     super()
 
-    this.dockerService.init()
+    this.dockerService.initialize()
   }
 
   async execute({ command, projectId }) {

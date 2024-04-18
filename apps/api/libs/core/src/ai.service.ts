@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { MESSAGE_RECEIVED_EVENT } from './constants'
 import { MessageEntity } from '@/models/message'
+import { ChatOpenAI } from '@langchain/openai'
 import AgentsOrchestrator from './agents/orchestrator'
+import { MESSAGE_RECEIVED_EVENT } from './constants'
 
 @Injectable()
 export class AIService {
@@ -10,6 +11,17 @@ export class AIService {
 
   @OnEvent(MESSAGE_RECEIVED_EVENT)
   async invoke(message: MessageEntity): Promise<void> {
-    await this.orchestrator.act(message.content)
+    // TODO: Implement a way to select the model based on the user's preferences
+    new ChatOpenAI({
+      modelName: 'gpt-4-turbo',
+      temperature: 0
+    })
+
+    await this.orchestrator.act({
+      input: message.content,
+      config: {
+        recursionLimit: 50
+      }
+    })
   }
 }

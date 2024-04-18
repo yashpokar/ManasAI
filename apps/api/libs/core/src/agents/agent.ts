@@ -1,33 +1,31 @@
-import { Message } from '@/models/message'
 import { Injectable, Logger } from '@nestjs/common'
-import { toStructuredTools } from '../tools/tool'
-import { Tool as StructuredTool } from '@langchain/core/tools'
-import EditorTool from '../tools/editor'
-import TerminalTool from '../tools/terminal'
-import BrowserTool from '../tools/browser'
-import SearchTool from '../tools/search'
+import path from 'path'
+import * as fs from 'fs'
+import { AgentState } from '../types/agent'
+import { BaseChatModel } from '@langchain/core/language_models/chat_models'
+import { ChatPromptTemplate, ParamsFromFString } from '@langchain/core/prompts'
 
 @Injectable()
 abstract class Agent {
   protected logger = new Logger(this.constructor.name)
+  protected llm: BaseChatModel
 
-  constructor(
-    private readonly editor: EditorTool,
-    private readonly browser: BrowserTool,
-    private readonly terminal: TerminalTool,
-    private readonly search: SearchTool
-  ) {}
+  protected getPromptTemplate(
+    filename: string
+  ): ChatPromptTemplate<ParamsFromFString<string>, any> {
+    const prompt = fs.readFileSync(
+      path.join(__dirname, `../prompts/${filename}.tpl`),
+      'utf8'
+    )
 
-  protected get tools(): StructuredTool[] {
-    return toStructuredTools([
-      this.editor,
-      this.browser,
-      this.terminal,
-      this.search
-    ])
+    return ChatPromptTemplate.fromTemplate(prompt)
   }
 
-  abstract act(question: string, previousMessage: Message[]): Promise<void>
+  async initialize(llm: BaseChatModel): Promise<void> {
+    this.llm = llm
+  }
+
+  abstract act(state: AgentState): Promise<Partial<AgentState>>
 }
 
 export default Agent

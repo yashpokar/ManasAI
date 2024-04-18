@@ -13,6 +13,7 @@ import Agent from './agent'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
 import { BaseMessage } from '@langchain/core/messages'
+import { AgentState } from '../types/agent'
 
 const planExecuteState = {
   input: {
@@ -70,7 +71,7 @@ type ReplannerOutput = {
 
 @Injectable()
 class OpenAIAgent extends Agent {
-  async act(question: string): Promise<void> {
+  async act(): Promise<Partial<AgentState>> {
     const prompt = await pull<ChatPromptTemplate>(
       'hwchase17/openai-functions-agent'
     )
@@ -79,13 +80,13 @@ class OpenAIAgent extends Agent {
 
     const agentRunnable = await createOpenAIFunctionsAgent({
       llm,
-      tools: this.tools,
+      tools: [],
       prompt
     })
 
     const agentExecutor = createAgentExecutor({
       agentRunnable,
-      tools: this.tools
+      tools: []
     })
 
     const plannerPrompt =
@@ -188,18 +189,7 @@ Only add steps to the plan that still NEED to be done. Do not return previously 
       false: 'planner'
     })
 
-    const app = workflow.compile()
-
-    const config = { recursionLimit: 20 }
-    const inputs = {
-      input: question
-    }
-
-    for await (const event of await app.stream(inputs, config)) {
-      this.logger.log(`PLAN is ${JSON.stringify(event)}`)
-    }
-
-    this.logger.log(`OpenAIAgent acting on question: ${question}`)
+    return {}
   }
 }
 
