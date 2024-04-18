@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { MessageEntity } from '@/models/message'
 import { ChatOpenAI } from '@langchain/openai'
@@ -8,6 +8,8 @@ import OpenAIAgent from './agents/openai'
 
 @Injectable()
 export class AIService {
+  private readonly logger = new Logger(AIService.name)
+
   constructor(
     private readonly orchestrator: AgentsOrchestrator,
     private readonly openaiAgent: OpenAIAgent
@@ -23,11 +25,15 @@ export class AIService {
 
     this.openaiAgent.initialize(model)
 
-    await this.orchestrator.act({
+    const results = this.orchestrator.act({
       input: message.content,
       config: {
         recursionLimit: 50
       }
     })
+
+    for await (const result of results) {
+      this.logger.debug(`Received result: ${JSON.stringify(result)}`)
+    }
   }
 }

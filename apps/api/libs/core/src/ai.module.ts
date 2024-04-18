@@ -11,7 +11,18 @@ import DockerService from './providers/docker.service'
 import OpenAIAgent from './agents/openai'
 
 @Module({
-  providers: [AIService],
+  providers: [
+    PubSubService,
+    FileSystemService,
+    DockerService,
+    EditorTool,
+    BrowserTool,
+    TerminalTool,
+    SearchTool,
+    OpenAIAgent,
+    AgentsOrchestrator,
+    AIService
+  ],
   exports: [
     PubSubService,
     FileSystemService,
