@@ -1,7 +1,7 @@
 import { pull } from 'langchain/hub'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { createAgentExecutor } from '@langchain/langgraph/prebuilt'
-import { createOpenAIFunctionsAgent } from 'langchain/agents'
+import { createOpenAIToolsAgent } from 'langchain/agents'
 import { Inject, Injectable } from '@nestjs/common'
 import { Tool } from '@langchain/core/tools'
 import Agent from './agent'
@@ -37,15 +37,17 @@ class OpenAIAgent extends Agent {
       'hwchase17/openai-functions-agent'
     )
 
-    const agentRunnable = await createOpenAIFunctionsAgent({
-      llm: this.model,
-      tools: this.tools,
+    const { model: llm, tools } = this
+
+    const agentRunnable = await createOpenAIToolsAgent({
+      llm,
+      tools,
       prompt
     })
 
     const agentExecutor = createAgentExecutor({
       agentRunnable,
-      tools: this.tools
+      tools
     })
 
     const agentResponse = await agentExecutor.invoke({ input })
