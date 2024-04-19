@@ -1,7 +1,6 @@
 import {
-  DynamicStructuredToolInput,
-  DynamicTool,
-  Tool as StructuredTool
+  DynamicStructuredTool,
+  DynamicStructuredToolInput
 } from '@langchain/core/tools'
 import { Logger } from '@nestjs/common'
 import { z } from 'zod'
@@ -29,6 +28,8 @@ export abstract class Tool<
 
 export const toStructuredTools = <T extends Tool>(
   tools: T[]
-): StructuredTool[] => {
-  return tools.map(tool => new DynamicTool(tool.toDynamicStructuredTool()))
+): DynamicStructuredTool[] => {
+  return tools.map(
+    tool => new DynamicStructuredTool(tool.toDynamicStructuredTool())
+  )
 }

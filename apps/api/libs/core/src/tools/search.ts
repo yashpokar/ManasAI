@@ -15,13 +15,15 @@ class SearchTool extends Tool {
   public async execute({ query }) {
     this.logger.debug(`Searching for ${query} on the web...`)
 
+    if (!query) {
+      throw new Error('Query is required to search for.')
+    }
+
     const resp = await axios.get(
       `https://api.duckduckgo.com/?q=${query}&format=json`
     )
 
-    this.logger.debug(
-      `Response: ${JSON.stringify(resp.data)}, status: ${resp.status}`
-    )
+    this.logger.debug(`Response: `, resp)
 
     if (resp.status !== 200) {
       throw new Error('Failed to search for query, retry again.')

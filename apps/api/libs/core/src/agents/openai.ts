@@ -2,7 +2,7 @@ import { pull } from 'langchain/hub'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { AgentExecutor, createOpenAIToolsAgent } from 'langchain/agents'
 import { Injectable } from '@nestjs/common'
-import { Tool } from '@langchain/core/tools'
+import { DynamicStructuredTool } from '@langchain/core/tools'
 import Agent from './agent'
 import { PlanExecuteState } from '../types/agent'
 import { ChatOpenAI } from '@langchain/openai'
@@ -14,7 +14,7 @@ import { toStructuredTools } from '../tools/tool'
 
 @Injectable()
 class OpenAIAgent extends Agent<PlanExecuteState> {
-  private tools: Tool[]
+  private tools: DynamicStructuredTool[]
 
   constructor(
     readonly editor: EditorTool,

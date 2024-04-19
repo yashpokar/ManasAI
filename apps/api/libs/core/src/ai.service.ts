@@ -19,7 +19,7 @@ import { PlanExecuteState } from './types/agent'
 @Injectable()
 export class AIService {
   constructor(
-    private readonly orchestrator: AgentsOrchestrator<PlanExecuteState>,
+    private readonly orc: AgentsOrchestrator<PlanExecuteState>,
     private readonly openaiAgent: OpenAIAgent,
     private readonly plannerAgent: PlannerAgent,
     private readonly replannerAgent: RePlannerAgent
@@ -27,7 +27,7 @@ export class AIService {
 
   @OnEvent(MESSAGE_RECEIVED_EVENT)
   async invoke(message: MessageEntity): Promise<void> {
-    this.orchestrator.initiate({
+    this.orc.initiate({
       input: {
         value: null
       },
@@ -44,7 +44,7 @@ export class AIService {
       }
     })
 
-    this.orchestrator.orchestrate({
+    this.orc.orchestrate({
       nodes: [
         [PLANNER_NODE, this.plannerAgent],
         [AGENT_NODE, this.openaiAgent],
@@ -68,7 +68,7 @@ export class AIService {
       entryPoint: PLANNER_NODE
     })
 
-    this.orchestrator.act({
+    this.orc.act({
       args: {
         input: message.content,
         plan: [],
