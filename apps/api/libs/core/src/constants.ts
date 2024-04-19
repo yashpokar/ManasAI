@@ -10,5 +10,3 @@ export const REPLANNER_NODE = 'replan'
 
 export const CONTINUE = 'continue'
 export const EXIT = 'exit'
-
-export const OPENAI_SERVICE = 'openai'
