@@ -5,7 +5,7 @@ import { createOpenAIToolsAgent } from 'langchain/agents'
 import { Inject, Injectable } from '@nestjs/common'
 import { Tool } from '@langchain/core/tools'
 import Agent from './agent'
-import { AgentState } from '../types/agent'
+import { PlanExecuteState } from '../types/agent'
 import { OPENAI_SERVICE } from '../constants'
 import { ChatOpenAI } from '@langchain/openai'
 import EditorTool from '../tools/editor'
@@ -15,7 +15,7 @@ import SearchTool from '../tools/search'
 import { toStructuredTools } from '../tools/tool'
 
 @Injectable()
-class OpenAIAgent extends Agent {
+class OpenAIAgent extends Agent<PlanExecuteState> {
   private tools: Tool[]
 
   constructor(
@@ -32,7 +32,7 @@ class OpenAIAgent extends Agent {
     this.tools = toStructuredTools([editor, browser, terminal, search])
   }
 
-  async act({ input }: AgentState): Promise<Partial<AgentState>> {
+  async act({ input }: PlanExecuteState): Promise<Partial<PlanExecuteState>> {
     const prompt = await pull<ChatPromptTemplate>(
       'hwchase17/openai-functions-agent'
     )

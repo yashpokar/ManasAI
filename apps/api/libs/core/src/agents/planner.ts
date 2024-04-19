@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@nestjs/common'
 import { JsonOutputFunctionsParser } from 'langchain/output_parsers'
 import { ChatOpenAI } from '@langchain/openai'
 import Agent from './agent'
-import { AgentOutput, AgentState } from '../types/agent'
+import { AgentOutput, PlanExecuteState } from '../types/agent'
 import planFunction from '../functions/plan'
 import { OPENAI_SERVICE } from '../constants'
 
 @Injectable()
-class PlannerAgent extends Agent {
+class PlannerAgent extends Agent<PlanExecuteState> {
   constructor(
     @Inject(OPENAI_SERVICE)
     private readonly model: ChatOpenAI
@@ -15,7 +15,7 @@ class PlannerAgent extends Agent {
     super()
   }
 
-  async act(state: AgentState): Promise<Partial<AgentState>> {
+  async act(state: PlanExecuteState): Promise<Partial<PlanExecuteState>> {
     this.logger.debug(`Acting the given state: `, state)
 
     this.model.bind({

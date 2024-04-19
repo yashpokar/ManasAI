@@ -1,7 +1,7 @@
 import { BaseChatModel } from '@langchain/core/language_models/chat_models'
 import { Tool } from '@langchain/core/tools'
 
-export interface AgentState {
+export interface PlanExecuteState {
   input: string | null
   plan: string[]
   pastSteps: string[]
@@ -13,7 +13,7 @@ export interface AgentOutput {
   response?: string
 }
 
-export interface AgentInitilizationInput<M extends BaseChatModel> {
-  model: M
+export interface AgentInitilizationInput<LLM extends BaseChatModel> {
+  model: LLM
   tools: Tool[]
 }

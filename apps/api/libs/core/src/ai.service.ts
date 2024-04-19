@@ -13,13 +13,13 @@ import {
 import OpenAIAgent from './agents/openai'
 import PlannerAgent from './agents/planner'
 import RePlannerAgent from './agents/replanner'
-import { AgentState } from './types/agent'
+import { PlanExecuteState } from './types/agent'
 import { END } from '@langchain/langgraph'
 
 @Injectable()
 export class AIService {
   constructor(
-    private readonly orchestrator: AgentsOrchestrator,
+    private readonly orchestrator: AgentsOrchestrator<PlanExecuteState>,
     private readonly openaiAgent: OpenAIAgent,
     private readonly plannerAgent: PlannerAgent,
     private readonly replannerAgent: RePlannerAgent
@@ -27,6 +27,23 @@ export class AIService {
 
   @OnEvent(MESSAGE_RECEIVED_EVENT)
   async invoke(message: MessageEntity): Promise<void> {
+    this.orchestrator.initiate({
+      input: {
+        value: null
+      },
+      plan: {
+        value: null,
+        default: () => []
+      },
+      pastSteps: {
+        value: (prev, curr) => prev.concat(curr),
+        default: () => []
+      },
+      response: {
+        value: null
+      }
+    })
+
     this.orchestrator.orchestrate({
       nodes: [
         [PLANNER_NODE, this.plannerAgent],
@@ -41,7 +58,7 @@ export class AIService {
       conditionalEdges: [
         [
           REPLANNER_NODE,
-          ({ response }: AgentState) => (response ? CONTINUE : EXIT),
+          ({ response }) => (response ? EXIT : CONTINUE),
           {
             [CONTINUE]: PLANNER_NODE,
             [EXIT]: END

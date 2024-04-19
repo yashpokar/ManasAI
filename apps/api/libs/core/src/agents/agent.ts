@@ -1,10 +1,9 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import { AgentState } from '../types/agent'
 import { ChatPromptTemplate, ParamsFromFString } from '@langchain/core/prompts'
 import { Logger } from '@nestjs/common'
 
-abstract class Agent {
+abstract class Agent<State> {
   protected readonly logger = new Logger(this.constructor.name)
 
   protected getPromptTemplate(
@@ -18,7 +17,7 @@ abstract class Agent {
     return ChatPromptTemplate.fromTemplate(prompt)
   }
 
-  abstract act(state: AgentState): Promise<Partial<AgentState>>
+  abstract act(state: State): Promise<Partial<State>>
 }
 
 export default Agent
