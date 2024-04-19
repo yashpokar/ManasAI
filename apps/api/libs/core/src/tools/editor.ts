@@ -18,7 +18,7 @@ class EditorTool extends Tool {
     path: z
       .string()
       .describe(
-        'The abstolute path from the project root to the file or directory.'
+        'The relative path from the project root to the file or directory.'
       ),
     data: z.string().optional().describe('The data to write to the file.')
   })
