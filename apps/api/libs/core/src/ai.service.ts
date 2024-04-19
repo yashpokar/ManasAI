@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { MessageEntity } from '@/models/message'
+import { END } from '@langchain/langgraph'
 import AgentsOrchestrator from './agents/orchestrator'
 import {
   AGENT_NODE,
@@ -14,7 +15,6 @@ import OpenAIAgent from './agents/openai'
 import PlannerAgent from './agents/planner'
 import RePlannerAgent from './agents/replanner'
 import { PlanExecuteState } from './types/agent'
-import { END } from '@langchain/langgraph'
 
 @Injectable()
 export class AIService {

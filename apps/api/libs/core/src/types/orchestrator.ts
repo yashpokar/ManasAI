@@ -1,6 +1,6 @@
 import { PregelOptions } from '@langchain/langgraph/dist/pregel'
-import Agent from '../agents/agent'
 import { BinaryOperator } from '@langchain/langgraph/dist/channels/binop'
+import Agent from '../agents/agent'
 
 export interface OrchestratorActInput<AgentState> {
   args: AgentState
