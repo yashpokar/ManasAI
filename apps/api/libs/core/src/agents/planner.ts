@@ -11,7 +11,7 @@ class PlannerAgent extends Agent<PlanExecuteState> {
     this.logger.debug(`Acting the given state: `, state)
 
     const llm = new ChatOpenAI({
-      modelName: 'gpt-3.5-turbo'
+      modelName: 'gpt-4-turbo-preview'
     }).bind({
       functions: [planFunction],
       function_call: planFunction

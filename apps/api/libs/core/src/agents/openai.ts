@@ -33,7 +33,7 @@ class OpenAIAgent extends Agent<PlanExecuteState> {
     )
 
     const llm = new ChatOpenAI({
-      modelName: 'gpt-3.5-turbo'
+      modelName: 'gpt-4-turbo-preview'
     })
 
     const { tools } = this
@@ -50,6 +50,7 @@ class OpenAIAgent extends Agent<PlanExecuteState> {
     })
 
     const agentResponse = await agentExecutor.invoke({ input })
+
     return {
       pastSteps: [input, agentResponse.output]
     }

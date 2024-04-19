@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { AIService } from './ai.service'
 import { PubSubService } from './providers/pubsub.service'
-import AgentsOrchestrator from './agents/orchestrator'
 import EditorTool from './tools/editor'
 import BrowserTool from './tools/browser'
 import TerminalTool from './tools/terminal'
@@ -26,15 +25,8 @@ import PlannerAgent from './agents/planner'
     OpenAIAgent,
     PlannerAgent,
     RePlannerAgent,
-    AgentsOrchestrator,
     AIService
   ],
-  exports: [
-    PubSubService,
-    FileSystemService,
-    DockerService,
-    AgentsOrchestrator,
-    AIService
-  ]
+  exports: [PubSubService, FileSystemService, DockerService, AIService]
 })
 export class AIModule {}

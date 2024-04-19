@@ -13,7 +13,7 @@ class RePlannerAgent extends Agent<PlanExecuteState> {
     this.logger.debug(`Acting the given state: ${JSON.stringify(state)}`, state)
 
     const llm = new ChatOpenAI({
-      modelName: 'gpt-3.5-turbo'
+      modelName: 'gpt-4-turbo-preview'
     })
 
     const prompt = this.getPromptTemplate('replanner')
@@ -30,6 +30,8 @@ class RePlannerAgent extends Agent<PlanExecuteState> {
       plan: state.plan ? state.plan.join('\n') : '',
       pastSteps: state.pastSteps.join('\n')
     })
+
+    this.logger.debug(`Replanner output: ${JSON.stringify(plan)}`, plan)
 
     if ('response' in plan) {
       return { response: plan.response }
