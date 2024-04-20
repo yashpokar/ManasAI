@@ -1,4 +1,4 @@
-import { DEVICE_ID } from '@/constants'
+import { DEVICE_ID, PROJECT_ID } from '@/constants'
 import { IChatContext, Message, ProviderProps } from '@/types'
 import { gql, useMutation, useSubscription } from '@apollo/client'
 import React, { createContext, useCallback, useState } from 'react'
@@ -35,7 +35,7 @@ const ChatProvider: React.FC<ProviderProps> = ({ children }) => {
 
   useSubscription(MESSAGES_SUBSCRIPTION, {
     variables: {
-      projectId: '468c0112-8ae9-4131-bf11-f1715e527661',
+      projectId: localStorage.getItem(PROJECT_ID),
       deviceId: localStorage.getItem(DEVICE_ID)
     },
     onData: ({

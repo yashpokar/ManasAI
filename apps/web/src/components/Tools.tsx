@@ -7,6 +7,10 @@ import Plan from '@/components/Plan'
 
 const tabs = [
   {
+    name: 'Planner',
+    component: <Plan />
+  },
+  {
     name: 'Shell',
     component: <Shell />
   },
@@ -17,10 +21,6 @@ const tabs = [
   {
     name: 'Editor',
     component: <Editor />
-  },
-  {
-    name: 'Planner',
-    component: <Plan />
   }
 ]
 

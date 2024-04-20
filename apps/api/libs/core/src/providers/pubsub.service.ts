@@ -1,19 +1,18 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { PubSub } from 'graphql-subscriptions'
 
 @Injectable()
 export class PubSubService {
-  private pubSub: PubSub
+  private pubSub: PubSub = new PubSub()
+  private readonly logger = new Logger(PubSubService.name)
 
-  constructor() {
-    this.pubSub = new PubSub()
-  }
+  async publish(trigger: string, payload: any): Promise<void> {
+    this.logger.debug(`Publishing to trigger: ${trigger}`, payload)
 
-  async publish(trigger: string, payload: any) {
     return this.pubSub.publish(trigger, payload)
   }
 
-  asyncIterator<T = any>(trigger: string) {
-    return this.pubSub.asyncIterator(trigger) as AsyncIterator<T>
+  asyncIterator<T = any>(trigger: string): AsyncIterator<T> {
+    return this.pubSub.asyncIterator(trigger)
   }
 }

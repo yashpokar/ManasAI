@@ -11,6 +11,7 @@ import DockerService from './providers/docker.service'
 import OpenAIAgent from './agents/openai'
 import RePlannerAgent from './agents/replanner'
 import PlannerAgent from './agents/planner'
+import AgentEventsHandler from './handlers/agent-events-handler'
 
 @Module({
   imports: [ConfigModule],
@@ -25,8 +26,9 @@ import PlannerAgent from './agents/planner'
     OpenAIAgent,
     PlannerAgent,
     RePlannerAgent,
+    AgentEventsHandler,
     AIService
   ],
-  exports: [PubSubService, FileSystemService, DockerService, AIService]
+  exports: [PubSubService]
 })
 export class AIModule {}

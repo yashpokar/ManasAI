@@ -1,13 +1,10 @@
-import clsx from 'clsx'
-import React, { useState } from 'react'
-
-interface Step {
-  title: string
-  completed: boolean
-}
+import usePreview from '@/hooks/use-preview'
+import React from 'react'
 
 const Plan: React.FC = () => {
-  const [steps] = useState<Step[]>([])
+  const {
+    plan: { steps }
+  } = usePreview()
 
   return (
     <div className="flex flex-col gap-y-2 p-2 md:p-4 lg:p-6">
@@ -19,24 +16,15 @@ const Plan: React.FC = () => {
         </p>
       )}
 
-      {steps.map((step, idx) => (
-        <div className="flex items-center gap-x-2" key={idx}>
-          <input
-            type="checkbox"
-            className="form-checkbox rounded text-indigo-500 focus:ring-0 focus:border-none"
-            checked={step.completed}
-            readOnly
-          />
-
-          <span
-            className={clsx('font-chat leading-loose dark:text-zinc-100', {
-              'line-through': step.completed
-            })}
-          >
-            {step.title}
-          </span>
-        </div>
-      ))}
+      <div className="grid gap-y-1.5 mt-4">
+        {steps.map((step, idx) => (
+          <div className="flex items-center text-sm gap-x-2" key={idx}>
+            <span className={'font-chat leading-relaxed dark:text-zinc-100'}>
+              {step}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

@@ -12,22 +12,24 @@ import OpenAIAgent from './agents/openai'
 import PlannerAgent from './agents/planner'
 import RePlannerAgent from './agents/replanner'
 import { PlanExecuteState } from './types/agent'
+import { Pregel } from '@langchain/langgraph/dist/pregel'
 
 @Injectable()
 export class AIService {
   private readonly logger = new Logger(AIService.name)
+  private pregel: Pregel
 
   constructor(
     private readonly openaiAgent: OpenAIAgent,
     private readonly plannerAgent: PlannerAgent,
     private readonly replannerAgent: RePlannerAgent
-  ) {}
-
-  @OnEvent(MESSAGE_RECEIVED_EVENT)
-  async invoke(message: MessageEntity): Promise<void> {
+  ) {
     const workflow = new StateGraph({
       channels: {
         input: {
+          value: null
+        },
+        projectId: {
           value: null
         },
         plan: {
@@ -74,11 +76,15 @@ export class AIService {
       }
     )
 
-    const app = workflow.compile()
+    this.pregel = workflow.compile()
+  }
 
-    for await (const event of await app.stream(
+  @OnEvent(MESSAGE_RECEIVED_EVENT)
+  async invoke({ content, project }: MessageEntity): Promise<void> {
+    for await (const event of await this.pregel.stream(
       {
-        input: message.content
+        input: content,
+        projectId: project.id
       },
       {
         recursionLimit: 50

@@ -22,6 +22,7 @@ import ChatProvider from '@/providers/ChatProvider'
 
 import './index.css'
 import { createClient } from 'graphql-ws'
+import { PreviewProvider } from './providers/PreviewProvider'
 
 const inDevelopment = import.meta.env.MODE === 'development'
 
@@ -76,9 +77,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ApolloProvider client={client}>
         <DeviceProvider>
           <ChatProvider>
-            <ProjectProvider>
-              <App />
-            </ProjectProvider>
+            <PreviewProvider>
+              <ProjectProvider>
+                <App />
+              </ProjectProvider>
+            </PreviewProvider>
           </ChatProvider>
         </DeviceProvider>
       </ApolloProvider>

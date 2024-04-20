@@ -10,6 +10,8 @@ import { ProjectModule } from '@/modules/project.module'
 import { ProjectEntity } from '@/models/project'
 import { MessageModule } from '@/modules/message.module'
 import { MessageEntity } from '@/models/message'
+import { PreviewModule } from './modules/preview.module'
+import { AIModule } from '@core/core'
 
 @Module({
   imports: [
@@ -40,9 +42,10 @@ import { MessageEntity } from '@/models/message'
       entities: [ProjectEntity, MessageEntity],
       synchronize: true
     }),
+    AIModule,
     ProjectModule,
-    MessageModule
-  ],
-  controllers: []
+    MessageModule,
+    PreviewModule
+  ]
 })
 export class AppModule {}

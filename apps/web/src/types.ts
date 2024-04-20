@@ -40,6 +40,12 @@ export interface IChatContext {
   setMessages: (messages: Message[]) => void
 }
 
+export interface IPreviewContext {
+  plan: {
+    steps: string[]
+  }
+}
+
 export type FormActions =
   | {
       type: typeof LOADING

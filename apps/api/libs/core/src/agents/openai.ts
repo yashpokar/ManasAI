@@ -9,10 +9,7 @@ import TerminalTool from '../tools/terminal'
 import BrowserTool from '../tools/browser'
 import SearchTool from '../tools/search'
 import { toStructuredTools } from '../tools/tool'
-import {
-  ChatPromptTemplate,
-  MessagesPlaceholder
-} from '@langchain/core/prompts'
+import AgentEventsHandler from '../handlers/agent-events-handler'
 
 @Injectable()
 class OpenAIAgent extends Agent<PlanExecuteState> {
@@ -22,32 +19,20 @@ class OpenAIAgent extends Agent<PlanExecuteState> {
     readonly editor: EditorTool,
     readonly browser: BrowserTool,
     readonly terminal: TerminalTool,
-    readonly search: SearchTool
+    readonly search: SearchTool,
+
+    private readonly eventsHandler: AgentEventsHandler
   ) {
     super()
 
     this.tools = toStructuredTools([editor, browser, terminal, search])
   }
 
-  async act({ input }: PlanExecuteState): Promise<Partial<PlanExecuteState>> {
-    // TODO: modify the this.getPromptTemplate('openai') to use ChatPromptTemplate.fromMessages
-    const prompt = ChatPromptTemplate.fromMessages([
-      [
-        'system',
-        `As a world-class programmer tasked with achieving a specific goal, begin by formulating a detailed plan.
-        Break down the goal into manageable steps.
-
-        After each action, recap the plan to ensure continuity due to short-term memory constraints.
-        Use the terminal for execution and the browser for validation, notifying the user of any external instructions received.
-        Start by installing necessary packages by deciding best suitable package manager,
-        possibly the executable could also be missing, so install it first and then the package.
-        Remember to iterate: execute, validate, and adjust based on outcomes.
-        Your ultimate objective is to iteratively develop, test, and refine your solution/plan until the goal is met.`
-      ],
-      ['system', 'The workspace being used is {projectId}'],
-      ['human', '{input}'],
-      new MessagesPlaceholder('agent_scratchpad')
-    ])
+  async act({
+    input,
+    projectId
+  }: PlanExecuteState): Promise<Partial<PlanExecuteState>> {
+    const prompt = this.getPromptTemplate('agent')
 
     const llm = new ChatOpenAI({
       modelName: 'gpt-4-turbo-preview'
@@ -66,10 +51,15 @@ class OpenAIAgent extends Agent<PlanExecuteState> {
       tools
     })
 
-    const response = await executor.invoke({
-      input,
-      projectId: '468c0112-8ae9-4131-bf11-f1715e527661'
-    })
+    const response = await executor.invoke(
+      {
+        input,
+        projectId
+      },
+      {
+        callbacks: [this.eventsHandler]
+      }
+    )
 
     return {
       pastSteps: [input, response.output]

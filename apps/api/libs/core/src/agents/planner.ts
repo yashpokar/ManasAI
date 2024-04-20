@@ -4,9 +4,15 @@ import { ChatOpenAI } from '@langchain/openai'
 import Agent from './agent'
 import { AgentOutput, PlanExecuteState } from '../types/agent'
 import planFunction from '../functions/plan'
+import { TOPIC_PLAN } from '../constants'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
 class PlannerAgent extends Agent<PlanExecuteState> {
+  constructor(private readonly eventEmitter: EventEmitter2) {
+    super()
+  }
+
   async act(state: PlanExecuteState): Promise<Partial<PlanExecuteState>> {
     this.logger.debug(`Acting the given state: `, state)
 
@@ -23,6 +29,10 @@ class PlannerAgent extends Agent<PlanExecuteState> {
 
     const plan: AgentOutput = await planner.invoke({
       objective: state.input
+    })
+
+    this.eventEmitter.emit(TOPIC_PLAN, {
+      onPlanPreview: plan
     })
 
     return { plan: plan.steps }
