@@ -1,15 +1,13 @@
-version: '3.9'
-
 services:
   sandbox:
     build:
       context: .
       dockerfile: Dockerfile.sandbox
-    image: 'manasai-sandbox:latest'
-    container_name: 'manasai-sandbox'
+    image: "${API_SANDBOX_IMAGE_NAME}:${API_SANDBOX_IMAGE_TAG}"
+    container_name: "${API_SANDBOX_IMAGE_NAME}"
     volumes:
-      - ./workspaces:/var/www/html
-    working_dir: /var/www/html
+      - ./workspaces:/workspaces
+    working_dir: /workspaces
     healthcheck:
       test: ["CMD", "echo", "Hello ManasAI Gang!"]
       interval: 30s
