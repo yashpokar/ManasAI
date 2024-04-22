@@ -4,7 +4,8 @@ import {
   TOPIC_EDITOR,
   TOPIC_PLAN,
   TOPIC_BROWSER,
-  TOPIC_TERMINAL
+  TOPIC_TERMINAL,
+  PREVIEW_EVENT
 } from '@core/core/constants'
 import { Args, Resolver, Subscription } from '@nestjs/graphql'
 import { Editor } from '@core/core/models/editor'
@@ -16,9 +17,9 @@ import { OnEvent } from '@nestjs/event-emitter'
 export class PreviewResolver {
   constructor(private readonly service: PreviewService) {}
 
-  @OnEvent(TOPIC_PLAN)
-  async onPlan(data: Plan): Promise<void> {
-    return this.service.publish(TOPIC_PLAN, data)
+  @OnEvent(PREVIEW_EVENT)
+  async preview(topic: string, data: any): Promise<void> {
+    return this.service.publish(topic, data)
   }
 
   @Subscription(() => Plan)

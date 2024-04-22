@@ -4,7 +4,7 @@ import { ChatOpenAI } from '@langchain/openai'
 import Agent from './agent'
 import { AgentOutput, PlanExecuteState } from '../types/agent'
 import planFunction from '../functions/plan'
-import { TOPIC_PLAN } from '../constants'
+import { PREVIEW_EVENT, TOPIC_PLAN } from '../constants'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
@@ -31,7 +31,7 @@ class PlannerAgent extends Agent<PlanExecuteState> {
       objective: state.input
     })
 
-    this.eventEmitter.emit(TOPIC_PLAN, {
+    this.eventEmitter.emit(PREVIEW_EVENT, TOPIC_PLAN, {
       onPlanPreview: plan
     })
 
