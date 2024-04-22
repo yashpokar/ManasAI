@@ -3,8 +3,4 @@ export interface IContext {
     deviceId: string
     projectId: string
   }
-  connection: {
-    deviceId: string
-    projectId: string
-  }
 }

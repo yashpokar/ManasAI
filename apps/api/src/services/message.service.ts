@@ -12,6 +12,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, Repository } from 'typeorm'
+import { MessageResponseEvent } from '@core/core/types/message'
 
 @Injectable()
 export class MessageService {
@@ -31,8 +32,27 @@ export class MessageService {
     private readonly eventEmitter: EventEmitter2
   ) {}
 
+  async handleMessageResponse(event: MessageResponseEvent): Promise<void> {
+    this.logger.debug(`handling message response`, event)
+
+    const message = await this._create(event.projectId, event.deviceId, {
+      content: event.content,
+      author: Author.ASSISTANT
+    })
+
+    this.eventEmitter.emit(MESSAGE_SENT_EVENT, message)
+  }
+
   async create(
     ctx: IContext,
+    input: CreateMessageInput
+  ): Promise<MessageEntity> {
+    return this._create(ctx.req.projectId, ctx.req.deviceId, input)
+  }
+
+  async _create(
+    projectId: string,
+    deviceId: string,
     input: CreateMessageInput
   ): Promise<MessageEntity> {
     const queryRunner = this.dataSource.createQueryRunner()
@@ -44,7 +64,7 @@ export class MessageService {
       // Note: not depending on the active project from the database
       // in-order to be consistent with the frontend
       const project = await queryRunner.manager.findOne(ProjectEntity, {
-        where: { id: ctx.req.projectId, deviceId: ctx.req.deviceId }
+        where: { id: projectId, deviceId }
       })
 
       if (!project) {

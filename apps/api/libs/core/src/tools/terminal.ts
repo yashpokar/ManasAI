@@ -2,6 +2,9 @@ import { z } from 'zod'
 import { Injectable } from '@nestjs/common'
 import { Tool } from './tool'
 import DockerService from '../providers/docker.service'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { Terminal } from '../models/terminal'
+import { PREVIEW_EVENT, TOPIC_TERMINAL } from '../constants'
 
 @Injectable()
 class TerminalTool extends Tool {
@@ -13,16 +16,27 @@ class TerminalTool extends Tool {
     command: z.string().describe('The shell command to execute.')
   })
 
-  constructor(private readonly dockerService: DockerService) {
+  constructor(
+    private readonly dockerService: DockerService,
+    private readonly eventEmitter: EventEmitter2
+  ) {
     super()
-
     this.dockerService.initialize()
   }
 
   async execute({ command, projectId }) {
     this.logger.debug(`Executing shell command: ${command}`)
 
-    return this.dockerService.executeCommand(command, projectId)
+    const output = await this.dockerService.executeCommand(command, projectId)
+
+    const onTerminalPreview: Terminal = {
+      command,
+      output
+    }
+
+    this.eventEmitter.emit(PREVIEW_EVENT, TOPIC_TERMINAL, { onTerminalPreview })
+
+    return output
   }
 }
 

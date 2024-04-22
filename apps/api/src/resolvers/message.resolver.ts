@@ -11,11 +11,19 @@ import {
   Resolver,
   Subscription
 } from '@nestjs/graphql'
+import { OnEvent } from '@nestjs/event-emitter'
+import { MESSAGE_RECEIVED_EVENT } from '@core/core/constants'
+import { MessageResponseEvent } from '@core/core/types/message'
 
 @Resolver()
 export class MessageResolver {
   private readonly logger = new Logger(MessageResolver.name)
   constructor(private readonly service: MessageService) {}
+
+  @OnEvent(MESSAGE_RECEIVED_EVENT)
+  async onMessageReceived(event: MessageResponseEvent): Promise<void> {
+    return this.service.handleMessageResponse(event)
+  }
 
   @Mutation(() => Message)
   @UseGuards(DeviceIdGuard, ProjectIdGuard)

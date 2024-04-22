@@ -3,10 +3,12 @@ import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
 import useTheme from '@/hooks/use-theme'
+import usePreview from '@/hooks/use-preview'
 
 const Shell: React.FC = () => {
   const playgroundRef = useRef<HTMLDivElement>(null)
   const { isDarkMode } = useTheme()
+  const { terminal: commands } = usePreview()
 
   useLayoutEffect(() => {
     if (!playgroundRef.current) return
@@ -62,10 +64,15 @@ const Shell: React.FC = () => {
       fitAddon.fit()
     }, 0)
 
+    commands.forEach(({ command, output }) => {
+      terminal.write(command)
+      terminal.writeln(`\r\n${output}\r\n $`)
+    })
+
     return () => {
       terminal.dispose()
     }
-  }, [playgroundRef, isDarkMode])
+  }, [playgroundRef, isDarkMode, commands])
 
   return <div ref={playgroundRef} className="p-2 h-full" />
 }

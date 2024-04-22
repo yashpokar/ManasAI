@@ -14,14 +14,69 @@ const PLAN_PREVIEW_SUBSCRIPTION = gql`
   }
 `
 
+const EDITOR_PREVIEW_SUBSCRIPTION = gql`
+  subscription EditorPreviewSubscription(
+    $projectId: String!
+    $deviceId: String!
+  ) {
+    onEditorPreview(projectId: $projectId, deviceId: $deviceId) {
+      content
+    }
+  }
+`
+
+const BROWSER_PREVIEW_SUBSCRIPTION = gql`
+  subscription BrowserPreviewSubscription(
+    $projectId: String!
+    $deviceId: String!
+  ) {
+    onBrowserPreview(projectId: $projectId, deviceId: $deviceId) {
+      url
+      content
+    }
+  }
+`
+
+const TERMINAL_PREVIEW_SUBSCRIPTION = gql`
+  subscription TerminalPreviewSubscription(
+    $projectId: String!
+    $deviceId: String!
+  ) {
+    onTerminalPreview(projectId: $projectId, deviceId: $deviceId) {
+      command
+      output
+    }
+  }
+`
+
 export const PreviewContext = createContext<IPreviewContext>({
   plan: {
     steps: []
-  }
+  },
+  editor: {
+    content: null,
+    fileName: null,
+    path: null
+  },
+  browser: {
+    url: null,
+    content: null
+  },
+  terminal: []
 })
 
 export const PreviewProvider: React.FC<ProviderProps> = ({ children }) => {
   const [steps, setSteps] = useState<string[]>([])
+  const [editor, setEditor] = useState<IPreviewContext['editor']>({
+    content: null,
+    fileName: null,
+    path: null
+  })
+  const [browser, setBrowser] = useState<IPreviewContext['browser']>({
+    url: null,
+    content: null
+  })
+  const [commands, setCommands] = useState<IPreviewContext['terminal']>([])
 
   useSubscription(PLAN_PREVIEW_SUBSCRIPTION, {
     variables: {
@@ -33,13 +88,56 @@ export const PreviewProvider: React.FC<ProviderProps> = ({ children }) => {
         data: { onPlanPreview }
       }
     }) => {
-      console.log({ onPlanPreview })
       setSteps(onPlanPreview.steps)
     }
   })
 
+  useSubscription(EDITOR_PREVIEW_SUBSCRIPTION, {
+    variables: {
+      projectId: localStorage.getItem(PROJECT_ID),
+      deviceId: localStorage.getItem(DEVICE_ID)
+    },
+    onData: ({
+      data: {
+        data: { onEditorPreview }
+      }
+    }) => {
+      setEditor(onEditorPreview)
+    }
+  })
+
+  useSubscription(BROWSER_PREVIEW_SUBSCRIPTION, {
+    variables: {
+      projectId: localStorage.getItem(PROJECT_ID),
+      deviceId: localStorage.getItem(DEVICE_ID)
+    },
+    onData: ({
+      data: {
+        data: { onBrowserPreview }
+      }
+    }) => {
+      setBrowser(onBrowserPreview)
+    }
+  })
+
+  useSubscription(TERMINAL_PREVIEW_SUBSCRIPTION, {
+    variables: {
+      projectId: localStorage.getItem(PROJECT_ID),
+      deviceId: localStorage.getItem(DEVICE_ID)
+    },
+    onData: ({
+      data: {
+        data: { onTerminalPreview }
+      }
+    }) => {
+      setCommands(commands => [...commands, onTerminalPreview])
+    }
+  })
+
   return (
-    <PreviewContext.Provider value={{ plan: { steps } }}>
+    <PreviewContext.Provider
+      value={{ plan: { steps }, editor, browser, terminal: commands }}
+    >
       {children}
     </PreviewContext.Provider>
   )

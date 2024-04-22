@@ -2,6 +2,9 @@ import { z } from 'zod'
 import { Tool } from './tool'
 import { Injectable } from '@nestjs/common'
 import { chromium } from 'playwright'
+import { Browser } from '../models/browser'
+import { PREVIEW_EVENT, TOPIC_BROWSER } from '../constants'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
 class BrowserTool extends Tool {
@@ -17,6 +20,10 @@ class BrowserTool extends Tool {
       )
   })
 
+  constructor(private readonly eventEmitter: EventEmitter2) {
+    super()
+  }
+
   public async execute({ url }) {
     this.logger.debug(`testing or previewing URL: ${url}`)
 
@@ -30,6 +37,13 @@ class BrowserTool extends Tool {
     const content = await page.content()
 
     await browser.close()
+
+    const onBrowserPreview: Browser = {
+      url,
+      content
+    }
+
+    this.eventEmitter.emit(PREVIEW_EVENT, TOPIC_BROWSER, { onBrowserPreview })
 
     return content
   }

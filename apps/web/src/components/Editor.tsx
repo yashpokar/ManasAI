@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import CodeEditor, { useMonaco } from '@monaco-editor/react'
 import useTheme from '@/hooks/use-theme'
+import usePreview from '@/hooks/use-preview'
 
 const Editor: React.FC = () => {
   const monaco = useMonaco()
   const { isDarkMode } = useTheme()
+  const { editor: editorPreview } = usePreview()
 
   useEffect(() => {
     monaco?.editor.defineTheme('manas-ai', {
@@ -26,11 +28,14 @@ const Editor: React.FC = () => {
           height="100%"
           theme="manas-ai"
           defaultLanguage="python"
-          defaultValue={`"""Welcome to ManasAI Editor! 🚀
+          defaultValue={
+            editorPreview.content ??
+            `"""Welcome to ManasAI Editor! 🚀
 
 ManasAI will write a code once starts executing its plan.
 """
-`}
+`
+          }
           options={{
             fontFamily:
               'SF Mono, Menlo, Roboto Mono, Ubuntu Mono, Oxygen Mono, monospace',

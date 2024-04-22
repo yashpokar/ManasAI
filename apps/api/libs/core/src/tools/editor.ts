@@ -3,6 +3,9 @@ import { Tool } from './tool'
 import { Injectable } from '@nestjs/common'
 import FileSystemService from '../providers/file-system.service'
 import { join } from 'path'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { PREVIEW_EVENT, TOPIC_EDITOR } from '../constants'
+import { Editor } from '../models/editor'
 
 @Injectable()
 class EditorTool extends Tool {
@@ -15,15 +18,14 @@ class EditorTool extends Tool {
       .enum(['READ', 'WRITE', 'DELETE'])
       .describe('The action to perform.'),
     filename: z.string().describe('The name of the file to edit or write.'),
-    path: z
-      .string()
-      .describe(
-        'The relative path from the project root to the file or directory.'
-      ),
+    path: z.string().describe('The relative path to the file or directory.'),
     data: z.string().optional().describe('The data to write to the file.')
   })
 
-  constructor(private readonly fileSystemService: FileSystemService) {
+  constructor(
+    private readonly fileSystemService: FileSystemService,
+    private readonly eventEmitter: EventEmitter2
+  ) {
     super()
   }
 
@@ -36,6 +38,16 @@ class EditorTool extends Tool {
       case 'READ':
         return this.fileSystemService.readFile(location)
       case 'WRITE':
+        const onEditorPreview: Editor = {
+          path,
+          fileName: filename,
+          content: data
+        }
+
+        this.eventEmitter.emit(PREVIEW_EVENT, TOPIC_EDITOR, {
+          onEditorPreview
+        })
+
         return this.fileSystemService.writeFile(location, data || '')
       case 'DELETE':
         return this.fileSystemService.deleteFile(location)

@@ -16,7 +16,7 @@ const Plan: React.FC = () => {
         </p>
       )}
 
-      <div className="grid gap-y-1.5 mt-4">
+      <div className="grid gap-y-1.5 mt-4 overflow-y-auto">
         {steps.map((step, idx) => (
           <div className="flex items-center text-sm gap-x-2" key={idx}>
             <span className={'font-chat leading-relaxed dark:text-zinc-100'}>

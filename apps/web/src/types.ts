@@ -44,6 +44,22 @@ export interface IPreviewContext {
   plan: {
     steps: string[]
   }
+
+  editor: {
+    content: string | null
+    fileName: string | null
+    path: string | null
+  }
+
+  browser: {
+    url: string | null
+    content: string | null
+  }
+
+  terminal: {
+    command: string
+    output: string
+  }[]
 }
 
 export type FormActions =

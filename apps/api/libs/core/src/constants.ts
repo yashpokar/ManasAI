@@ -1,6 +1,7 @@
 export const MESSAGE_CREATED_EVENT = 'message::created'
 export const MESSAGE_SENT_EVENT = 'message::sent'
 export const MESSAGE_RECEIVED_EVENT = 'message::received'
+export const MESSAGE_RESPONSE_EVENT = 'message::response'
 
 export const PREVIEW_EVENT = 'preview::event'
 

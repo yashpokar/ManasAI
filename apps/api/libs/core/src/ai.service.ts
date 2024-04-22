@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { OnEvent } from '@nestjs/event-emitter'
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
 import { MessageEntity } from '@/models/message'
 import { END, StateGraph } from '@langchain/langgraph'
 import {
   AGENT_NODE,
   MESSAGE_RECEIVED_EVENT,
+  MESSAGE_RESPONSE_EVENT,
   PLANNER_NODE,
   REPLANNER_NODE
 } from './constants'
@@ -13,6 +14,7 @@ import PlannerAgent from './agents/planner'
 import RePlannerAgent from './agents/replanner'
 import { PlanExecuteState } from './types/agent'
 import { Pregel } from '@langchain/langgraph/dist/pregel'
+import { MessageResponseEvent } from './types/message'
 
 @Injectable()
 export class AIService {
@@ -22,7 +24,8 @@ export class AIService {
   constructor(
     private readonly openaiAgent: OpenAIAgent,
     private readonly plannerAgent: PlannerAgent,
-    private readonly replannerAgent: RePlannerAgent
+    private readonly replannerAgent: RePlannerAgent,
+    private readonly eventEmitter: EventEmitter2
   ) {
     const workflow = new StateGraph({
       channels: {
@@ -90,7 +93,18 @@ export class AIService {
         recursionLimit: 50
       }
     )) {
-      this.logger.log(`Event: ${JSON.stringify(event)}`)
+      this.logger.debug(`Event: `, event)
+
+      if (END in event) {
+        // TODO: refactor this, not a right place
+        const input: MessageResponseEvent = {
+          content: event[END].response,
+          projectId: project.id,
+          deviceId: project.deviceId
+        }
+
+        this.eventEmitter.emit(MESSAGE_RESPONSE_EVENT, input)
+      }
     }
   }
 }
