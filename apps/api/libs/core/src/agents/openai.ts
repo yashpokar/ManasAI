@@ -35,7 +35,7 @@ class OpenAIAgent extends Agent<PlanExecuteState> {
     const prompt = this.getPromptTemplate('agent')
 
     const llm = new ChatOpenAI({
-      modelName: 'gpt-4-turbo-preview'
+      modelName: 'gpt-4o'
     })
 
     const { tools } = this
