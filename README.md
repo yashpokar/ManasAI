@@ -59,7 +59,7 @@ make run
 - [x] Multi project
 - [ ] Multi model
 - [ ] Multi agent
-- [x] Dedeicated sandbox to test the code in isolation
+- [x] Dedicated sandbox to test the code in isolation
   - [x] Terminal tool to display the commands (ran by the agent) and the output
   - [ ] Allow the user to run the commands
 - [ ] Dedicated web browser to test web based code in isolation
